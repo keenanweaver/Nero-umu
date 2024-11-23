@@ -182,7 +182,6 @@ void NeroPrefixSettingsWindow::LoadSettings()
             else if(dllType == "b,n") AddDLL(dllName, NeroConstant::DLLBuiltinThenNative);
             else if(dllType == "native") AddDLL(dllName, NeroConstant::DLLNativeOnly);
             else if(dllType == "disabled") AddDLL(dllName, NeroConstant::DLLDisabled);
-            //qDebug() << dllName << dllType;
         }
     }
 
@@ -368,7 +367,6 @@ void NeroPrefixSettingsWindow::AddDLL(const QString newDLL, const int newDLLtype
 
     ui->dllOverridesGrid->addWidget(dllSetting.last(), dllDelete.size()-1, 0);
     ui->dllOverridesGrid->addWidget(dllDelete.last(), dllDelete.size()-1, 1);
-    //qDebug() << ui->dllOverridesGrid->rowCount();
 }
 
 
@@ -436,7 +434,6 @@ void NeroPrefixSettingsWindow::on_prefixInstallDiscordRPC_clicked()
 
 void NeroPrefixSettingsWindow::on_prefixDrivesBtn_clicked()
 {
-    // TODO: drive manager isn't making working symlinks
     drives = new NeroVirtualDriveDialog(this);
     drives->exec();
     delete drives;
@@ -532,22 +529,16 @@ void NeroPrefixSettingsWindow::on_buttonBox_clicked(QAbstractButton *button)
 
             // for the generic input fields, changed values will have boldFont
             for(const auto child : this->findChildren<QCheckBox*>())
-                if(child->font() == boldFont) {
+                if(child->font() == boldFont)
                     NeroFS::SetCurrentPrefixCfg("PrefixSettings", child->property("isFor").toString(), child->isChecked());
-                    //qDebug() << child->property("isFor").toString() << "has been changed.";
-                }
 
             for(const auto child : this->findChildren<QLineEdit*>())
-                if(child->font() == boldFont) {
+                if(child->font() == boldFont)
                     NeroFS::SetCurrentPrefixCfg("PrefixSettings", child->property("isFor").toString(), child->text().trimmed());
-                    //qDebug() << child->property("isFor").toString() << "has been changed.";
-                }
 
             for(const auto child : this->findChildren<QComboBox*>())
-                if(child->font() == boldFont) {
+                if(child->font() == boldFont)
                     NeroFS::SetCurrentPrefixCfg("PrefixSettings", child->property("isFor").toString(), child->currentIndex());
-                    //qDebug() << child->property("isFor").toString() << "has been changed.";
-                }
 
             NeroFS::SetCurrentRunner(ui->prefixRunner->currentText());
             NeroFS::SetCurrentPrefixCfg("PrefixSettings", "CurrentRunner", ui->prefixRunner->currentText());
@@ -559,12 +550,10 @@ void NeroPrefixSettingsWindow::on_buttonBox_clicked(QAbstractButton *button)
             // per-shortcut settings
 
             // check if new ico was set.
-            if(!newAppIcon.isEmpty()) {
+            if(!newAppIcon.isEmpty())
                 QFile::copy(newAppIcon, QString("%1/%2/.icoCache/%3").arg(NeroFS::GetPrefixesPath().path(),
                                                                           NeroFS::GetCurrentPrefix(),
                                                                           QString("%1-%2.png").arg(settings.value("Name").toString(), currentShortcutHash)));
-                //qDebug() << "New icon was set.";
-            }
 
             // for the generic input fields, changed values will have boldFont
             for(const auto child : this->findChildren<QCheckBox*>())
@@ -572,28 +561,24 @@ void NeroPrefixSettingsWindow::on_buttonBox_clicked(QAbstractButton *button)
                     if(child->checkState() == Qt::PartiallyChecked)
                         NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), child->property("isFor").toString(), "");
                     else NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), child->property("isFor").toString(), child->isChecked());
-                    //qDebug() << child->property("isFor").toString() << "has been changed.";
                 }
 
             for(const auto child : this->findChildren<QLineEdit*>())
-                if(child->font() == boldFont) {
+                if(child->font() == boldFont)
                     NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), child->property("isFor").toString(), child->text().trimmed());
-                    //qDebug() << child->property("isFor").toString() << "has been changed.";
-                }
 
             for(const auto child : this->findChildren<QComboBox*>())
                 if(child->font() == boldFont) {
                     if(child->currentIndex() < 1)
                         NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), child->property("isFor").toString(), "");
                     else NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), child->property("isFor").toString(), child->currentIndex()-1);
-                    //qDebug() << child->property("isFor").toString() << "has been changed.";
                 }
 
             // need to add exe to user.reg, @ [Software\\\\Wine\\\\AppDefaults\\\\app.exe], w/ "Version"="newvalue" as according to winVersionVerb
             if(ui->winVerBox->font() == boldFont) {
                 int winVerSelected = winVersionListBackwards.indexOf(ui->winVerBox->itemText(ui->winVerBox->currentIndex()));
                 NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), "WindowsVersion", winVerSelected);
-                //qDebug() << "New Windows version set!" << winVersionListBackwards.at(winVerSelected);
+
                 qDebug() << "TODO: make entry in user.reg";
             }
 

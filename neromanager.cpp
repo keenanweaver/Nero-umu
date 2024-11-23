@@ -624,7 +624,7 @@ void NeroManagerWindow::on_prefixTricksBtn_clicked()
             verbsInstalled.removeDuplicates();
         }
     } else {
-        printf("Prefix has no winetricks file, skipping...");
+        printf("Prefix has no winetricks file, skipping...\n");
     }
 
     tricks = new NeroTricksWindow();

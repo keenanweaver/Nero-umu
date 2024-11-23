@@ -22,9 +22,11 @@
 
 #include <QDialog>
 #include <QDir>
+#include <QComboBox>
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QLineEdit>
+#include <QStandardItemModel>
 
 namespace Ui {
 class NeroVirtualDriveDialog;
@@ -41,6 +43,8 @@ public:
 private slots:
     void on_addDirBtn_clicked();
 
+    void letterBox_activated(const QString);
+
     void changeBtn_clicked();
 
     void deleteBtn_clicked();
@@ -50,21 +54,62 @@ private slots:
 private:
     Ui::NeroVirtualDriveDialog *ui;
 
+    void RenderList();
+
     void AddDir(const QString, const QString);
+
+    void UpdateUsedLetters();
+
+    void SetComboBoxItemEnabled(QComboBox * comboBox, const int index, const bool enabled) {
+        auto * model = qobject_cast<QStandardItemModel*>(comboBox->model());
+        auto * item = model->item(index);
+        item->setEnabled(enabled);
+    }
 
     QDir prefixDir;
     QDir externalDir;
-    QFile fileWriter;
 
-    QStringList currentLinks;
+    QStringList usedLetters;
 
+    const QStringList letters = {
+        "A:",
+        "B:",
+        "C:",
+        "D:",
+        "E:",
+        "F:",
+        "G:",
+        "H:",
+        "I:",
+        "J:",
+        "K:",
+        "L:",
+        "M:",
+        "N:",
+        "O:",
+        "P:",
+        "Q:",
+        "R:",
+        "S:",
+        "T:",
+        "U:",
+        "V:",
+        "W:",
+        "X:",
+        "Y:",
+        "Z:"
+    };
+
+    QList<QComboBox*> dirLetter;
     QList<QLabel*> dirPath;
     QList<QLineEdit*> dirWinLabel;
     QList<QPushButton*> dirChange;
     QList<QPushButton*> dirDelete;
-    QList<QHBoxLayout*> dirLine;
-    QList<QVBoxLayout*> dirLabelsLayout;
+    QList<QHBoxLayout*> dirLetterPathLayout;
+    QList<QVBoxLayout*> dirPathAndLabelsLayout;
+    QList<QHBoxLayout*> dirWholeLine;
 
+    QFont letterFont;
     QFont lineEditFont;
     QFont mainLabelFont;
 };
