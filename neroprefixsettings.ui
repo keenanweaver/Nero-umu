@@ -1,0 +1,1668 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>NeroPrefixSettingsWindow</class>
+ <widget class="QDialog" name="NeroPrefixSettingsWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="5,3,0">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="generalTab">
+      <attribute name="icon">
+       <iconset theme="go-home"/>
+      </attribute>
+      <attribute name="title">
+       <string>General</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,1" columnstretch="1,0">
+       <item row="0" column="0" colspan="2">
+        <widget class="QGroupBox" name="shortcutSettings">
+         <property name="title">
+          <string>Shortcut</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0,3,1">
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="shortcutIco">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Click to set the icon for this shortcut.&lt;/p&gt;&lt;p&gt;Acceptable formats are &lt;span style=&quot; font-style:italic;&quot;&gt;PNG, EXE, ICO,&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;DLL&lt;/span&gt; - the latter three will be extracted with &lt;span style=&quot; font-style:italic;&quot;&gt;icoextract&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;icoutils,&lt;/span&gt; if found on the system.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Shortcut Icon</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="application-x-executable"/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QGridLayout" name="shortcutFields">
+            <item row="3" column="0" colspan="2">
+             <widget class="QLineEdit" name="shortcutArgs">
+              <property name="whatsThis">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter any arguments that gets passed to the executable for this shortcut. These usually allow for enabling hidden or undocumented features of an app, such as borderless windowed modes or fullscreen on launch. Refer to your app's documentation for information on what arguments can be used with it.&lt;/p&gt;&lt;p&gt;If unsure, leave this field blank.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="accessibleName">
+               <string>Shortcut Arguments</string>
+              </property>
+              <property name="placeholderText">
+               <string>Shortcut Arguments (-fullscreen, --borderless, etc.)</string>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>true</bool>
+              </property>
+              <property name="isFor" stdset="0">
+               <string>Args</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QPushButton" name="shortcutPathBtn">
+              <property name="whatsThis">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Click to select a new executable for this shortcut.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="accessibleName">
+               <string>Select an Executable</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset theme="document-open"/>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLineEdit" name="shortcutPath">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="whatsThis">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The current path for this shortcut.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="accessibleName">
+               <string>Executable Path</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: gray</string>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+              <property name="placeholderText">
+               <string>Path</string>
+              </property>
+              <property name="isFor" stdset="0">
+               <string>Path</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" colspan="2">
+             <widget class="QLineEdit" name="shortcutName">
+              <property name="whatsThis">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter the name of this shortcut as it appears in the shortcuts list.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="accessibleName">
+               <string>Shortcut Name</string>
+              </property>
+              <property name="placeholderText">
+               <string>Shortcut Name</string>
+              </property>
+              <property name="isFor" stdset="0">
+               <string>Name</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QLabel" name="nameMatchWarning">
+              <property name="font">
+               <font>
+                <pointsize>9</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: red</string>
+              </property>
+              <property name="text">
+               <string>Another shortcut with this name already exists!</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="performanceGroup">
+         <property name="title">
+          <string>Graphics and Image Quality</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,0,0,0">
+          <item row="2" column="1">
+           <widget class="QComboBox" name="setScalingBox">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the method of scaling the image of the application. Some versions of Proton supports various different types of image scaling for fullscreen applications only; otherwise, &lt;a href=&quot;https://github.com/ValveSoftware/gamescope?tab=readme-ov-file#gamescope-the-micro-compositor-formerly-known-as-steamcompmgr&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;Gamescope&lt;/span&gt;&lt;/a&gt; (if installed) can be used for more scaling options, as well as forcing games into an effective borderless windowed mode, regardless of display.&lt;/p&gt;&lt;p&gt;It should be noted that all Proton runners uses a rendering hack to scale fullscreen applications to your display resolution, regardless of the resolution setting used in-game.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Only Proton-GE has support for &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;AMD FSR 1&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; scaling modes.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;If unsure, select &lt;span style=&quot; font-style:italic;&quot;&gt;Normal.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Proton Scaling Mode</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>ScalingMode</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>Normal</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Integer Scaling</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>AMD FSR 1 - Performance</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>AMD FSR 1 - Balanced</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>AMD FSR 1 - Quality</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>AMD FSR 1 - High Quality</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>AMD FSR 1 - Higher Quality</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>AMD FSR 1 - Highest Quality</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>AMD FSR 1 - Custom Resolution</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamescope - Windowed</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamescope - Borderless</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamescope - Fullscreen</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="2">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="4" column="1">
+           <widget class="QGroupBox" name="gamescopeSection">
+            <layout class="QGridLayout" name="gamescopeStuff" columnstretch="1,0,0,0">
+             <item row="0" column="1" colspan="3">
+              <widget class="QComboBox" name="gamescopeSetScalerBox">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When using Gamescope, this sets the method it uses to scale the image to the desired display resolution.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Normal, Integer Scaling,&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;Scale to Fit&lt;/span&gt; all maintain aspect ratio.&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Scale to Fill&lt;/span&gt; will crop the image until the entire screen is filled.&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Stretch to Fill&lt;/span&gt; will stretch the image, regardless of aspect ratio, until the entire screen is filled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Gamescope Scaler Type</string>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>GamescopeScaler</string>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Default</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Integer Scaling</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Scale to Fit</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Scale to Fill</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Stretch Image</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_10">
+               <property name="text">
+                <string>Window Resolution:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3">
+              <widget class="QLineEdit" name="gamescopeAppHeight">
+               <property name="whatsThis">
+                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This sets the effective resolution that Gamescope reports to the game - in other words, a forced &lt;span style=&quot; font-style:italic;&quot;&gt;render resolution.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Gamescope App Resolution (Height)</string>
+               </property>
+               <property name="maxLength">
+                <number>8</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="placeholderText">
+                <string>Height (px)</string>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>GamescopeOutResH</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>Scaler Type:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1" colspan="3">
+              <widget class="QComboBox" name="gamescopeSetUpscalingBox">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When using Gamescope, this sets the filter it will apply to the image output.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;AMD FSR&lt;/span&gt; will work for all GPUs, while &lt;span style=&quot; font-style:italic;&quot;&gt;NVIDIA Image Scaling&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;requires an NVIDIA GPU running the NVIDIA Proprietary Driver (either &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Binary&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; or &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Open Kernel Module&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; distributions).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Gamescope Upscaling Filter</string>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>GamescopeFilter</string>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Bilinear Filter</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Nearest Neighbor</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>AMD FSR 1</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>NVIDIA Image Scaling</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Pixel</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QLabel" name="label_9">
+               <property name="text">
+                <string>x</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_8">
+               <property name="text">
+                <string>App Resolution:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLineEdit" name="gamescopeAppWidth">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the effective resolution that Gamescope reports to the game - in other words, a forced &lt;span style=&quot; font-style:italic;&quot;&gt;render resolution.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Gamescope App Resolution (Width)</string>
+               </property>
+               <property name="maxLength">
+                <number>8</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="placeholderText">
+                <string>Width (px)</string>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>GamescopeOutResW</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Upscaling Filter:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="3">
+              <widget class="QLineEdit" name="gamescopeWindowHeight">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the resolution of the Gamescope output window. If both fields are unset, Gamescope will default to the &lt;span style=&quot; font-style:italic;&quot;&gt;App Resolution&lt;/span&gt; for the window size.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Gamescope Window Resolution (Height) [*Optional]</string>
+               </property>
+               <property name="maxLength">
+                <number>8</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="placeholderText">
+                <string>Height (px)</string>
+               </property>
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>GamescopeWinResH</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QLabel" name="label_11">
+               <property name="text">
+                <string>x</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLineEdit" name="gamescopeWindowWidth">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the resolution of the Gamescope output window. If both fields are unset, Gamescope will default to the &lt;span style=&quot; font-style:italic;&quot;&gt;App Resolution&lt;/span&gt; for the window size.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Gamescope Window Resolution (Width) [*Optional]</string>
+               </property>
+               <property name="maxLength">
+                <number>8</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="placeholderText">
+                <string>Width (px)</string>
+               </property>
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>GamescopeWinResW</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QGroupBox" name="fsrSection">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If using the FSR Custom Mode, this sets the screen resolution that is reported to the application. This can be used for more precise rendering resolutions, or for use with games that expects a non-standard resolution, and will crash if it's not detected - examples of the latter include several Sega arcade game dumps, which often demands resolutions of either &lt;span style=&quot; font-style:italic;&quot;&gt;1360x768&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;1024x600.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>FSR Custom Resolution</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_10">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_12">
+               <property name="text">
+                <string>Custom Resolution:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="fsrCustomW">
+               <property name="maxLength">
+                <number>8</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="placeholderText">
+                <string>Width (px)</string>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>FSRcustomResW</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>x</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLineEdit" name="fsrCustomH">
+               <property name="maxLength">
+                <number>8</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="placeholderText">
+                <string>Height (px)</string>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>FSRcustomResH</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Scaling Mode:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QCheckBox" name="toggleNVAPI">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This enables support for &lt;a href=&quot;https://github.com/jp7677/dxvk-nvapi?tab=readme-ov-file#dxvk-nvapi&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;DXVK-NVAPI&lt;/span&gt;&lt;/a&gt; for NVIDIA graphics cards, which correctly reports the GPU model and (usually) allows apps to access certain vendor exclusive features, such as DLSS, Ray Tracing, or hardware-accelerated CUDA in some games. &lt;span style=&quot; font-weight:700;&quot;&gt;Full DLSS or CUDA functionality requires the &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;physx&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; verb to be installed, as well as enabling the &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;nvcuda&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; native DLL override.&lt;/span&gt; When disabled, any NVIDIA cards will be reported as an AMD GPU.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;This setting can ONLY be used with NVIDIA GPUs using the NVIDIA Proprietary Driver (either &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Binary&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; or &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Open Kernel Module&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; distributions).&lt;/span&gt;&lt;/p&gt;&lt;p&gt;If unsure, you should enable this only if the application has explicit support for DLSS or RTX features.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Enable NVAPI Support</string>
+            </property>
+            <property name="text">
+             <string>Enable NVAPI Support</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>EnableNVAPI</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QGroupBox" name="servicesGroup">
+         <property name="title">
+          <string>System Services</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QCheckBox" name="toggleGamemode">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, Proton will be run with Feral Interactive's &lt;a href=&quot;https://github.com/FeralInteractive/gamemode?tab=readme-ov-file#gamemode&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;Gamemode&lt;/span&gt;&lt;/a&gt; daemon, which can provide useful optimizations for games.&lt;/p&gt;&lt;p&gt;If unsure, enable if your system has &lt;span style=&quot; font-style:italic;&quot;&gt;gamemode&lt;/span&gt; installed. Disable if a game has issues starting with &lt;span style=&quot; font-style:italic;&quot;&gt;gamemode&lt;/span&gt; enabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Enable Feral Gamemode</string>
+            </property>
+            <property name="text">
+             <string>Enable Feral Gamemode</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>Gamemode</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="toggleMangohud">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, Proton will run with the &lt;a href=&quot;https://github.com/flightlessmango/MangoHud?tab=readme-ov-file#mangohud&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;Mangohud&lt;/span&gt;&lt;/a&gt; overlay enabled, which can provide useful monitoring of your system and any 3D application's performance and/or rendering metrics. Mangohud can either be used on its own, or as part of a configuration utility, such as &lt;a href=&quot;https://github.com/benjamimgois/goverlay?tab=readme-ov-file#goverlay&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;GOverlay.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;If unsure, enable if you want to monitor a game's performance.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Enable Mangohud Overlay</string>
+            </property>
+            <property name="text">
+             <string>Enable Mangohud Overlay</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>Mangohud</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="toggleVKcap">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, this will allow any apps using Vulkan (including DX8-11 titles w/ DXVK, or DX12 titles w/ VKD3D) to be captured in OBS Studio using the &lt;a href=&quot;https://github.com/nowrep/obs-vkcapture&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;Game Capture source.&lt;/span&gt;&lt;/a&gt; This is usually provided in a user package such as &lt;span style=&quot; font-style:italic;&quot;&gt;obs-vkcapture-git&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;lib32-obs-vkcapture-git.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Enable OBS Studio Vulkan Capture</string>
+            </property>
+            <property name="text">
+             <string>Enable OBS Vulkan Capture</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>VKcapture</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QGroupBox" name="prefixSettings">
+         <property name="title">
+          <string>Runner Settings</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_7" columnstretch="1,0,2,1">
+          <item row="0" column="0">
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Proton Runner</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QComboBox" name="prefixRunner">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the version of Proton that's used to run executables in this prefix. This field is populated by the folders that Nero searches on boot which contains Proton runners, preferring Steam's compatibilitytools.d folder if available.&lt;/p&gt;&lt;p&gt;If unsure, the newest version of Proton-GE is usually the best one to use for games for its multimedia fixes, and is the only version with built-in FSR hacks.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Current Prefix's Proton Runner</string>
+            </property>
+            <property name="placeholderText">
+             <string>[No Current Runner Set]</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <spacer name="horizontalSpacer_6">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="1" colspan="2">
+           <widget class="QCheckBox" name="togglePrefixRuntimeUpdates">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When checked, every time an application is launched in this prefix, &lt;span style=&quot; font-style:italic;&quot;&gt;umu&lt;/span&gt; will always check the internet if there's a new version of the Steam Runtime available, and automatically install it if an update is found. This ensures compatibility, at a cost to a minor hit in startup time, especially if you happen to be running in an environment without internet at the time.&lt;/p&gt;&lt;p&gt;If unsure, leave this enabled unless you're planning to run applications offline.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Check for Runtime Updates on Prefix Startup</string>
+            </property>
+            <property name="text">
+             <string>Check for Runtime Updates on Launch</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>RuntimeUpdateOnLaunch</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="compatibilityTab">
+      <attribute name="icon">
+       <iconset theme="preferences-other"/>
+      </attribute>
+      <attribute name="title">
+       <string>Compatibility</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,1">
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="title">
+          <string>DLL Overrides</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout" stretch="4,5,0,3,0">
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="dllAdder">
+              <property name="whatsThis">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Input the name of the DLL to add to the overrides list below.&lt;/p&gt;&lt;p&gt;Windows applications often uses a number of different Dynamic Link Libraries (DLLs) to function, many of which Proton includes. However, by default, Proton will use its own implementations over those that the application ships with, which can lead to incorrect behavior, or at times be the cause of crashes or instability.&lt;/p&gt;&lt;p&gt;The overrides list below will tell Proton to use the DLLs provided in the following manner:&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; - Native, then Built-in:&lt;/span&gt; Use the native libraries first, then include Wine's implementation. This is the one that you'll most likely want to use.&lt;br/&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; - Native Only:&lt;/span&gt; Use the native libraries exclusively.&lt;br/&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; - Built-in, then Native:&lt;/span&gt; Prioritize Wine's implementation first before loading the native libraries.&lt;br/&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; - Built-in Only:&lt;/span&gt; Only use Wine's implementation of the library. This is useful if an app has issues with the original/native libraries.&lt;br/&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; - Disabled: &lt;/span&gt;Don't load the library at all. This will usually lead to a crash, and is only useful for debugging.&lt;/p&gt;&lt;p&gt;If unsure, you'll want to use the &lt;span style=&quot; font-style:italic;&quot;&gt;Native, then Built-in&lt;/span&gt; setting.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="accessibleName">
+               <string>DLL File to Override</string>
+              </property>
+              <property name="maxLength">
+               <number>32</number>
+              </property>
+              <property name="placeholderText">
+               <string>DLL File Name</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="dllAddBtn">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset theme="list-add"/>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="toggleShortcutPrefixOverride">
+              <property name="whatsThis">
+               <UInt>0</UInt>
+              </property>
+              <property name="accessibleName">
+               <string>Exclusively Use Shortcut's DLL Overrides List</string>
+              </property>
+              <property name="text">
+               <string>Shortcut DLLs Overrides Prefix</string>
+              </property>
+              <property name="isFor" stdset="0">
+               <string>IgnoreGlobalDLLs</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QScrollArea" name="scrollArea">
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>592</width>
+               <height>347</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <item>
+               <layout class="QGridLayout" name="dllOverridesGrid2" rowstretch="0,1" columnstretch="1,3,1">
+                <item row="0" column="0">
+                 <spacer name="horizontalSpacer_11">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>0</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="1">
+                 <layout class="QGridLayout" name="dllOverridesGrid" columnstretch="1,0">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="goat1">
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="goat2">
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item row="0" column="2">
+                 <spacer name="horizontalSpacer_12">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>0</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="1" column="1">
+                 <spacer name="verticalSpacer_2">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="windowsVerSection">
+         <property name="title">
+          <string>Windows</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,0,2,1">
+          <item>
+           <spacer name="horizontalSpacer_9">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Windows Version Override:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="winVerBox">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set the Windows version to report to this application.&lt;/p&gt;&lt;p&gt;If this setting is changed from the shortcut's current value&lt;span style=&quot; font-style:italic;&quot;&gt;,&lt;/span&gt; Nero will add the compatibility flag into the registry file &lt;span style=&quot; font-style:italic;&quot;&gt;user.reg,&lt;/span&gt; which can sometimes fix compatibility issues - for example, &lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Phantasy Star Online: Blue Burst&lt;/span&gt;&lt;span style=&quot; font-weight:700; text-decoration: underline;&quot;&gt;requires&lt;/span&gt; a Windows version less than &lt;span style=&quot; font-style:italic;&quot;&gt;Windows 7&lt;/span&gt; to load without crashing.&lt;/p&gt;&lt;p&gt;If unsure, keep it at &lt;span style=&quot; font-style:italic;&quot;&gt;Windows 10&lt;/span&gt; unless an app needs a specific Windows version to work.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Windows Version Override</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>WindowsVersion</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>Windows 11</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows 10</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows 8.1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows 8</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows Server 2008 R2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows 7</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows Server 2008</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows Vista</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows Server 2003</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows XP (64-bit)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows XP (32-bit)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows 2000</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows ME</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows 98</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows 95</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows NT 4.0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows NT 3.5.1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows 3.1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows 3.0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Windows 2.0</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_10">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="advancedTab">
+      <attribute name="icon">
+       <iconset theme="system-run"/>
+      </attribute>
+      <attribute name="title">
+       <string>Advanced</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_5" rowstretch="0,0,1">
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="runnerGroup">
+         <property name="title">
+          <string>Shortcut Runner Settings</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_8">
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="preRunScriptPath">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Path to a designated Pre-run Script for this Shortcut.&lt;/p&gt;&lt;p&gt;When set, this script will be run whenever this shortcut is started &lt;span style=&quot; font-style:italic;&quot;&gt;before&lt;/span&gt; the Proton runner process. This can be used for setting up other services before the application starts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Pre-Run Script</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: gray</string>
+            </property>
+            <property name="placeholderText">
+             <string>Path to a Pre-run Script</string>
+            </property>
+            <property name="clearButtonEnabled">
+             <bool>true</bool>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>PreRunScript</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLineEdit" name="postRunScriptPath">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Path to a designated Post-run Script for this Shortcut.&lt;/p&gt;&lt;p&gt;When set, this script will be run whenever this shortcut is started &lt;span style=&quot; font-style:italic;&quot;&gt;after&lt;/span&gt; the Proton runner process. This can be used for cleaning up or closing other process that may have been started for the application, but don't need to be run in perpetuity.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Post-Run Script</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: gray</string>
+            </property>
+            <property name="placeholderText">
+             <string>Path to a Post-run Script</string>
+            </property>
+            <property name="clearButtonEnabled">
+             <bool>true</bool>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>PostRunScript</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="preRunButton">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select a Pre-run Script to run for this Shortcut.&lt;/p&gt;&lt;p&gt;When set, this script will be run whenever this shortcut is started &lt;span style=&quot; font-style:italic;&quot;&gt;before&lt;/span&gt; the Proton runner process. This can be used for setting up other services before the application starts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Pre-Run Script</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="document-open"/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="flat">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="postRunButton">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select a Post-run Script to run for this Shortcut.&lt;/p&gt;&lt;p&gt;When set, this script will be run whenever this shortcut is started &lt;span style=&quot; font-style:italic;&quot;&gt;after&lt;/span&gt; the Proton runner process. This can be used for cleaning up or closing other process that may have been started for the application, but don't need to be run in perpetuity.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Post-Run Script</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="document-open"/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="legacyGroup">
+         <property name="title">
+          <string>Legacy</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0" rowspan="2">
+           <spacer name="horizontalSpacer_13">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="4" rowspan="2">
+           <spacer name="horizontalSpacer_14">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="3">
+           <widget class="QCheckBox" name="toggleWineD3D">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, DXVK &lt;span style=&quot; font-weight:700;&quot;&gt;will be disabled&lt;/span&gt;, falling back to Wine's default &lt;span style=&quot; font-style:italic;&quot;&gt;WineD3D&lt;/span&gt; OpenGL-based renderer for Direct3D versions up until Direct3D11.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Using WineD3D is MUCH slower than DXVK, &lt;/span&gt;&lt;span style=&quot; font-weight:700; text-decoration: underline;&quot;&gt;and generally shouldn't be used without good reason.&lt;/span&gt; However, WineD3D might be compatible with certain titles that have trouble rendering with DXVK. That said, any issues with DXVK &lt;a href=&quot;https://github.com/doitsujin/dxvk&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;should be reported to the project.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Note: a few titles using DirectDraw instead of Direct3D may still render using WineD3D, regardless of this setting, such as the arcade dumps of &lt;span style=&quot; font-style:italic;&quot;&gt;(Suggoi!) Arcana Heart 2&lt;/span&gt;.&lt;/p&gt;&lt;p&gt;If unsure, leave disabled &lt;span style=&quot; font-style:italic;&quot;&gt;unless you know WineD3D renders correctly.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Disable DXVK/VKD3D, Use WineD3D Instead</string>
+            </property>
+            <property name="text">
+             <string>Use WineD3D instead of DXVK</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>ForceWineD3D</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="toggleNoD8VK">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, D8VK will be disabled.&lt;/p&gt;&lt;p&gt;Starting with &lt;span style=&quot; font-style:italic;&quot;&gt;Proton-GE9-10&lt;/span&gt;, the D8VK project was merged into the runner's DXVK libraries, allowing for anywhere from noticeably to substantially improved performance and rendering for Direct3D8 titles. Nero enables this by default, but &lt;a href=&quot;https://github.com/doitsujin/dxvk/issues/4130&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;there might be certain titles&lt;/span&gt;&lt;/a&gt; where you may still want to use WineD3D instead.&lt;/p&gt;&lt;p&gt;Note: if performance is still of concern, you may want to consider using &lt;a href=&quot;https://www.pcgamingwiki.com/wiki/DgVoodoo_2&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;dgVoodoo2&lt;/span&gt;&lt;/a&gt; as an alternative to the WineD3D fallback.&lt;/p&gt;&lt;p&gt;If unsure, keep disabled, &lt;span style=&quot; font-style:italic;&quot;&gt;unless you are running a problematic D3D8 title.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Disable D8VK, use WineD3D Instead</string>
+            </property>
+            <property name="text">
+             <string>Disable D8VK</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>NoD8VK</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Set File Synchronization Method:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="toggleLimitGL">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, the OpenGL extensions provided by your graphics driver (AMD, NVIDIA, Intel, et al) will be intentionally partially obfuscated to resemble an older version of OpenGL circa 2003. This is primarily intended for &lt;span style=&quot; font-weight:700;&quot;&gt;idTech3&lt;/span&gt; titles (i.e. the &lt;span style=&quot; font-style:italic;&quot;&gt;Quake 3&lt;/span&gt; engine), which will crash if too many extensions are present in the OpenGL driver descriptor.&lt;/p&gt;&lt;p&gt;If unsure, keep disabled unless this shortcut or prefix is for &lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Quake 3&lt;/span&gt;, &lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Star Wars Jedi Outcast/Jedi Academy&lt;/span&gt;, &lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Medal of Honor - Allied Assault&lt;/span&gt;, &lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Return to Castle Wolfenstein&lt;/span&gt;, or &lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;other 2000's era games running idTech3&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Limit Output of Available GL Extensions</string>
+            </property>
+            <property name="text">
+             <string>Set Limited GL Extensions</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>LimitGLextensions</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" colspan="2">
+           <widget class="QComboBox" name="fileSyncBox">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To speed up file and memory access performance, Proton takes advantage of specialized file sync protocols &lt;span style=&quot; font-style:italic;&quot;&gt;Fsync&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;Esync.&lt;/span&gt; Both of these services enables increasingly near-native performance when reading files, with &lt;span style=&quot; font-style:italic;&quot;&gt;Fsync&lt;/span&gt; being the newest protocol introduced in Linux kernel version 5.16 and Proton 4-11 and is used by default.&lt;/p&gt;&lt;p&gt;While this usually helps modern games by a substantial margin, some older titles (particularly those with archaic media formats) can have certain bugs introduced by the newer sync formats; namely, titles like &lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Phantasy Star Universe: Ambition of the Illuminus&lt;/span&gt; has sound glitches introduced when using any sync method, and &lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Marvel Ultimate Alliance&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt; (2006)&lt;/span&gt; has severe video playback issues with any sync method. For these problem apps, you may want to consider stepping the sync method back to the &lt;span style=&quot; font-style:italic;&quot;&gt;Legacy&lt;/span&gt; method, which will resolve such media-related glitches.&lt;/p&gt;&lt;p&gt;If unsure, keep this set to &lt;span style=&quot; font-style:italic;&quot;&gt;Use Fsync&lt;/span&gt;, &lt;span style=&quot; font-style:italic;&quot;&gt;unless you run into issues with older titles as described above.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Set File Synchronization Method</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>Use Fsync</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Use Esync</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Use Legacy Sync</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="systemGroup">
+         <property name="title">
+          <string>System</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_6" columnstretch="1,0,2,1">
+          <item row="0" column="0">
+           <spacer name="horizontalSpacer_7">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="QLineEdit" name="prefixEnvVars">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter any desired Environment Variables that you might need for this prefix.&lt;/p&gt;&lt;p&gt;Environment Variables must be entered in &lt;span style=&quot; font-weight:700;&quot;&gt;KEY=&amp;quot;values&amp;quot; &lt;/span&gt;format.&lt;/p&gt;&lt;p&gt;Any Environment Variables added here will be prepended to the main runner environment for this prefix when an application starts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Custom Prefix Environment Variables</string>
+            </property>
+            <property name="placeholderText">
+             <string>Enter Custom Environment Variables...</string>
+            </property>
+            <property name="clearButtonEnabled">
+             <bool>true</bool>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>CustomEnvVars</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <spacer name="horizontalSpacer_8">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Debug Output:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QComboBox" name="debugBox">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set the desired level of debug output Nero should print when running an application in this prefix.&lt;/p&gt;&lt;p&gt;This can be useful if you are debugging a troublesome application and need to know the output.&lt;/p&gt;&lt;p&gt;Any debug output will be printed to standard output (i.e. the terminal application Nero is launched from).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Set Proton/UMU Debug Output</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>DebugOutput</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>No Debug Output</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Show Loaded DLLs</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Full Debug Output</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="4">
+           <widget class="QGroupBox" name="prefixServices">
+            <property name="title">
+             <string notr="true"/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+            <layout class="QGridLayout" name="prefixServices_layout" columnstretch="1,0,0,1">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item row="2" column="1">
+              <widget class="QPushButton" name="prefixRegeditBtn">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This will open up the Windows Registry for this prefix, using Wine &lt;span style=&quot; font-style:italic;&quot;&gt;regedit.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Access and Edit this Prefix's Registry</string>
+               </property>
+               <property name="text">
+                <string>Open Regedit in Prefix</string>
+               </property>
+               <property name="icon">
+                <iconset theme="document-print-preview"/>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QPushButton" name="prefixWinecfgBtn">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This will open up the current prefix's Wine configuration menu, using &lt;span style=&quot; font-style:italic;&quot;&gt;Winecfg.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Access this Prefix's Wine Configurator</string>
+               </property>
+               <property name="text">
+                <string>Open Winecfg in Prefix</string>
+               </property>
+               <property name="icon">
+                <iconset theme="document-properties"/>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>12</width>
+                 <height>12</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QPushButton" name="prefixDrivesBtn">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Proton can map directories anywhere within your Linux filesystem to a simulated Windows drive. This submenu allows you to configure what directories are mapped to what virtual drive letters.&lt;/p&gt;&lt;p&gt;Note: By default, every Proton prefix will map &lt;span style=&quot; font-style:italic;&quot;&gt;Z:&lt;/span&gt; to your root &lt;span style=&quot; font-style:italic;&quot;&gt;(/)&lt;/span&gt; filesystem, and (in recent versions starting in Proton 9) any mounted drives in &lt;span style=&quot; font-style:italic;&quot;&gt;/mnt&lt;/span&gt; as additional drive letters.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Configure Virtual Drives</string>
+               </property>
+               <property name="text">
+                <string>Configure Virtual Drives...</string>
+               </property>
+               <property name="icon">
+                <iconset theme="folder-visiting"/>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>16</width>
+                 <height>16</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QPushButton" name="prefixInstallDiscordRPC">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Click to install EnderIce2's &lt;a href=&quot;https://enderice2.github.io/rpc-bridge/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;Discord Rich Presence Bridge Service&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;This service will be installed to the prefix and run as a startup service by the runner. This allows any Rich Presence output within the Proton prefix to be forwarded to a native Linux Discord client, such as the official Discord client (or even better, &lt;a href=&quot;https://github.com/Vencord/Vesktop?tab=readme-ov-file#vesktop&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;Vesktop&lt;/span&gt;&lt;/a&gt;).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Install Discord Rich Presence Bridge Service</string>
+               </property>
+               <property name="text">
+                <string>Install Discord Rich Presence Service</string>
+               </property>
+               <property name="icon">
+                <iconset theme="package-x-generic"/>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>16</width>
+                 <height>16</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3" rowspan="2">
+              <spacer name="horizontalSpacer_16">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="0" rowspan="2">
+              <spacer name="horizontalSpacer_15">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="0" colspan="4">
+              <widget class="Line" name="line">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="infoBox">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox::title {
+color: yellow
+}</string>
+     </property>
+     <property name="title">
+      <string/>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QScrollArea" name="scrollArea_2">
+        <property name="styleSheet">
+         <string notr="true">background-color: transparent</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Shape::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Plain</enum>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents_2">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>610</width>
+           <height>148</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="QLabel" name="infoText">
+            <property name="styleSheet">
+             <string notr="true">color: lightgray</string>
+            </property>
+            <property name="text">
+             <string>&amp;Hover over a setting to view info about it here.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Reset|QDialogButtonBox::StandardButton::Save</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>NeroPrefixSettingsWindow</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>NeroPrefixSettingsWindow</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
