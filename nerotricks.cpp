@@ -97,6 +97,11 @@ void NeroTricksWindow::InitVerbs()
                     winetricksDescriptions.clear();
                 }
 
+                if(NeroFS::GetWinetricks().contains("protontricks"))
+                    // read first line, which is boilerplate cd
+                    winetricksList.readLine();
+
+                // capture the rest of the verbs list output to organize.
                 QString winetricksOutput = winetricksList.readAllStandardOutput();
                 winetricksAvailVerbs << winetricksOutput.split("\n", Qt::SkipEmptyParts);
 

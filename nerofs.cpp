@@ -204,9 +204,15 @@ QString NeroFS::GetUmU()
 
 QString NeroFS::GetWinetricks()
 {
-    if(QDir("/usr/bin").exists("winetricks")) {
-        return "/usr/bin/winetricks";
-    } else { return ""; }
+    // Each Proton version comes with a Winetricks script. Neat!
+    if(QDir(QString("%1/%2/protonfixes").arg(GetProtonsPath().path(), GetCurrentRunner())).exists("winetricks"))
+        return QString("%1/%2/protonfixes/winetricks").arg(GetProtonsPath().path(), GetCurrentRunner());
+    else {
+        // fall back to system winetricks
+        if(QDir("/usr/bin").exists("winetricks"))
+            return "/usr/bin/winetricks";
+        else return "";
+    }
 }
 
 QSettings* NeroFS::GetCurrentPrefixCfg()
@@ -366,4 +372,18 @@ QMap<QString, QString> NeroFS::GetCurrentShortcutsMap()
     }
 
     return shortcutsMap;
+}
+
+void NeroFS::DeleteShortcut(const QString shortcutHash)
+{
+    GetCurrentPrefixCfg();
+    prefixCfg->beginGroup("Shortcuts");
+    QString name = prefixCfg->value(shortcutHash).toString();
+    prefixCfg->remove(shortcutHash);
+    prefixCfg->endGroup();
+    prefixCfg->beginGroup(QString("Shortcuts--%1").arg(shortcutHash));
+    prefixCfg->remove("");
+    prefixCfg->endGroup();
+    QFile icoFile(QString("%1/%2/.icoCache/%3-%4.png").arg(GetPrefixesPath().path(), GetCurrentPrefix(), name, shortcutHash));
+    if(icoFile.exists()) icoFile.remove();
 }

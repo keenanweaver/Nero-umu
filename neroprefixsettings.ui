@@ -203,8 +203,31 @@
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
-         <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,0,0,0">
-          <item row="2" column="1">
+         <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,0,1">
+          <item row="0" column="0" colspan="2">
+           <widget class="QCheckBox" name="toggleNVAPI">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This enables support for &lt;a href=&quot;https://github.com/jp7677/dxvk-nvapi?tab=readme-ov-file#dxvk-nvapi&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;DXVK-NVAPI&lt;/span&gt;&lt;/a&gt; for NVIDIA graphics cards, which correctly reports the GPU model and (usually) allows apps to access certain vendor exclusive features, such as DLSS, Ray Tracing, or hardware-accelerated CUDA in some games. &lt;span style=&quot; font-weight:700;&quot;&gt;Full DLSS or CUDA functionality requires the &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;physx&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; verb to be installed, as well as enabling the &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;nvcuda&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; native DLL override.&lt;/span&gt; When disabled, any NVIDIA cards will be reported as an AMD GPU.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;This setting can ONLY be used with NVIDIA GPUs using the NVIDIA Proprietary Driver (either &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Binary&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; or &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Open Kernel Module&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; distributions).&lt;/span&gt;&lt;/p&gt;&lt;p&gt;If unsure, you should enable this only if the application has explicit support for DLSS or RTX features.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Enable NVAPI Support</string>
+            </property>
+            <property name="text">
+             <string>Enable NVAPI Support</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>EnableNVAPI</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Scaling Mode:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
            <widget class="QComboBox" name="setScalingBox">
             <property name="whatsThis">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the method of scaling the image of the application. Some versions of Proton supports various different types of image scaling for fullscreen applications only; otherwise, &lt;a href=&quot;https://github.com/ValveSoftware/gamescope?tab=readme-ov-file#gamescope-the-micro-compositor-formerly-known-as-steamcompmgr&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;Gamescope&lt;/span&gt;&lt;/a&gt; (if installed) can be used for more scaling options, as well as forcing games into an effective borderless windowed mode, regardless of display.&lt;/p&gt;&lt;p&gt;It should be noted that all Proton runners uses a rendering hack to scale fullscreen applications to your display resolution, regardless of the resolution setting used in-game.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Only Proton-GE has support for &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;AMD FSR 1&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; scaling modes.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;If unsure, select &lt;span style=&quot; font-style:italic;&quot;&gt;Normal.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -277,20 +300,65 @@
             </item>
            </widget>
           </item>
-          <item row="5" column="0" colspan="2">
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Orientation::Vertical</enum>
+          <item row="2" column="1">
+           <widget class="QGroupBox" name="fsrSection">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If using the FSR Custom Mode, this sets the screen resolution that is reported to the application. This can be used for more precise rendering resolutions, or for use with games that expects a non-standard resolution, and will crash if it's not detected - examples of the latter include several Sega arcade game dumps, which often demands resolutions of either &lt;span style=&quot; font-style:italic;&quot;&gt;1360x768&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;1024x600.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>0</height>
-             </size>
+            <property name="accessibleName">
+             <string>FSR Custom Resolution</string>
             </property>
-           </spacer>
+            <layout class="QGridLayout" name="gridLayout_10">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_12">
+               <property name="text">
+                <string>Custom Resolution:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="fsrCustomW">
+               <property name="maxLength">
+                <number>8</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="placeholderText">
+                <string>Width (px)</string>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>FSRcustomResW</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>x</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLineEdit" name="fsrCustomH">
+               <property name="maxLength">
+                <number>8</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="placeholderText">
+                <string>Height (px)</string>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>FSRcustomResH</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </item>
-          <item row="4" column="1">
+          <item row="3" column="1">
            <widget class="QGroupBox" name="gamescopeSection">
             <layout class="QGridLayout" name="gamescopeStuff" columnstretch="1,0,0,0">
              <item row="0" column="1" colspan="3">
@@ -515,86 +583,18 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </layout>
            </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="QGroupBox" name="fsrSection">
-            <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If using the FSR Custom Mode, this sets the screen resolution that is reported to the application. This can be used for more precise rendering resolutions, or for use with games that expects a non-standard resolution, and will crash if it's not detected - examples of the latter include several Sega arcade game dumps, which often demands resolutions of either &lt;span style=&quot; font-style:italic;&quot;&gt;1360x768&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;1024x600.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <item row="4" column="0" colspan="2">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
             </property>
-            <property name="accessibleName">
-             <string>FSR Custom Resolution</string>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>0</height>
+             </size>
             </property>
-            <layout class="QGridLayout" name="gridLayout_10">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_12">
-               <property name="text">
-                <string>Custom Resolution:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="fsrCustomW">
-               <property name="maxLength">
-                <number>8</number>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-               </property>
-               <property name="placeholderText">
-                <string>Width (px)</string>
-               </property>
-               <property name="isFor" stdset="0">
-                <string>FSRcustomResW</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QLabel" name="label_3">
-               <property name="text">
-                <string>x</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="3">
-              <widget class="QLineEdit" name="fsrCustomH">
-               <property name="maxLength">
-                <number>8</number>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-               </property>
-               <property name="placeholderText">
-                <string>Height (px)</string>
-               </property>
-               <property name="isFor" stdset="0">
-                <string>FSRcustomResH</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Scaling Mode:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="2">
-           <widget class="QCheckBox" name="toggleNVAPI">
-            <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This enables support for &lt;a href=&quot;https://github.com/jp7677/dxvk-nvapi?tab=readme-ov-file#dxvk-nvapi&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;DXVK-NVAPI&lt;/span&gt;&lt;/a&gt; for NVIDIA graphics cards, which correctly reports the GPU model and (usually) allows apps to access certain vendor exclusive features, such as DLSS, Ray Tracing, or hardware-accelerated CUDA in some games. &lt;span style=&quot; font-weight:700;&quot;&gt;Full DLSS or CUDA functionality requires the &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;physx&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; verb to be installed, as well as enabling the &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;nvcuda&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; native DLL override.&lt;/span&gt; When disabled, any NVIDIA cards will be reported as an AMD GPU.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;This setting can ONLY be used with NVIDIA GPUs using the NVIDIA Proprietary Driver (either &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Binary&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; or &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Open Kernel Module&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; distributions).&lt;/span&gt;&lt;/p&gt;&lt;p&gt;If unsure, you should enable this only if the application has explicit support for DLSS or RTX features.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="accessibleName">
-             <string>Enable NVAPI Support</string>
-            </property>
-            <property name="text">
-             <string>Enable NVAPI Support</string>
-            </property>
-            <property name="isFor" stdset="0">
-             <string>EnableNVAPI</string>
-            </property>
-           </widget>
+           </spacer>
           </item>
          </layout>
         </widget>

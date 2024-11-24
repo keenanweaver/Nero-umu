@@ -65,6 +65,8 @@ private slots:
 
     void on_actionAbout_Nero_triggered();
 
+    void on_oneTimeRunBtn_clicked();
+
 private:
     Ui::NeroManagerWindow *ui;
     NeroManagerPreferences *prefs;

@@ -14,10 +14,13 @@
    <string>NeroManagerWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
+     <layout class="QGridLayout" name="topHeaderLayout">
+      <property name="verticalSpacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
        <widget class="QPushButton" name="backButton">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -42,8 +45,8 @@
         </property>
        </widget>
       </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item row="0" column="1">
+       <layout class="QVBoxLayout" name="headerTextArea">
         <item>
          <widget class="QLabel" name="topTitle">
           <property name="sizePolicy">
@@ -92,7 +95,7 @@
         </item>
        </layout>
       </item>
-      <item>
+      <item row="0" column="2">
        <widget class="QPushButton" name="addButton">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -117,7 +120,88 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="1">
+       <layout class="QHBoxLayout" name="oneTimeLine" stretch="2,0,3,1">
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="oneTimeRunBtn">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Run Executable in Prefix...</string>
+          </property>
+          <property name="icon">
+           <iconset theme="media-playback-start"/>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>24</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="oneTimeRunArgs">
+          <property name="placeholderText">
+           <string>One-time Runner Args...</string>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
      </layout>
+    </item>
+    <item>
+     <widget class="Line" name="line">
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+      <property name="lineWidth">
+       <number>2</number>
+      </property>
+      <property name="midLineWidth">
+       <number>1</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QScrollArea" name="prefixesScrollArea">
@@ -148,7 +232,7 @@
          <x>0</x>
          <y>0</y>
          <width>563</width>
-         <height>201</height>
+         <height>183</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -227,7 +311,7 @@
          <x>0</x>
          <y>0</y>
          <width>563</width>
-         <height>201</height>
+         <height>182</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">

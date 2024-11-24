@@ -73,6 +73,8 @@ private slots:
 
     void OptionSet();
 
+    void deleteShortcut_clicked();
+
     void on_buttonBox_clicked(QAbstractButton *button);
 
     void on_tabWidget_currentChanged(int index);
@@ -124,6 +126,8 @@ private:
     QList<QAction*> dllOptions;
 
     QFont boldFont;
+
+    QPushButton *deleteShortcut;
 
     bool umuRunning = false;
 

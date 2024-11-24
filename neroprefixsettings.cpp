@@ -25,6 +25,7 @@
 
 #include <QAction>
 #include <QProcess>
+#include <QDebug>
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QuaZip-Qt5-1.4/quazip/quazip.h>
@@ -70,6 +71,11 @@ NeroPrefixSettingsWindow::NeroPrefixSettingsWindow(QWidget *parent, const QStrin
         ui->prefixSettings->setVisible(false);
         ui->prefixServices->setVisible(false);
         ui->nameMatchWarning->setVisible(false);
+
+        deleteShortcut = new QPushButton("Delete Shortcut");
+        deleteShortcut->setIcon(QIcon::fromTheme("edit-delete"));
+        ui->buttonBox->addButton(deleteShortcut, QDialogButtonBox::ResetRole);
+        connect(deleteShortcut, &QPushButton::clicked, this, &NeroPrefixSettingsWindow::deleteShortcut_clicked);
 
         // shortcut view uses tristate items,
         // where PartiallyChecked is unmodified from global/undefined in shortcut config.
@@ -440,9 +446,9 @@ void NeroPrefixSettingsWindow::on_postRunButton_clicked()
 
 void NeroPrefixSettingsWindow::on_prefixInstallDiscordRPC_clicked()
 {
-    // TODO(?): currently, wget is more convenient to call as it's installed in every user's distro anyways,
-    // and I can't be fucked to make a downloader rn.
-    // This especially is where help would be appreciated kthx <3<3
+    // TODO(?): curl could be pulled as a dependency and done in code,
+    // but it wouldn't be much different since curl is already on most distros anyways?
+    // Maybe later.
     QDir tmpDir(QDir::temp());
     if(!tmpDir.exists("nero-manager"))
         tmpDir.mkdir("nero-manager");
@@ -747,5 +753,17 @@ void NeroPrefixSettingsWindow::on_buttonBox_clicked(QAbstractButton *button)
 
         }
     // cancel button case isn't needed, since we filter by font to find changed values.
+    }
+}
+
+
+void NeroPrefixSettingsWindow::deleteShortcut_clicked()
+{
+    if(QMessageBox::warning(this,
+                             "Delete Shortcut?",
+                             "Are you sure you wish to delete this shortcut?\n",
+                             QMessageBox::Yes | QMessageBox::No, QMessageBox::No)
+        == QMessageBox::Yes) {
+        this->done(-1);
     }
 }

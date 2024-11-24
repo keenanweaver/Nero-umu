@@ -112,6 +112,8 @@ void NeroManagerWindow::SetHeader(const QString prefix, const unsigned int short
         ui->addButton->setIcon(QIcon::fromTheme("folder-new"));
         ui->addButton->setToolTip("Create a new prefix.");
         ui->addButton->clearFocus();
+        ui->oneTimeRunBtn->setVisible(false);
+        ui->oneTimeRunArgs->setVisible(false);
 
         if(NeroFS::GetPrefixes().isEmpty()) { StartBlinkTimer(); }
         else { StopBlinkTimer(); }
@@ -128,6 +130,9 @@ void NeroManagerWindow::SetHeader(const QString prefix, const unsigned int short
         ui->addButton->clearFocus();
         ui->addButton->setIcon(QIcon::fromTheme("list-add"));
         ui->addButton->setToolTip("Add a new shortcut to this prefix.");
+        ui->oneTimeRunBtn->setVisible(true);
+        ui->oneTimeRunArgs->setVisible(true);
+        ui->oneTimeRunArgs->clear();
 
         if(shortcutsCount) {
             ui->topSubtitle->setText(QString("%1 Apps").arg(shortcutsCount));
@@ -573,20 +578,40 @@ void NeroManagerWindow::prefixShortcutEditButtons_clicked()
         if(prefixSettings->appName != prefixShortcutLabel.at(slot)->text())
             prefixShortcutLabel.at(slot)->setText(prefixSettings->appName);
     } else if(prefixSettings->result() == -1) {
-        // delete objects here.
+        NeroFS::DeleteShortcut(settings.value(prefixShortcutLabel.at(slot)->text()));
+        delete prefixShortcutIco[slot];
+        delete prefixShortcutIcon[slot];
+        delete prefixShortcutLabel[slot];
+        delete prefixShortcutPlayButton[slot];
+        delete prefixShortcutEditButton[slot];
+        prefixShortcutIco[slot] = new QIcon;
+        prefixShortcutIcon[slot] = new QLabel;
+        prefixShortcutLabel[slot] = new QLabel;
+        prefixShortcutPlayButton[slot] = new QPushButton;
+        prefixShortcutEditButton[slot] = new QPushButton;
     }
 
-
-
     delete prefixSettings;
+}
+
+void NeroManagerWindow::on_oneTimeRunBtn_clicked()
+{
+    QString oneTimeApp = QFileDialog::getOpenFileName(this,
+                                                      "Select an Executable to Start in Prefix",
+                                                      qEnvironmentVariable("HOME"),
+    "Compatible Windows Executables (*.bat *.exe *.msi);;Windows Batch Script Files (*.bat);;Windows Portable Executable (*.exe);;Windows Installer Package (*.msi)");
+
+    if(!oneTimeApp.isEmpty()) {
+        qDebug() << "TODO: start runner here";
+    }
 }
 
 void NeroManagerWindow::CleanupShortcuts()
 {
     // TODO: for some reason, pulling from currentPrefixIni stops showing results here?
-    // some logic bug?
+    // some logic bug? So just use NeroFS.
     if(!NeroFS::GetCurrentPrefixShortcuts().isEmpty()) {
-        for(unsigned int i = 0; i < NeroFS::GetCurrentPrefixShortcuts().count(); i++) {
+        for(unsigned int i = 0; i < prefixShortcutLabel.count(); i++) {
             delete prefixShortcutIco[i];
             delete prefixShortcutIcon[i];
             delete prefixShortcutLabel[i];
@@ -628,10 +653,9 @@ void NeroManagerWindow::on_prefixTricksBtn_clicked()
 
     tricks = new NeroTricksWindow();
 
-    if(!verbsInstalled.isEmpty()) { tricks->SetPreinstalledVerbs(verbsInstalled); }
+    if(!verbsInstalled.isEmpty()) tricks->SetPreinstalledVerbs(verbsInstalled);
 
     bool confirmed = false;
-
     QStringList verbsToInstall;
 
     while(!confirmed) {
