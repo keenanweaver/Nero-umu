@@ -244,7 +244,10 @@ void NeroPrefixSettingsWindow::LoadSettings()
                                                                 currentShortcutHash)));
 
         ui->toggleShortcutPrefixOverride->setChecked(settings.value("IgnoreGlobalDLLs").toBool());
-        ui->winVerBox->setCurrentText(winVersionListBackwards.at(settings.value("WindowsVersion").toInt()));
+
+        if(settings.value("WindowsVersion").toString().isEmpty())
+            ui->winVerBox->setCurrentIndex(-1);
+        else ui->winVerBox->setCurrentText(winVersionListBackwards.at(settings.value("WindowsVersion").toInt()));
 
         // if current scaler is set as disabled due to incompatible runner, set to Normal.
         auto *model = qobject_cast<QStandardItemModel*>(ui->setScalingBox->model());

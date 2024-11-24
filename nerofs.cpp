@@ -292,7 +292,7 @@ void NeroFS::AddNewShortcut(const QString newShortcutHash, const QString newShor
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "Name", newShortcutName);
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "Path", newAppPath);
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "Args", {""});
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "WindowsVersion", NeroConstant::WinVer10);
+    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "WindowsVersion", "");
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "Gamemode", "");
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "VKcapture", "");
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "Mangohud", "");
