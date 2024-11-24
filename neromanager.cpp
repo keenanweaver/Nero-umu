@@ -157,10 +157,12 @@ void NeroManagerWindow::RenderPrefixes()
 
             prefixMainButton.at(i)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
             prefixMainButton.at(i)->setFont(listFont);
+            prefixMainButton.at(i)->setProperty("slot", i);
 
             prefixDeleteButton.at(i)->setFlat(true);
             prefixDeleteButton.at(i)->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
             prefixDeleteButton.at(i)->setToolTip(QString("Delete %1").arg(NeroFS::GetPrefixes().at(i)));
+            prefixDeleteButton.at(i)->setProperty("slot", i);
 
             ui->prefixesList->addWidget(prefixMainButton.at(i), i, 0);
             ui->prefixesList->addWidget(prefixDeleteButton.at(i), i, 1);
@@ -290,10 +292,12 @@ void NeroManagerWindow::CreatePrefix(const QString newPrefix, const QString runn
 
         prefixMainButton.at(pos)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         prefixMainButton.at(pos)->setFont(listFont);
+        prefixMainButton.at(pos)->setProperty("slot", pos);
 
         prefixDeleteButton.at(pos)->setFlat(true);
         prefixDeleteButton.at(pos)->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
         prefixDeleteButton.at(pos)->setToolTip(QString("Delete %1").arg(newPrefix));
+        prefixDeleteButton.at(pos)->setProperty("slot", pos);
 
         ui->prefixesList->addWidget(prefixMainButton.at(pos), pos, 0);
         ui->prefixesList->addWidget(prefixDeleteButton.at(pos), pos, 1);
@@ -471,15 +475,7 @@ void NeroManagerWindow::on_backButton_clicked()
 
 void NeroManagerWindow::prefixMainButtons_clicked()
 {
-    // replace with sender's "slot" property
-    int slot;
-    QObject* obj = sender();
-    for(int i = 0;;i++) {
-        if(obj == prefixMainButton.at(i)) {
-            slot = i;
-            break;
-        }
-    }
+    int slot = sender()->property("slot").toInt();
 
     if(NeroFS::GetCurrentPrefix() != prefixMainButton.at(slot)->text()) {
         if(prefixShortcutLabel.count())
@@ -495,15 +491,7 @@ void NeroManagerWindow::prefixMainButtons_clicked()
 
 void NeroManagerWindow::prefixDeleteButtons_clicked()
 {
-    // replace with sender's "slot" property
-    int slot;
-    QObject* obj = sender();
-    for(int i = 0;;i++) {
-        if(obj == prefixDeleteButton.at(i)) {
-            slot = i;
-            break;
-        }
-    }
+    int slot = sender()->property("slot").toInt();
 
     if(QMessageBox::question(this,
                              "Removing Prefix",
