@@ -30,8 +30,6 @@
 #include <QTimer>
 #include <QDebug>
 
-QSettings *currentPrefixIni;
-
 NeroManagerWindow::NeroManagerWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::NeroManagerWindow)
@@ -175,7 +173,7 @@ void NeroManagerWindow::RenderPrefixes()
 
 void NeroManagerWindow::RenderPrefixList()
 {
-    currentPrefixIni = NeroFS::GetCurrentPrefixCfg();
+    QSettings *currentPrefixIni = NeroFS::GetCurrentPrefixCfg();
     currentPrefixIni->beginGroup("Shortcuts");
 
     if(!currentPrefixIni->childKeys().isEmpty()) {
@@ -285,9 +283,9 @@ void NeroManagerWindow::CreatePrefix(const QString newPrefix, const QString runn
             StopBlinkTimer();
         }
 
-        unsigned int pos = NeroFS::GetPrefixes().indexOf(newPrefix);
+        unsigned int pos = prefixMainButton.count();
 
-        prefixMainButton << new QPushButton(NeroFS::GetPrefixes().at(pos));
+        prefixMainButton << new QPushButton(newPrefix);
         prefixDeleteButton << new QPushButton(QIcon::fromTheme("edit-delete"), "");
 
         prefixMainButton.at(pos)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -295,7 +293,7 @@ void NeroManagerWindow::CreatePrefix(const QString newPrefix, const QString runn
 
         prefixDeleteButton.at(pos)->setFlat(true);
         prefixDeleteButton.at(pos)->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-        prefixDeleteButton.at(pos)->setToolTip(QString("Delete %1").arg(NeroFS::GetPrefixes().at(pos)));
+        prefixDeleteButton.at(pos)->setToolTip(QString("Delete %1").arg(newPrefix));
 
         ui->prefixesList->addWidget(prefixMainButton.at(pos), pos, 0);
         ui->prefixesList->addWidget(prefixDeleteButton.at(pos), pos, 1);
@@ -377,7 +375,7 @@ void NeroManagerWindow::on_addButton_clicked()
                 // hash function here
                 QString hashName(QCryptographicHash::hash(QString(LOLRANDOM).toLocal8Bit(), QCryptographicHash::Md5).toHex(0));
 
-                currentPrefixIni = NeroFS::GetCurrentPrefixCfg();
+                QSettings *currentPrefixIni = NeroFS::GetCurrentPrefixCfg();
                 currentPrefixIni->beginGroup("Shortcuts");
 
                 // if this hash matches anything, repeatedly generate hashes until a unique one is found
@@ -484,19 +482,12 @@ void NeroManagerWindow::prefixMainButtons_clicked()
     }
 
     if(NeroFS::GetCurrentPrefix() != prefixMainButton.at(slot)->text()) {
-        if(currentPrefixIni != nullptr) {
+        if(prefixShortcutLabel.count())
             CleanupShortcuts();
-        }
 
         NeroFS::SetCurrentPrefix(prefixMainButton.at(slot)->text());
 
         RenderPrefixList();
-
-        if(!currentPrefixIni->group().isEmpty())
-            currentPrefixIni->endGroup();
-        currentPrefixIni->beginGroup("PrefixSettings");
-
-        NeroFS::SetCurrentRunner(currentPrefixIni->value("CurrentRunner").toString());
     }
 
     SetHeader(NeroFS::GetCurrentPrefix(), NeroFS::GetCurrentPrefixShortcuts().count());
@@ -519,34 +510,17 @@ void NeroManagerWindow::prefixDeleteButtons_clicked()
                              QString("Are you sure you wish to delete %1?\n\n"
                                      "All data inside the prefix will be deleted.\n"
                                      "This operation CAN NOT BE UNDONE.")
-                             .arg(NeroFS::GetPrefixes().at(slot))
+                             .arg(prefixMainButton.at(slot)->text())
                             ) == QMessageBox::Yes)
     {
-        if(QDir(QString("%1/%2").arg(NeroFS::GetPrefixesPath().path(), NeroFS::GetPrefixes().at(slot))).removeRecursively()) {
-            if(NeroFS::GetCurrentPrefix() == prefixMainButton.at(slot)->text()) {
+        if(NeroFS::DeletePrefix(prefixMainButton.at(slot)->text())) {
+            if(NeroFS::GetCurrentPrefix() == prefixMainButton.at(slot)->text())
                 CleanupShortcuts();
 
-                NeroFS::SetCurrentPrefix();
-            }
-
-            for(int i = 0; i < NeroFS::GetPrefixes().count(); i++) {
-                delete prefixMainButton.at(i);
-                delete prefixDeleteButton.at(i);
-            }
-            // TODO: do we need the extra deletion stuff?
-
-
-            // both individual pointer deletes *AND* the list clear are necessary for stability.
-            prefixMainButton.clear();
-            prefixDeleteButton.clear();
-
-            NeroFS::RemovePrefixBySlot(slot); //NeroFS::RemovePrefix(NeroFS::GetPrefixes().at(slot));
-
-            // TODO: actually, I don't think we *need* to re-render?
-
-            // because memory has been fragmented if the deleted entry isn't the very last,
-            // the whole Prefix panel needs to be repainted to be sure.
-            RenderPrefixes();
+            delete prefixMainButton.at(slot);
+            delete prefixDeleteButton.at(slot);
+            prefixMainButton[slot] = new QPushButton;
+            prefixDeleteButton[slot] = new QPushButton;
         }
     }
 }

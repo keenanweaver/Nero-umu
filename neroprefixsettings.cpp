@@ -215,8 +215,7 @@ void NeroPrefixSettingsWindow::LoadSettings()
         if(NeroFS::GetAvailableProtons().contains(settings.value("CurrentRunner").toString()))
             ui->prefixRunner->setCurrentText(settings.value("CurrentRunner").toString());
         else ui->prefixRunner->setCurrentIndex(0),
-             ui->prefixRunner->setFont(boldFont),
-             NeroFS::SetCurrentRunner(ui->prefixRunner->itemText(0));
+             ui->prefixRunner->setFont(boldFont);
         ui->togglePrefixRuntimeUpdates->setChecked(settings.value("RuntimeUpdateOnLaunch").toBool());
 
         // advanced tab
@@ -679,7 +678,6 @@ void NeroPrefixSettingsWindow::on_buttonBox_clicked(QAbstractButton *button)
                 if(child->font() == boldFont)
                     NeroFS::SetCurrentPrefixCfg("PrefixSettings", child->property("isFor").toString(), child->currentIndex());
 
-            NeroFS::SetCurrentRunner(ui->prefixRunner->currentText());
             NeroFS::SetCurrentPrefixCfg("PrefixSettings", "CurrentRunner", ui->prefixRunner->currentText());
 
             if(dllsToAdd.count()) NeroFS::SetCurrentPrefixCfg("PrefixSettings", "DLLoverrides", dllsToAdd);

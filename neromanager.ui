@@ -163,7 +163,7 @@
         <item>
          <widget class="QLineEdit" name="oneTimeRunArgs">
           <property name="placeholderText">
-           <string>One-time Runner Args...</string>
+           <string>Arguments</string>
           </property>
           <property name="clearButtonEnabled">
            <bool>true</bool>

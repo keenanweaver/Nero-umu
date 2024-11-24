@@ -59,6 +59,7 @@ public:
     static void CreateUserLinks(const QString);
     static void AddNewPrefix(const QString, const QString);
     static void AddNewShortcut(const QString, const QString, const QString);
+    static bool DeletePrefix(const QString);
     static void DeleteShortcut(const QString);
 
     static QSettings* GetCurrentPrefixCfg();
@@ -68,12 +69,11 @@ public:
     static QString GetUmU();
     static QString GetWinetricks();
 
-    static void SetCurrentPrefix(const QString prefix = "") { if(prefix.isEmpty()) currentPrefix.clear(); else currentPrefix = prefix; }
-    static void SetCurrentRunner(const QString runner = "") { currentRunner = runner; }
+    static void SetCurrentPrefix(const QString);
     static bool SetCurrentPrefixCfg(const QString, const QString, const QVariant);
-    static void AddNewShortcutSetting(const QString shortcutHash, const QString key, const QVariant value) { SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(shortcutHash), key, value); }
-    static void RemovePrefix(const QString prefix) { prefixes.removeOne(prefix); }
-    static void RemovePrefixBySlot(const int slot) { prefixes.removeAt(slot); }
+    static void AddNewShortcutSetting(const QString shortcutHash, const QString key, const QVariant value) {
+        SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(shortcutHash), key, value);
+    }
 };
 
 #endif // NEROFS_H
