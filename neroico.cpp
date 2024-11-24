@@ -34,7 +34,7 @@
 #include <QDir>
 #include <QString>
 #include <QProcess>
-#include <QDebug>
+//#include <QDebug>
 
 QString NeroIcoExtractor::GetIcon(QString sourceFile)
 {
@@ -60,23 +60,40 @@ QString NeroIcoExtractor::GetIcon(QString sourceFile)
 
                     extProcess.waitForFinished();
 
+                    // prepping for icon index values storage
                     QString stdout;
+                    int index;
+                    int size;
+                    int depth;
+                    QStringList icotoolOutput;
+                    QMap<int, int> icoScoreTable;
 
-                    // TODO: is it safe to assume the largest will always be the last result?
-                    // TODO: nope, DMC3SE's last entry is the low color depth icon.
-                    // we may have to try first with descending bit-depth numbers before
-                    // anything else.
-                    while(extProcess.canReadLine()) { stdout = extProcess.readLine(); }
+                    while(extProcess.canReadLine()) {
+                        stdout = extProcess.readLine();
+
+                        if(stdout.startsWith("--icon")) {
+                            index = stdout.remove("--icon --index=").leftRef(stdout.indexOf(' ')).toInt();
+                            icotoolOutput = stdout.split(' ', Qt::SkipEmptyParts);
+
+                            // trim these lines to get acceptable values
+                            icotoolOutput[1].remove("--width=");
+                            icotoolOutput[3].remove("--bit-depth=");
+
+                            size = icotoolOutput.at(1).toInt();
+                            depth = icotoolOutput.at(3).toInt();
+
+                            // whichever's the highest key wins!
+                            icoScoreTable[size*depth] = index;
+                        }
+                    }
 
                     if(extProcess.exitCode() == 0) {
-                        stdout = stdout.remove("--icon --index=").left(stdout.indexOf(' '));
-
-                        // now we actually extract the file.
+                        // now we actually extract the file, using the highest scored icon
                         extProcess.start(NeroFS::GetIcoutils(), { "-x",
                                                                   QString("%1.ico").arg(sourceFile.mid(sourceFile.lastIndexOf('/')+1).remove(".exe")),
                                                                   "--icon",
                                                                   "-i",
-                                                                  stdout,
+                                                                  QString("%1").arg(icoScoreTable.last()),
                                                                   "-o",
                                                                   QString("%1.png").arg(sourceFile.mid(sourceFile.lastIndexOf('/')+1).remove(".exe")) } );
 
@@ -126,20 +143,40 @@ QString NeroIcoExtractor::GetIcon(QString sourceFile)
 
                     extProcess.waitForFinished();
 
+                    // prepping for icon index values storage
                     QString stdout;
+                    int index;
+                    int size;
+                    int depth;
+                    QStringList icotoolOutput;
+                    QMap<int, int> icoScoreTable;
 
-                    // TODO: is it safe to assume the largest will always be the last result?
-                    while(extProcess.canReadLine()) { stdout = extProcess.readLine(); }
+                    while(extProcess.canReadLine()) {
+                        stdout = extProcess.readLine();
+
+                        if(stdout.startsWith("--icon")) {
+                            index = stdout.remove("--icon --index=").leftRef(stdout.indexOf(' ')).toInt();
+                            icotoolOutput = stdout.split(' ', Qt::SkipEmptyParts);
+
+                            // trim these lines to get acceptable values
+                            icotoolOutput[1].remove("--width=");
+                            icotoolOutput[3].remove("--bit-depth=");
+
+                            size = icotoolOutput.at(1).toInt();
+                            depth = icotoolOutput.at(3).toInt();
+
+                            // whichever's the highest key wins!
+                            icoScoreTable[size*depth] = index;
+                        }
+                    }
 
                     if(extProcess.exitCode() == 0) {
-                        stdout = stdout.remove("--icon --index=").left(stdout.indexOf(' '));
-
-                        // now we actually extract the file.
+                        // now we actually extract the file, using the highest scored icon
                         extProcess.start(NeroFS::GetIcoutils(), { "-x",
                                                                  QString("%1.ico").arg(sourceFile.mid(sourceFile.lastIndexOf('/')+1).remove(".dll")),
                                                                  "--icon",
                                                                  "-i",
-                                                                 stdout,
+                                                                 QString("%1").arg(icoScoreTable.last()),
                                                                  "-o",
                                                                  QString("%1.png").arg(sourceFile.mid(sourceFile.lastIndexOf('/')+1).remove(".dll")) } );
 
@@ -182,20 +219,40 @@ QString NeroIcoExtractor::GetIcon(QString sourceFile)
 
             extProcess.waitForFinished();
 
+            // prepping for icon index values storage
             QString stdout;
+            int index;
+            int size;
+            int depth;
+            QStringList icotoolOutput;
+            QMap<int, int> icoScoreTable;
 
-            // TODO: is it safe to assume the largest will always be the last result?
-            while(extProcess.canReadLine()) { stdout = extProcess.readLine(); }
+            while(extProcess.canReadLine()) {
+                stdout = extProcess.readLine();
+
+                if(stdout.startsWith("--icon")) {
+                    index = stdout.remove("--icon --index=").leftRef(stdout.indexOf(' ')).toInt();
+                    icotoolOutput = stdout.split(' ', Qt::SkipEmptyParts);
+
+                    // trim these lines to get acceptable values
+                    icotoolOutput[1].remove("--width=");
+                    icotoolOutput[3].remove("--bit-depth=");
+
+                    size = icotoolOutput.at(1).toInt();
+                    depth = icotoolOutput.at(3).toInt();
+
+                    // whichever's the highest key wins!
+                    icoScoreTable[size*depth] = index;
+                }
+            }
 
             if(extProcess.exitCode() == 0) {
-                stdout = stdout.remove("--icon --index=").left(stdout.indexOf(' '));
-
-                // now we actually extract the file.
+                // now we actually extract the file, using the highest scored icon
                 extProcess.start(NeroFS::GetIcoutils(), { "-x",
                                                          sourceFile,
                                                          "--icon",
                                                          "-i",
-                                                         stdout,
+                                                         QString("%1").arg(icoScoreTable.last()),
                                                          "-o",
                                                          QString("%1.png").arg(sourceFile.mid(sourceFile.lastIndexOf('/')+1).remove(".ico")) } );
 
