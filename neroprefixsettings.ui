@@ -1601,7 +1601,7 @@ color: yellow
              <string notr="true">color: lightgray</string>
             </property>
             <property name="text">
-             <string>&amp;Hover over a setting to view info about it here.</string>
+             <string>Hover over a setting to view info about it here.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>

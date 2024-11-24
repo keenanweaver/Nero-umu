@@ -24,8 +24,15 @@
 #include "neroico.h"
 
 #include <QAction>
-#include <QDebug>
 #include <QProcess>
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QuaZip-Qt5-1.4/quazip/quazip.h>
+#include <QuaZip-Qt5-1.4/quazip/quazipfile.h>
+#else
+#include <QuaZip-Qt6-1.4/quazip/quazip.h>
+#include <QuaZip-Qt6-1.4/quazip/quazipfile.h>
+#endif
 
 NeroPrefixSettingsWindow::NeroPrefixSettingsWindow(QWidget *parent, const QString shortcutHash)
     : QDialog(parent)
@@ -172,7 +179,7 @@ void NeroPrefixSettingsWindow::LoadSettings()
     if(!settings.value("VKcapture").toString().isEmpty())   ui->toggleVKcap->setChecked(settings.value("VKcapture").toBool());
 
     // compatibility tab
-    if(!settings.value("DLLoverrides").toStringList().first().isEmpty()) {
+    if(!settings.value("DLLoverrides").toStringList().isEmpty()) {
         dllSetting.clear();
         dllDelete.clear();
         const QStringList dllsToAdd = settings.value("DLLoverrides").toStringList();
@@ -430,7 +437,70 @@ void NeroPrefixSettingsWindow::on_postRunButton_clicked()
 
 void NeroPrefixSettingsWindow::on_prefixInstallDiscordRPC_clicked()
 {
-    // Working on bridge installer lol no peeking
+    // TODO(?): currently, wget is more convenient to call as it's installed in every user's distro anyways,
+    // and I can't be fucked to make a downloader rn.
+    // This especially is where help would be appreciated kthx <3<3
+    QDir tmpDir(QDir::temp());
+    if(!tmpDir.exists("nero-manager"))
+        tmpDir.mkdir("nero-manager");
+    QProcess process;
+    process.setWorkingDirectory(tmpDir.path()+"/nero-manager");
+    process.start("/usr/bin/wget", { "https://github.com/EnderIce2/rpc-bridge/releases/latest/download/bridge.zip" });
+    printf("Downloading Discord RPC Bridge with wget...\n");
+
+    NeroPrefixSettingsWindow::blockSignals(true);
+    umuRunning = true;
+    ui->tabWidget->setEnabled(false);
+    ui->buttonBox->setEnabled(false);
+    ui->infoBox->setEnabled(false);
+    ui->infoBox->setTitle("Downloading Discord RPC Bridge...");
+    ui->infoText->setText("");
+
+    while(process.state() != QProcess::NotRunning) QApplication::processEvents();
+
+    if(process.exitStatus() == 0) {
+        printf("Extracting bridge.zip...\n");
+        ui->infoBox->setTitle("Extracting bridge package...");
+
+        // QuaZip is like minizip, except it actually works here.
+        QuaZip zipFile(tmpDir.absoluteFilePath("nero-manager/bridge.zip"));
+        zipFile.open(QuaZip::mdUnzip);
+        zipFile.setCurrentFile("bridge.exe");
+        QuaZipFile exeToExtract(&zipFile);
+
+        if(exeToExtract.open(QIODevice::ReadOnly)) {
+            QFile outFile(tmpDir.absoluteFilePath("nero-manager/bridge.exe"));
+            outFile.open(QIODevice::WriteOnly);
+            outFile.write(exeToExtract.readAll());
+            outFile.close();
+
+            StartUmu(tmpDir.absoluteFilePath("nero-manager/bridge.exe"), { "--install" });
+
+            ui->prefixInstallDiscordRPC->setEnabled(false);
+            ui->prefixInstallDiscordRPC->setText("Discord RPC Service Already Installed");
+            settings.value("DiscordRPCinstalled", true);
+            NeroFS::SetCurrentPrefixCfg("PrefixSettings", "DiscordRPCinstalled", true);
+        } else {
+            QMessageBox::warning(this,
+                                 "Error!",
+                                 QString("Bridge extraction exited with the error:\n\n%1").arg(exeToExtract.errorString()));
+            ui->infoBox->setTitle("");
+            ui->infoText->setText(QString("Bridge extraction exited with the error: %1").arg(exeToExtract.errorString()));
+        }
+
+    } else {
+        QMessageBox::warning(this,
+                             "Error!",
+                             QString("wget exited with an error code:\n\n%1").arg(process.exitStatus()));
+        ui->infoBox->setTitle("");
+        ui->infoText->setText(QString("wget exited with an error code: %1.").arg(process.exitStatus()));
+    }
+
+    ui->tabWidget->setEnabled(true);
+    ui->buttonBox->setEnabled(true);
+    ui->infoBox->setEnabled(true);
+    umuRunning = false;
+    NeroPrefixSettingsWindow::blockSignals(false);
 }
 
 
@@ -599,9 +669,10 @@ void NeroPrefixSettingsWindow::on_buttonBox_clicked(QAbstractButton *button)
 
             NeroFS::SetCurrentRunner(ui->prefixRunner->currentText());
             NeroFS::SetCurrentPrefixCfg("PrefixSettings", "CurrentRunner", ui->prefixRunner->currentText());
-            if(!ui->prefixInstallDiscordRPC->isEnabled()) NeroFS::SetCurrentPrefixCfg("PrefixSettings", "DiscordRPCinstalled", true);
 
-            NeroFS::SetCurrentPrefixCfg("PrefixSettings", "DLLoverrides", dllsToAdd);
+            if(dllsToAdd.count()) NeroFS::SetCurrentPrefixCfg("PrefixSettings", "DLLoverrides", dllsToAdd);
+            else NeroFS::SetCurrentPrefixCfg("PrefixSettings", "DLLoverrides", "");
+
 
         } else {
             // per-shortcut settings
@@ -662,7 +733,9 @@ void NeroPrefixSettingsWindow::on_buttonBox_clicked(QAbstractButton *button)
                 }
             }
 
-            NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), "DLLoverrides", dllsToAdd);
+            if(dllsToAdd.count()) NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), "DLLoverrides", dllsToAdd);
+            else NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), "DLLoverrides", "");
+
 
             appName = ui->shortcutName->text().trimmed();
 

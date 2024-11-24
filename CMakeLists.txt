@@ -23,9 +23,6 @@ set(PROJECT_SOURCES
         nerorunner.h
         nerofs.cpp
         nerofs.h
-
-
-
         nerotricks.cpp
         nerotricks.h
         nerotricks.ui
@@ -37,31 +34,37 @@ set(PROJECT_SOURCES
         neroshortcut.ui
         neroico.cpp
         neroico.h
+        neropreferences.h
+        neropreferences.cpp
+        neropreferences.ui
+        neroprefixsettings.h
+        neroprefixsettings.cpp
+        neroprefixsettings.ui
+        neroconstants.h
+        neroconstants.cpp
+        nerodrives.h
+        nerodrives.cpp
+        nerodrives.ui
         ${TS_FILES}
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    find_package(QuaZip-Qt6)
     qt_add_executable(nero-launcher
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 else()
+    find_package(QuaZip-Qt5)
     add_executable(nero-launcher
         ${PROJECT_SOURCES}
         pics.qrc
-
-        neropreferences.h neropreferences.cpp neropreferences.ui
-
-        neroprefixsettings.h neroprefixsettings.cpp neroprefixsettings.ui
-        neroconstants.h neroconstants.cpp
-        nerodrives.h nerodrives.cpp nerodrives.ui
-
     )
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
-target_link_libraries(nero-launcher PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(nero-launcher PRIVATE Qt${QT_VERSION_MAJOR}::Widgets QuaZip::QuaZip)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
