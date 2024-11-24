@@ -448,8 +448,8 @@ void NeroPrefixSettingsWindow::on_prefixInstallDiscordRPC_clicked()
         tmpDir.mkdir("nero-manager");
     QProcess process;
     process.setWorkingDirectory(tmpDir.path()+"/nero-manager");
-    process.start("/usr/bin/wget", { "https://github.com/EnderIce2/rpc-bridge/releases/latest/download/bridge.zip" });
-    printf("Downloading Discord RPC Bridge with wget...\n");
+    process.start("/usr/bin/curl", { "-o", "bridge.zip", "-L", "https://github.com/EnderIce2/rpc-bridge/releases/latest/download/bridge.zip" });
+    printf("Downloading Discord RPC Bridge...\n");
 
     NeroPrefixSettingsWindow::blockSignals(true);
     umuRunning = true;
