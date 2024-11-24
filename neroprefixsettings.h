@@ -90,6 +90,7 @@ private:
 
     void LoadSettings();
     void AddDLL(const QString, const int);
+    void StartUmu(const QString, QStringList = {});
 
     void SetComboBoxItemEnabled(QComboBox * comboBox, const int index, const bool enabled)
     {
@@ -123,6 +124,8 @@ private:
     QList<QAction*> dllOptions;
 
     QFont boldFont;
+
+    bool umuRunning = false;
 
     const QStringList dllOverrideNames = {
         "Native, then Built-in",

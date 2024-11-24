@@ -25,6 +25,7 @@
 
 #include <QAction>
 #include <QDebug>
+#include <QProcess>
 
 NeroPrefixSettingsWindow::NeroPrefixSettingsWindow(QWidget *parent, const QString shortcutHash)
     : QDialog(parent)
@@ -134,12 +135,13 @@ NeroPrefixSettingsWindow::NeroPrefixSettingsWindow(QWidget *parent, const QStrin
 
 bool NeroPrefixSettingsWindow::eventFilter(QObject* object, QEvent* event)
 {
-    if (event->type() == QEvent::Enter) {
-        if(!object->property("whatsThis").isNull()) {
-            ui->infoText->setText(object->property("whatsThis").toString()),
-            ui->infoBox->setTitle(object->property("accessibleName").toString());
-        }
-    }
+    if(!umuRunning)
+        if(event->type() == QEvent::Enter)
+            if(!object->property("whatsThis").isNull()) {
+                ui->infoText->setText(object->property("whatsThis").toString()),
+                ui->infoBox->setTitle(object->property("accessibleName").toString());
+            }
+
     return QWidget::eventFilter(object, event);
 }
 
@@ -428,7 +430,7 @@ void NeroPrefixSettingsWindow::on_postRunButton_clicked()
 
 void NeroPrefixSettingsWindow::on_prefixInstallDiscordRPC_clicked()
 {
-    qDebug() << "TODO: grab Discord RPC bridge and run NeroFS::GetCurrentRunner to install it to prefix";
+    // Working on bridge installer lol no peeking
 }
 
 
@@ -442,13 +444,68 @@ void NeroPrefixSettingsWindow::on_prefixDrivesBtn_clicked()
 
 void NeroPrefixSettingsWindow::on_prefixRegeditBtn_clicked()
 {
-    qDebug() << "TODO: open regedit in current prefix with current runner";
+    StartUmu("regedit");
+    ui->tabWidget->setEnabled(true);
+    ui->buttonBox->setEnabled(true);
+    ui->infoBox->setEnabled(true);
+    umuRunning = false;
+    NeroPrefixSettingsWindow::blockSignals(false);
 }
 
 
 void NeroPrefixSettingsWindow::on_prefixWinecfgBtn_clicked()
 {
-    qDebug() << "TODO: open winecfg in current prefix with current runner";
+    StartUmu("winecfg");
+    ui->tabWidget->setEnabled(true);
+    ui->buttonBox->setEnabled(true);
+    ui->infoBox->setEnabled(true);
+    umuRunning = false;
+    NeroPrefixSettingsWindow::blockSignals(false);
+}
+
+
+void NeroPrefixSettingsWindow::StartUmu(const QString command, QStringList args)
+{
+    if(!NeroFS::GetUmU().isEmpty()) {
+        args.prepend(command);
+
+        QProcess umu(this);
+        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+
+        env.insert("WINEPREFIX", QString("%1/%2").arg(NeroFS::GetPrefixesPath().path(), NeroFS::GetCurrentPrefix()));
+        env.insert("GAMEID", "0");
+        env.insert("PROTONPATH", QString("%1/%2").arg(NeroFS::GetProtonsPath().path(), NeroFS::GetCurrentRunner()));
+        env.insert("UMU_RUNTIME_UPDATE", "0");
+        umu.setProcessEnvironment(env);
+        umu.setProcessChannelMode(QProcess::MergedChannels);
+
+        umu.start(NeroFS::GetUmU(), args);
+
+        NeroPrefixSettingsWindow::blockSignals(true);
+        umuRunning = true;
+        ui->tabWidget->setEnabled(false);
+        ui->buttonBox->setEnabled(false);
+        ui->infoBox->setEnabled(false);
+        ui->infoBox->setTitle("Starting umu...");
+        ui->infoText->setText("");
+
+        // don't use blocking function so that the UI doesn't freeze.
+        while(umu.state() != QProcess::NotRunning) {
+            QApplication::processEvents();
+            if(umu.canReadLine()) printf(umu.readLine());
+        }
+
+        if(umu.exitStatus() == 0) {
+            ui->infoBox->setTitle("");
+            ui->infoText->setText("Umu exited successfully.");
+        } else {
+            QMessageBox::warning(this,
+                                 "Error!",
+                                 QString("Umu exited with an error code:\n\n%1").arg(umu.exitStatus()));
+            ui->infoBox->setTitle("");
+            ui->infoText->setText(QString("Umu exited with an error code: %1.").arg(umu.exitStatus()));
+        }
+    }
 }
 
 
@@ -574,12 +631,35 @@ void NeroPrefixSettingsWindow::on_buttonBox_clicked(QAbstractButton *button)
                     else NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), child->property("isFor").toString(), child->currentIndex()-1);
                 }
 
-            // need to add exe to user.reg, @ [Software\\\\Wine\\\\AppDefaults\\\\app.exe], w/ "Version"="newvalue" as according to winVersionVerb
             if(ui->winVerBox->font() == boldFont) {
                 int winVerSelected = winVersionListBackwards.indexOf(ui->winVerBox->itemText(ui->winVerBox->currentIndex()));
                 NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), "WindowsVersion", winVerSelected);
 
-                qDebug() << "TODO: make entry in user.reg";
+                QDir prefixPath(QString("%1/%2").arg(NeroFS::GetPrefixesPath().path(), NeroFS::GetCurrentPrefix()));
+                if(prefixPath.exists("user.reg")) {
+                    QFile regFile(QString("%1/user.reg").arg(prefixPath.path()));
+                    if(regFile.open(QFile::ReadWrite)) {
+                        QString newReg;
+                        QString line;
+                        const QString exe = settings.value("Path").toString().mid(settings.value("Path").toString().lastIndexOf('/')+1);
+                        const QString compareString = QString("[Software\\\\Wine\\\\AppDefaults\\\\%1]\n").arg(exe);
+                        bool exists = false;
+
+                        while(!regFile.atEnd()) {
+                            line = regFile.readLine();
+                            newReg.append(line);
+                            if(line == compareString)
+                                regFile.readLine(), newReg.append(QString("\"Version\"=\"%1\"\n").arg(winVersionVerb.at(winVerSelected))), exists = true;
+                        }
+
+                        if(!exists)
+                            newReg.append(QString("\n[Software\\\\Wine\\\\AppDefaults\\\\%1]\n\"Version\"=\"%2\"\n").arg(exe, winVersionVerb.at(winVerSelected)));
+
+                        regFile.resize(0);
+                        regFile.write(newReg.toUtf8());
+                        regFile.close();
+                    }
+                }
             }
 
             NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), "DLLoverrides", dllsToAdd);
