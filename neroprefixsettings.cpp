@@ -601,9 +601,12 @@ void NeroPrefixSettingsWindow::OptionSet()
             comboBox->setFont(boldFont);
         else comboBox->setFont(QFont());
         // extra check for Windows box, since the index doesn't quite match the way it's listed in the UI.
-        if(comboBox == ui->winVerBox)
-            if(comboBox->currentText() == winVersionListBackwards[settings.value("WindowsVersion").toInt()])
-                comboBox->setFont(QFont());
+        if(comboBox == ui->winVerBox) {
+            if(settings.value("WindowsVersion").toString().isEmpty())
+                // ensures that the box is marked when selecting the topmost entry.
+                comboBox->setFont(boldFont);
+            else if(comboBox->currentText() == winVersionListBackwards[settings.value("WindowsVersion").toInt()])
+                comboBox->setFont(QFont()); }
     } else if(sender()->inherits("QCheckBox")) {
         QCheckBox* checkBox = qobject_cast<QCheckBox*>(sender());
         if(checkBox->isTristate())
