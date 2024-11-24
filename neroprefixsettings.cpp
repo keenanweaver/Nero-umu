@@ -72,8 +72,7 @@ NeroPrefixSettingsWindow::NeroPrefixSettingsWindow(QWidget *parent, const QStrin
         ui->prefixServices->setVisible(false);
         ui->nameMatchWarning->setVisible(false);
 
-        deleteShortcut = new QPushButton("Delete Shortcut");
-        deleteShortcut->setIcon(QIcon::fromTheme("edit-delete"));
+        deleteShortcut = new QPushButton(QIcon::fromTheme("edit-delete"), "Delete Shortcut");
         ui->buttonBox->addButton(deleteShortcut, QDialogButtonBox::ResetRole);
         connect(deleteShortcut, &QPushButton::clicked, this, &NeroPrefixSettingsWindow::deleteShortcut_clicked);
 

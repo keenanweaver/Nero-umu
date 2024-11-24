@@ -213,8 +213,6 @@ void NeroManagerWindow::RenderPrefixList()
             prefixShortcutPlayButton.at(i)->setIconSize(QSize(16, 16));
             prefixShortcutPlayButton.at(i)->setProperty("slot", i);
 
-            // TODO: connect play button to slot.
-
             prefixShortcutEditButton << new QPushButton(QIcon::fromTheme("document-properties"), "");
             prefixShortcutEditButton.at(i)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
             prefixShortcutEditButton.at(i)->setIconSize(QSize(16, 16));
@@ -363,9 +361,6 @@ void NeroManagerWindow::on_addButton_clicked()
     blinkTimer->stop();
 
     if(prefixIsSelected) {
-        // TODO: popup file browser to request executable MSI/EXE/BAT,
-        // then create shortcut wizard window to make initial settings.
-
         QString newApp(QFileDialog::getOpenFileName(this,
                                                     "Select a Windows Executable",
                                                     qEnvironmentVariable("HOME"),
@@ -570,8 +565,6 @@ void NeroManagerWindow::on_oneTimeRunBtn_clicked()
 
 void NeroManagerWindow::CleanupShortcuts()
 {
-    // TODO: for some reason, pulling from currentPrefixIni stops showing results here?
-    // some logic bug? So just use NeroFS.
     if(!NeroFS::GetCurrentPrefixShortcuts().isEmpty()) {
         for(unsigned int i = 0; i < prefixShortcutLabel.count(); i++) {
             delete prefixShortcutIco[i];
@@ -579,7 +572,6 @@ void NeroManagerWindow::CleanupShortcuts()
             delete prefixShortcutLabel[i];
             delete prefixShortcutPlayButton[i];
             delete prefixShortcutEditButton[i];
-            //qDebug() << "Purging shortcuts";
         }
         prefixShortcutIco.clear();
         prefixShortcutIcon.clear();
