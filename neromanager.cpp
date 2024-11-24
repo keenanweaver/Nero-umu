@@ -19,7 +19,6 @@
 
 #include "neromanager.h"
 #include "./ui_neromanager.h"
-#include "neroconstants.h"
 #include "nerofs.h"
 #include "neropreferences.h"
 #include "neroprefixsettings.h"

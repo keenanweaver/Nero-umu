@@ -54,7 +54,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>16</pointsize>
+            <pointsize>14</pointsize>
             <bold>true</bold>
            </font>
           </property>
@@ -76,6 +76,11 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>9</pointsize>
+           </font>
           </property>
           <property name="text">
            <string>Subtitle</string>
@@ -143,7 +148,7 @@
          <x>0</x>
          <y>0</y>
          <width>563</width>
-         <height>199</height>
+         <height>201</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -222,7 +227,7 @@
          <x>0</x>
          <y>0</y>
          <width>563</width>
-         <height>198</height>
+         <height>201</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
