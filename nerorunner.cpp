@@ -21,6 +21,7 @@
 #include "neroconstants.h"
 #include "nerofs.h"
 
+#include <QApplication>
 #include <QProcess>
 #include <QDir>
 
@@ -343,17 +344,7 @@ int NeroRunner::StartShortcut(const QString &hash)
         runner.start(command, arguments);
         runner.waitForStarted(-1);
 
-        while(runner.state() != QProcess::NotRunning) {
-            if(!halt) {
-                runner.waitForReadyRead(1000);
-                log.write(runner.readAll());
-            } else {
-                StopProcess();
-                break;
-            }
-        }
-
-        log.close();
+        WaitLoop(runner, log);
 
         return runner.exitCode();
     } else {
@@ -535,29 +526,50 @@ int NeroRunner::StartOnetime(const QString &path, const QStringList args)
     runner.start(command, arguments);
     runner.waitForStarted(-1);
 
+    WaitLoop(runner, log);
+
+    return runner.exitCode();
+}
+
+void NeroRunner::WaitLoop(QProcess &runner, QFile &log)
+{
+    QByteArray stdout;
+
     while(runner.state() != QProcess::NotRunning) {
         if(!halt) {
             runner.waitForReadyRead(1000);
-            log.write(runner.readAll());
+            if(runner.canReadLine()) {
+                stdout = runner.readLine();
+                log.write(stdout);
+                if(stdout.contains("umu-launcher"))
+                    emit StatusUpdate(NeroRunner::RunnerStarting);
+                else if(stdout.contains("steamrt is up to date"))
+                    emit StatusUpdate(NeroRunner::RunnerUpdated);
+                else if(stdout == "fsync: up and running.\n")
+                    emit StatusUpdate(NeroRunner::RunnerProtonBooting);
+                else if(stdout == "Command exited with status: 0\n")
+                    emit StatusUpdate(NeroRunner::RunnerProtonStarted);
+            }
         } else {
-            runner.terminate();
+            emit StatusUpdate(NeroRunner::RunnerProtonStopping);
             StopProcess();
+            emit StatusUpdate(NeroRunner::RunnerProtonStopped);
             break;
         }
     }
 
     log.close();
-
-    return runner.exitCode();
 }
 
 void NeroRunner::StopProcess()
 {
+    QApplication::processEvents();
     QProcess wineStopper;
     env.insert("UMU_NO_PROTON", "1");
     env.remove("UMU_RUNTIME_UPDATE");
     env.insert("UMU_RUNTIME_UPDATE", "0");
     wineStopper.setProcessEnvironment(env);
     wineStopper.start("umu-run", { NeroFS::GetProtonsPath().path()+'/'+NeroFS::GetCurrentRunner()+'/'+"proton", "runinprefix", "wineboot", "-e" });
-    wineStopper.waitForFinished();
+    while(wineStopper.state() != QProcess::NotRunning)
+        QApplication::processEvents();
 }

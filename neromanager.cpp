@@ -23,6 +23,7 @@
 #include "neropreferences.h"
 #include "neroprefixsettings.h"
 #include "nerorunner.h"
+#include "nerorunnerdialog.h"
 #include "nerowizard.h"
 
 #include <QCryptographicHash>
@@ -516,10 +517,16 @@ void NeroManagerWindow::prefixShortcutPlayButtons_clicked()
 
     int slot = sender()->property("slot").toInt();
 
+    // TODO: when playing, disable back buttons, and mayhaps provide a popup to indicate launching?
     if(currentlyRunning.contains(slot)) {
-        delete umuController.at(prefixShortcutPlayButton.at(slot)->property("thread").toInt());
-        prefixShortcutPlayButton.at(slot)->setIcon(QIcon::fromTheme("media-playback-start"));
-        currentlyRunning.removeOne(slot);
+
+        if(runnerWindow == nullptr) {
+            runnerWindow = new NeroRunnerDialog(this);
+            runnerWindow->SetupWindow(false, prefixShortcutLabel.at(slot)->text(), prefixShortcutIco.at(slot));
+            runnerWindow->show();
+        }
+
+        umuController.at(prefixShortcutPlayButton.at(slot)->property("thread").toInt())->Stop();
     } else {
         prefixShortcutPlayButton.at(slot)->setIcon(QIcon::fromTheme("media-playback-stop"));
         threadsCount += 1;
@@ -527,10 +534,17 @@ void NeroManagerWindow::prefixShortcutPlayButtons_clicked()
 
         QMap<QString, QString> settings = NeroFS::GetCurrentShortcutsMap();
 
+        if(runnerWindow == nullptr) {
+            runnerWindow = new NeroRunnerDialog(this);
+            runnerWindow->SetupWindow(true, prefixShortcutLabel.at(slot)->text(), prefixShortcutIco.at(slot));
+            runnerWindow->show();
+        }
+
         umuController << new NeroThreadController(slot, settings.value(prefixShortcutLabel.at(slot)->text()), {""});
         umuController.last()->setProperty("slot", threadsCount-1);
         prefixShortcutPlayButton.at(slot)->setProperty("thread", threadsCount-1);
         connect(umuController.last(), &NeroThreadController::passUmuResults, this, &NeroManagerWindow::handleUmuResults);
+        connect(&umuController.last()->umuWorker->Runner, &NeroRunner::StatusUpdate, this, &NeroManagerWindow::handleUmuSignal);
         emit umuController.last()->operate();
     }
 }
@@ -581,10 +595,19 @@ void NeroManagerWindow::on_oneTimeRunBtn_clicked()
     if(!oneTimeApp.isEmpty()) {
         threadsCount += 1;
 
+        if(runnerWindow == nullptr) {
+            qDebug() << "Opening window";
+            runnerWindow = new NeroRunnerDialog(this);
+            runnerWindow->setModal(true);
+            runnerWindow->SetupWindow(true, oneTimeApp.mid(oneTimeApp.lastIndexOf('/')+1));
+            runnerWindow->show();
+        }
+
         // TODO: flawed args split if the argument contains a path :/
         umuController << new NeroThreadController(-1, oneTimeApp, ui->oneTimeRunArgs->text().split(' '));
         umuController.last()->setProperty("slot", threadsCount-1);
         connect(umuController.last(), &NeroThreadController::passUmuResults, this, &NeroManagerWindow::handleUmuResults);
+        connect(&umuController.last()->umuWorker->Runner, &NeroRunner::StatusUpdate, this, &NeroManagerWindow::handleUmuSignal);
         emit umuController.last()->operate();
     }
 }
@@ -737,4 +760,32 @@ void NeroManagerWindow::handleUmuResults(const int &buttonSlot, const int &resul
 
     // TODO: better memory management should be done here tbh.
     delete umuController[threadSlot];
+}
+
+void NeroManagerWindow::handleUmuSignal(const int &signalType)
+{
+    if(runnerWindow != nullptr) {
+        switch(signalType) {
+        case NeroRunner::RunnerStarting:
+            runnerWindow->SetText("umu launching...");
+            break;
+        case NeroRunner::RunnerUpdated:
+            runnerWindow->SetText("umu runtime updated.");
+            break;
+        case NeroRunner::RunnerProtonBooting:
+            runnerWindow->SetText("Starting Proton...");
+            break;
+        case NeroRunner::RunnerProtonStarted:
+            delete runnerWindow;
+            runnerWindow = nullptr;
+            break;
+        case NeroRunner::RunnerProtonStopping:
+            runnerWindow->SetText("Stopping Proton process...");
+            break;
+        case NeroRunner::RunnerProtonStopped:
+            delete runnerWindow;
+            runnerWindow = nullptr;
+            break;
+        }
+    }
 }

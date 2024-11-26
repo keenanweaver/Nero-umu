@@ -60,6 +60,7 @@ else()
     add_executable(nero-launcher
         ${PROJECT_SOURCES}
         pics.qrc
+        nerorunnerdialog.h nerorunnerdialog.cpp nerorunnerdialog.ui
     )
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()

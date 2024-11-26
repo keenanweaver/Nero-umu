@@ -22,18 +22,33 @@
 
 #include <QString>
 #include <QProcessEnvironment>
+#include <QFile>
 
-class NeroRunner
+class NeroRunner : public QObject
 {
+    Q_OBJECT
+
 public:
     NeroRunner() {};
 
     int StartShortcut(const QString &);
     int StartOnetime(const QString &, const QStringList);
+    void WaitLoop(QProcess &, QFile &);
     void StopProcess();
 
     bool halt = false;
     QProcessEnvironment env;
+
+    enum {
+        RunnerStarting = 0,
+        RunnerUpdated,
+        RunnerProtonBooting,
+        RunnerProtonStarted,
+        RunnerProtonStopping,
+        RunnerProtonStopped
+    } RunnerStatus_e;
+signals:
+    void StatusUpdate(int);
 };
 
 #endif // NERORUNNER_H

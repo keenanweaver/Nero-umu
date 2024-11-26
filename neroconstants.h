@@ -100,8 +100,6 @@ public:
         DLLNativeOnly,
         DLLDisabled
     } DLLoverrideTypes_e;
-
-
 };
 
 #endif // NEROCONSTANTS_H

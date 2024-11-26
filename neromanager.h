@@ -23,6 +23,7 @@
 #include "neropreferences.h"
 #include "neroprefixsettings.h"
 #include "nerorunner.h"
+#include "nerorunnerdialog.h"
 #include "neroshortcut.h"
 #include "nerotricks.h"
 #include "nerowizard.h"
@@ -73,19 +74,26 @@ public:
         connect(&umuThread, &QThread::finished, umuWorker, &QObject::deleteLater);
         connect(this, &NeroThreadController::operate, umuWorker, &NeroThreadWorker::umuRunnerProcess);
         connect(umuWorker, &NeroThreadWorker::umuExited, this, &NeroThreadController::handleUmuResults);
+        //connect(&umuWorker->Runner, &NeroRunner::StatusUpdate, this, &NeroThreadController::handleUmuStatus);
         umuThread.start();
     }
     ~NeroThreadController() {
-        umuWorker->Runner.halt = true;
         umuThread.quit();
         umuThread.wait();
     }
     NeroThreadWorker *umuWorker;
+    void Stop() {
+        umuWorker->Runner.halt = true;
+        //umuThread.quit();
+        //umuThread.wait();
+    }
 signals:
     void operate();
     void passUmuResults(const int &, const int &);
+    //void passUmuStatus(const int &);
 public slots:
-    void handleUmuResults(const int &buttonSlot, const int &result) { emit passUmuResults(buttonSlot, result); };
+    void handleUmuResults(const int &buttonSlot, const int &result) { emit passUmuResults(buttonSlot, result); }
+    //void handleUmuStatus(const int &res) { emit passUmuStatus(res); }
 };
 
 class NeroManagerWindow : public QMainWindow
@@ -98,6 +106,7 @@ public:
 
 public slots:
     void handleUmuResults(const int &, const int &);
+    void handleUmuSignal(const int &);
 
 private slots:
     void prefixMainButtons_clicked();
@@ -126,6 +135,7 @@ private:
     NeroTricksWindow *tricks;
     NeroShortcutWizard *shortcutAdd;
     NeroPrefixSettingsWindow *prefixSettings;
+    NeroRunnerDialog *runnerWindow = nullptr;
 
     // METHODS
     void SetHeader(const QString prefix = "", const unsigned int shortcutsCount = 0);
