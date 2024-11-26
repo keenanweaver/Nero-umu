@@ -569,7 +569,8 @@ void NeroPrefixSettingsWindow::StartUmu(const QString command, QStringList args)
         // don't use blocking function so that the UI doesn't freeze.
         while(umu.state() != QProcess::NotRunning) {
             QApplication::processEvents();
-            if(umu.canReadLine()) printf(umu.readLine());
+            umu.waitForReadyRead(1000);
+            printf(umu.readAll());
         }
 
         if(umu.exitStatus() == 0) {

@@ -22,6 +22,7 @@
 
 #include "neropreferences.h"
 #include "neroprefixsettings.h"
+#include "nerorunner.h"
 #include "neroshortcut.h"
 #include "nerotricks.h"
 #include "nerowizard.h"
@@ -32,12 +33,60 @@
 #include <QPushButton>
 #include <QBoxLayout>
 #include <QTimer>
+#include <QThread>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class NeroManagerWindow;
 }
 QT_END_NAMESPACE
+
+// may or may not be copy/paste Qt doc example here
+class NeroThreadWorker : public QObject
+{
+    Q_OBJECT
+
+public:
+    NeroThreadWorker(const int &slot, const QString &params, const QStringList &extArgs = {}) {
+        currentSlot = slot, currentParameters = params, oneTimeArgs = extArgs;
+    }
+    ~NeroThreadWorker() {};
+    NeroRunner Runner;
+public slots:
+    void umuRunnerProcess();
+signals:
+    void umuExited(const int &, const int &);
+private:
+    int currentSlot;
+    QString currentParameters;
+    QStringList oneTimeArgs;
+};
+
+class NeroThreadController : public QObject
+{
+    Q_OBJECT
+    QThread umuThread;
+public:
+    NeroThreadController(const int &slot, const QString &params, const QStringList &extArgs = {}) {
+        umuWorker = new NeroThreadWorker(slot, params, extArgs);
+        umuWorker->moveToThread(&umuThread);
+        connect(&umuThread, &QThread::finished, umuWorker, &QObject::deleteLater);
+        connect(this, &NeroThreadController::operate, umuWorker, &NeroThreadWorker::umuRunnerProcess);
+        connect(umuWorker, &NeroThreadWorker::umuExited, this, &NeroThreadController::handleUmuResults);
+        umuThread.start();
+    }
+    ~NeroThreadController() {
+        umuWorker->Runner.halt = true;
+        umuThread.quit();
+        umuThread.wait();
+    }
+    NeroThreadWorker *umuWorker;
+signals:
+    void operate();
+    void passUmuResults(const int &, const int &);
+public slots:
+    void handleUmuResults(const int &buttonSlot, const int &result) { emit passUmuResults(buttonSlot, result); };
+};
 
 class NeroManagerWindow : public QMainWindow
 {
@@ -46,6 +95,9 @@ class NeroManagerWindow : public QMainWindow
 public:
     NeroManagerWindow(QWidget *parent = nullptr);
     ~NeroManagerWindow();
+
+public slots:
+    void handleUmuResults(const int &, const int &);
 
 private slots:
     void prefixMainButtons_clicked();
@@ -106,6 +158,10 @@ private:
 
     bool prefixIsSelected = false;
 
+    QList<int> currentlyRunning;
+    int threadsCount = 0;
+
+    QList<NeroThreadController*> umuController;
 };
 
 #endif // NEROMANAGER_H

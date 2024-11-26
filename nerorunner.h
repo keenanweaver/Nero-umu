@@ -20,13 +20,20 @@
 #ifndef NERORUNNER_H
 #define NERORUNNER_H
 
+#include <QString>
+#include <QProcessEnvironment>
+
 class NeroRunner
 {
 public:
-    NeroRunner();
+    NeroRunner() {};
 
-private:
-    //
+    int StartShortcut(const QString &);
+    int StartOnetime(const QString &, const QStringList);
+    void StopProcess();
+
+    bool halt = false;
+    QProcessEnvironment env;
 };
 
 #endif // NERORUNNER_H

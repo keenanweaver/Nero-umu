@@ -22,6 +22,7 @@
 #include "nerofs.h"
 #include "neropreferences.h"
 #include "neroprefixsettings.h"
+#include "nerorunner.h"
 #include "nerowizard.h"
 
 #include <QCryptographicHash>
@@ -261,11 +262,12 @@ void NeroManagerWindow::CreatePrefix(const QString newPrefix, const QString runn
     // don't use blocking function so that the dialog shows and the UI doesn't freeze.
     while(umu.state() != QProcess::NotRunning) {
         QApplication::processEvents();
-        QString stdout;
+        QByteArray stdout;
         // TODO: use QTextStream instead of printing line-by-line?
+        umu.waitForReadyRead(1000);
         if(umu.canReadLine()) {
             stdout = umu.readLine();
-            printf(stdout.toLocal8Bit());
+            printf(stdout);
             if(stdout.contains("Proton: Upgrading")) {
                 waitBox.setText(QString("Creating prefix %1 using %2...").arg(newPrefix, runner));
             } else if(stdout.contains("Downloading latest steamrt sniper")) {
@@ -335,11 +337,12 @@ void NeroManagerWindow::AddTricks(QStringList verbs, const QString prefix)
     // don't use blocking function so that the dialog shows and the UI doesn't freeze.
     while(umu.state() != QProcess::NotRunning) {
         QApplication::processEvents();
-        QString stdout;
+        QByteArray stdout;
         // TODO: use QTextStream instead of printing line-by-line?
+        umu.waitForReadyRead(100);
         if(umu.canReadLine()) {
             stdout = umu.readLine();
-            printf(stdout.toLocal8Bit());
+            printf(stdout);
             if(stdout.contains("Proton: Upgrading")) {
                 waitBox.setText(QString("Updating %1 with new Proton %2...").arg(prefix, settingsMap["CurrentRunner"].toString()));
             } else if(stdout.contains("Downloading latest steamrt sniper")) {
@@ -510,9 +513,26 @@ void NeroManagerWindow::prefixDeleteButtons_clicked()
 
 void NeroManagerWindow::prefixShortcutPlayButtons_clicked()
 {
+
     int slot = sender()->property("slot").toInt();
 
-    qDebug() << "TODO: make runner popup appear @ slot" << slot;
+    if(currentlyRunning.contains(slot)) {
+        delete umuController.at(prefixShortcutPlayButton.at(slot)->property("thread").toInt());
+        prefixShortcutPlayButton.at(slot)->setIcon(QIcon::fromTheme("media-playback-start"));
+        currentlyRunning.removeOne(slot);
+    } else {
+        prefixShortcutPlayButton.at(slot)->setIcon(QIcon::fromTheme("media-playback-stop"));
+        threadsCount += 1;
+        currentlyRunning.append(slot);
+
+        QMap<QString, QString> settings = NeroFS::GetCurrentShortcutsMap();
+
+        umuController << new NeroThreadController(slot, settings.value(prefixShortcutLabel.at(slot)->text()), {""});
+        umuController.last()->setProperty("slot", threadsCount-1);
+        prefixShortcutPlayButton.at(slot)->setProperty("thread", threadsCount-1);
+        connect(umuController.last(), &NeroThreadController::passUmuResults, this, &NeroManagerWindow::handleUmuResults);
+        emit umuController.last()->operate();
+    }
 }
 
 void NeroManagerWindow::prefixShortcutEditButtons_clicked()
@@ -559,7 +579,13 @@ void NeroManagerWindow::on_oneTimeRunBtn_clicked()
     "Compatible Windows Executables (*.bat *.exe *.msi);;Windows Batch Script Files (*.bat);;Windows Portable Executable (*.exe);;Windows Installer Package (*.msi)");
 
     if(!oneTimeApp.isEmpty()) {
-        qDebug() << "TODO: start runner here";
+        threadsCount += 1;
+
+        // TODO: flawed args split if the argument contains a path :/
+        umuController << new NeroThreadController(-1, oneTimeApp, ui->oneTimeRunArgs->text().split(' '));
+        umuController.last()->setProperty("slot", threadsCount-1);
+        connect(umuController.last(), &NeroThreadController::passUmuResults, this, &NeroManagerWindow::handleUmuResults);
+        emit umuController.last()->operate();
     }
 }
 
@@ -684,4 +710,31 @@ void NeroManagerWindow::StopBlinkTimer()
     ui->addButton->setFlat(true);
     blinkTimer->stop();
     if(!prefixIsSelected) { ui->missingPrefixesLabel->setVisible(false); }
+}
+
+// umu runner stuff here!
+void NeroThreadWorker::umuRunnerProcess()
+{
+    int result;
+    if(currentSlot >= 0) {
+        // for shortcuts, parameters = hash
+        result = Runner.StartShortcut(currentParameters);
+    } else {
+        // for one time, parameters = path, oneTimeArgs = contents of oneTimeArguments
+        result = Runner.StartOnetime(currentParameters, oneTimeArgs);
+    }
+
+    emit umuExited(currentSlot, result);
+}
+
+void NeroManagerWindow::handleUmuResults(const int &buttonSlot, const int &result)
+{
+    const unsigned int threadSlot = sender()->property("slot").toInt();
+    if(buttonSlot >= 0) {
+        prefixShortcutPlayButton.at(buttonSlot)->setIcon(QIcon::fromTheme("media-playback-start"));
+        currentlyRunning.removeOne(buttonSlot);
+    }
+
+    // TODO: better memory management should be done here tbh.
+    delete umuController[threadSlot];
 }
