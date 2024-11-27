@@ -717,8 +717,17 @@ void NeroManagerWindow::prefixSettings_result()
                 else prefixShortcutIcon.at(slot)->setPixmap(prefixShortcutIco.at(slot)->pixmap(24,24));
             }
             // update app name if changed
-            if(prefixSettings->appName != prefixShortcutLabel.at(slot)->text())
+            if(prefixSettings->appName != prefixShortcutLabel.at(slot)->text()) {
+                QMap<QString, QString> settings = NeroFS::GetCurrentShortcutsMap();
+                NeroFS::SetCurrentPrefixCfg("Shortcuts", settings.value(prefixShortcutLabel.at(slot)->text()), prefixSettings->appName);
+                // move existing ico (if any) to new name
+                QFile ico(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.icoCache/"+
+                          prefixShortcutLabel.at(slot)->text()+'-'+settings.value(prefixShortcutLabel.at(slot)->text())+".png");
+                if(ico.exists())
+                    ico.rename(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.icoCache/"+
+                               prefixSettings->appName+'-'+settings.value(prefixShortcutLabel.at(slot)->text()));
                 prefixShortcutLabel.at(slot)->setText(prefixSettings->appName);
+            }
         // delete shortcut signal
         } else if(prefixSettings->result() == -1) {
             QMap<QString, QString> settings = NeroFS::GetCurrentShortcutsMap();
