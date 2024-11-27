@@ -212,14 +212,14 @@ void NeroManagerWindow::RenderPrefixList()
             // media-playback-start should change to media-playback-stop when being slot is being played.
             prefixShortcutPlayButton << new QPushButton(QIcon::fromTheme("media-playback-start"), "");
             prefixShortcutPlayButton.at(i)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-            prefixShortcutPlayButton.at(i)->setToolTip(QString("Start %1.").arg(sortedShortcuts.at(i)));
+            prefixShortcutPlayButton.at(i)->setToolTip("Start " + sortedShortcuts.at(i));
             prefixShortcutPlayButton.at(i)->setIconSize(QSize(16, 16));
             prefixShortcutPlayButton.at(i)->setProperty("slot", i);
 
             prefixShortcutEditButton << new QPushButton(QIcon::fromTheme("document-properties"), "");
             prefixShortcutEditButton.at(i)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
             prefixShortcutEditButton.at(i)->setIconSize(QSize(16, 16));
-            prefixShortcutEditButton.at(i)->setToolTip(QString("Edit properties of %1.").arg(sortedShortcuts.at(i)));
+            prefixShortcutEditButton.at(i)->setToolTip("Edit properties of " + sortedShortcuts.at(i));
             prefixShortcutEditButton.at(i)->setFlat(true);
             prefixShortcutEditButton.at(i)->setProperty("slot", i);
 
@@ -423,13 +423,13 @@ void NeroManagerWindow::on_addButton_clicked()
                 prefixShortcutPlayButton << new QPushButton(QIcon::fromTheme("media-playback-start"), "");
                 prefixShortcutPlayButton.at(pos)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
                 prefixShortcutPlayButton.at(pos)->setIconSize(QSize(16, 16));
-                prefixShortcutPlayButton.at(pos)->setToolTip(QString("Start %1.").arg(shortcutAdd.shortcutName));
+                prefixShortcutPlayButton.at(pos)->setToolTip("Start "+shortcutAdd.shortcutName);
                 prefixShortcutPlayButton.at(pos)->setProperty("slot", pos);
 
                 prefixShortcutEditButton << new QPushButton(QIcon::fromTheme("document-properties"), "");
                 prefixShortcutEditButton.at(pos)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
                 prefixShortcutEditButton.at(pos)->setIconSize(QSize(16, 16));
-                prefixShortcutEditButton.at(pos)->setToolTip(QString("Edit properties of %1.").arg(shortcutAdd.shortcutName));
+                prefixShortcutEditButton.at(pos)->setToolTip("Edit properties of " + shortcutAdd.shortcutName);
                 prefixShortcutEditButton.at(pos)->setFlat(true);
                 prefixShortcutEditButton.at(pos)->setProperty("slot", pos);
 
@@ -467,7 +467,11 @@ void NeroManagerWindow::on_backButton_clicked()
     // this also handles the page toggling
     if(prefixIsSelected) {
         if(currentlyRunning.count() > 0) {
-            // TODO: confirmation to close all?
+            if(runnerWindow == nullptr) {
+                runnerWindow = new NeroRunnerDialog(this);
+                runnerWindow->SetupWindow(false, "all running apps in current prefix");
+                runnerWindow->show();
+            }
             for(int i = threadsCount; i > 0; i--) {
                 // for the current prefix, we only need to run the prefix kill command once to end them all!
                 if(umuController[i-1] != nullptr) {
@@ -536,6 +540,9 @@ void NeroManagerWindow::prefixShortcutPlayButtons_clicked()
         umuController.at(prefixShortcutPlayButton.at(slot)->property("thread").toInt())->Stop();
     } else {
         prefixShortcutPlayButton.at(slot)->setIcon(QIcon::fromTheme("media-playback-stop"));
+        prefixShortcutPlayButton.at(slot)->setToolTip("Stop " + prefixShortcutLabel.at(slot)->text());
+        ui->backButton->setIcon(QIcon::fromTheme("media-playback-stop"));
+        ui->backButton->setToolTip("Shut down all running programs in this prefix.");
         threadsCount += 1;
         currentlyRunning.append(slot);
 
@@ -582,6 +589,7 @@ void NeroManagerWindow::on_oneTimeRunBtn_clicked()
 
     if(!oneTimeApp.isEmpty()) {
         ui->backButton->setIcon(QIcon::fromTheme("media-playback-stop"));
+        ui->backButton->setToolTip("Shut down all running programs in this prefix.");
         threadsCount += 1;
         currentlyRunning.append(-1);
 
@@ -783,7 +791,10 @@ void NeroManagerWindow::handleUmuResults(const int &buttonSlot, const int &resul
 {
     const unsigned int threadSlot = sender()->property("slot").toInt();
 
-    if(buttonSlot >= 0) prefixShortcutPlayButton.at(buttonSlot)->setIcon(QIcon::fromTheme("media-playback-start"));
+    if(buttonSlot >= 0) {
+        prefixShortcutPlayButton.at(buttonSlot)->setIcon(QIcon::fromTheme("media-playback-start"));
+        prefixShortcutPlayButton.at(buttonSlot)->setToolTip("Start " + prefixShortcutLabel.at(buttonSlot)->text());
+    }
 
     delete umuController[threadSlot];
     umuController[threadSlot] = nullptr;
@@ -794,6 +805,7 @@ void NeroManagerWindow::handleUmuResults(const int &buttonSlot, const int &resul
         threadsCount = 0;
         umuController.clear();
         ui->backButton->setIcon(QIcon::fromTheme("go-previous"));
+        ui->backButton->setToolTip("Go back to prefixes list.");
     }
 }
 
