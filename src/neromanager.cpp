@@ -725,7 +725,7 @@ void NeroManagerWindow::prefixSettings_result()
                           prefixShortcutLabel.at(slot)->text()+'-'+settings.value(prefixShortcutLabel.at(slot)->text())+".png");
                 if(ico.exists())
                     ico.rename(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.icoCache/"+
-                               prefixSettings->appName+'-'+settings.value(prefixShortcutLabel.at(slot)->text()));
+                               prefixSettings->appName+'-'+settings.value(prefixShortcutLabel.at(slot)->text())+".png");
                 prefixShortcutLabel.at(slot)->setText(prefixSettings->appName);
             }
         // delete shortcut signal
