@@ -113,8 +113,8 @@ private slots:
     void prefixDeleteButtons_clicked();
     void prefixShortcutPlayButtons_clicked();
     void prefixShortcutEditButtons_clicked();
-
     void blinkTimer_timeout();
+    void prefixSettings_result();
 
     void on_addButton_clicked();
 
@@ -130,6 +130,7 @@ private slots:
 
 private:
     Ui::NeroManagerWindow *ui;
+    NeroPrefixSettingsWindow *prefixSettings = nullptr;
     NeroRunnerDialog *runnerWindow = nullptr;
 
     // METHODS

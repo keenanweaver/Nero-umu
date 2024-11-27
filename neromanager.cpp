@@ -553,32 +553,10 @@ void NeroManagerWindow::prefixShortcutEditButtons_clicked()
 
     QMap<QString, QString> settings = NeroFS::GetCurrentShortcutsMap();
 
-    NeroPrefixSettingsWindow prefixSettings(this, settings.value(prefixShortcutLabel.at(slot)->text()));
-    prefixSettings.exec();
-
-    if(prefixSettings.result() == QDialog::Accepted) {
-        if(!prefixSettings.newAppIcon.isEmpty()) {
-            prefixShortcutIco.at(slot)->addFile(prefixSettings.newAppIcon);
-            if(prefixShortcutIco.at(slot)->actualSize(QSize(24,24)).height() < 24)
-                prefixShortcutIcon.at(slot)->setPixmap(prefixShortcutIco.at(slot)->pixmap(prefixShortcutIco.at(slot)->actualSize(QSize(24,24))).scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation));
-            else prefixShortcutIcon.at(slot)->setPixmap(prefixShortcutIco.at(slot)->pixmap(24,24));
-        }
-
-        if(prefixSettings.appName != prefixShortcutLabel.at(slot)->text())
-            prefixShortcutLabel.at(slot)->setText(prefixSettings.appName);
-    } else if(prefixSettings.result() == -1) {
-        NeroFS::DeleteShortcut(settings.value(prefixShortcutLabel.at(slot)->text()));
-        delete prefixShortcutIco[slot];
-        delete prefixShortcutIcon[slot];
-        delete prefixShortcutLabel[slot];
-        delete prefixShortcutPlayButton[slot];
-        delete prefixShortcutEditButton[slot];
-        prefixShortcutIco[slot] = nullptr;
-        prefixShortcutIcon[slot] = nullptr;
-        prefixShortcutLabel[slot] = nullptr;
-        prefixShortcutPlayButton[slot] = nullptr;
-        prefixShortcutEditButton[slot] = nullptr;
-    }
+    prefixSettings = new NeroPrefixSettingsWindow(this, settings.value(prefixShortcutLabel.at(slot)->text()));
+    prefixSettings->setProperty("slot", slot);
+    connect(prefixSettings, &NeroPrefixSettingsWindow::finished, this, &NeroManagerWindow::prefixSettings_result);
+    prefixSettings->show();
 }
 
 void NeroManagerWindow::on_oneTimeRunBtn_clicked()
@@ -633,8 +611,10 @@ void NeroManagerWindow::CleanupShortcuts()
 
 void NeroManagerWindow::on_prefixSettingsBtn_clicked()
 {
-    NeroPrefixSettingsWindow prefixSettings(this);
-    prefixSettings.exec();
+    prefixSettings = new NeroPrefixSettingsWindow(this);
+    prefixSettings->setProperty("slot", -1);
+    connect(prefixSettings, &NeroPrefixSettingsWindow::finished, this, &NeroManagerWindow::prefixSettings_result);
+    prefixSettings->show();
 }
 
 void NeroManagerWindow::on_prefixTricksBtn_clicked()
@@ -678,6 +658,39 @@ void NeroManagerWindow::on_prefixTricksBtn_clicked()
             confirmed = true;
         }
     }
+}
+
+void NeroManagerWindow::prefixSettings_result()
+{
+    int slot = prefixSettings->property("slot").toInt();
+
+    if(slot >= 0) {
+        if(prefixSettings->result() == QDialog::Accepted) {
+            if(!prefixSettings->newAppIcon.isEmpty()) {
+                prefixShortcutIco.at(slot)->addFile(prefixSettings->newAppIcon);
+                if(prefixShortcutIco.at(slot)->actualSize(QSize(24,24)).height() < 24)
+                    prefixShortcutIcon.at(slot)->setPixmap(prefixShortcutIco.at(slot)->pixmap(prefixShortcutIco.at(slot)->actualSize(QSize(24,24))).scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+                else prefixShortcutIcon.at(slot)->setPixmap(prefixShortcutIco.at(slot)->pixmap(24,24));
+            }
+
+            if(prefixSettings->appName != prefixShortcutLabel.at(slot)->text())
+                prefixShortcutLabel.at(slot)->setText(prefixSettings->appName);
+        } else if(prefixSettings->result() == -1) {
+            QMap<QString, QString> settings = NeroFS::GetCurrentShortcutsMap();
+            NeroFS::DeleteShortcut(settings.value(prefixShortcutLabel.at(slot)->text()));
+            delete prefixShortcutIco[slot];
+            delete prefixShortcutIcon[slot];
+            delete prefixShortcutLabel[slot];
+            delete prefixShortcutPlayButton[slot];
+            delete prefixShortcutEditButton[slot];
+            prefixShortcutIco[slot] = nullptr;
+            prefixShortcutIcon[slot] = nullptr;
+            prefixShortcutLabel[slot] = nullptr;
+            prefixShortcutPlayButton[slot] = nullptr;
+            prefixShortcutEditButton[slot] = nullptr;
+        }
+    }
+
 }
 
 void NeroManagerWindow::on_actionAbout_Nero_triggered()
