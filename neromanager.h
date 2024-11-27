@@ -139,12 +139,25 @@ private:
     void StartBlinkTimer();
     void StopBlinkTimer();
 
-    // VARS
+    // VARS & OBJECTS
     unsigned int LOLRANDOM;
 
+    // General manager stuff
+    QSettings *managerCfg;
+    QTimer *blinkTimer;
+    int blinkingState = 1;
+    bool prefixIsSelected = false;
+
+    // umu threads
+    QList<NeroThreadController*> umuController;
+    QList<int> currentlyRunning;
+    int threadsCount = 0;
+
+    // Prefixes list assets
     QList<QPushButton*> prefixMainButton;
     QList<QPushButton*> prefixDeleteButton;
 
+    // Prefix Shortcuts list assets
     QList<QLabel*> prefixShortcutLabel;
     QList<QIcon*> prefixShortcutIco;
     QList<QLabel*> prefixShortcutIcon;
@@ -152,19 +165,7 @@ private:
     QList<QPushButton*> prefixShortcutEditButton;
     QList<QSpacerItem*> prefixShortcutSpacer;
 
-    QSettings *managerCfg;
-
     QFont listFont;
-
-    QTimer *blinkTimer;
-    int blinkingState = 1;
-
-    bool prefixIsSelected = false;
-
-    QList<int> currentlyRunning;
-    int threadsCount = 0;
-
-    QList<NeroThreadController*> umuController;
 };
 
 #endif // NEROMANAGER_H
