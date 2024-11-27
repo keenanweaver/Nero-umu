@@ -350,6 +350,15 @@ int NeroRunner::StartShortcut(const QString &hash)
 
         WaitLoop(runner, log);
 
+        if(!settings->value("Shortcuts--"+hash+"/PostRunScript").toString().isEmpty()) {
+            runner.start(settings->value("Shortcuts--"+hash+"/PostRunScript").toString(), {""});
+
+            while(runner.state() != QProcess::NotRunning) {
+                runner.waitForReadyRead(-1);
+                printf(runner.readAll());
+            }
+        }
+
         return runner.exitCode();
     } else {
         return -1;
