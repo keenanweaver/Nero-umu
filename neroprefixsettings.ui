@@ -6,12 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>720</height>
+    <width>666</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="5,3,0">
    <item>
@@ -33,13 +36,13 @@
           <string>Shortcut</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignCenter</set>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0,3,1">
           <item>
            <spacer name="horizontalSpacer_3">
             <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -173,7 +176,7 @@
                <string>Another shortcut with this name already exists!</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -182,7 +185,7 @@
           <item>
            <spacer name="horizontalSpacer_4">
             <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -201,25 +204,9 @@
           <string>Graphics and Image Quality</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignCenter</set>
          </property>
          <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,0,1">
-          <item row="0" column="0" colspan="2">
-           <widget class="QCheckBox" name="toggleNVAPI">
-            <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This enables support for &lt;a href=&quot;https://github.com/jp7677/dxvk-nvapi?tab=readme-ov-file#dxvk-nvapi&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;DXVK-NVAPI&lt;/span&gt;&lt;/a&gt; for NVIDIA graphics cards, which correctly reports the GPU model and (usually) allows apps to access certain vendor exclusive features, such as DLSS, Ray Tracing, or hardware-accelerated CUDA in some games. &lt;span style=&quot; font-weight:700;&quot;&gt;Full DLSS or CUDA functionality requires the &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;physx&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; verb to be installed, as well as enabling the &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;nvcuda&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; native DLL override.&lt;/span&gt; When disabled, any NVIDIA cards will be reported as an AMD GPU.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;This setting can ONLY be used with NVIDIA GPUs using the NVIDIA Proprietary Driver (either &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Binary&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; or &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Open Kernel Module&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; distributions).&lt;/span&gt;&lt;/p&gt;&lt;p&gt;If unsure, you should enable this only if the application has explicit support for DLSS or RTX features.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="accessibleName">
-             <string>Enable NVAPI Support</string>
-            </property>
-            <property name="text">
-             <string>Enable NVAPI Support</string>
-            </property>
-            <property name="isFor" stdset="0">
-             <string>EnableNVAPI</string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
@@ -302,12 +289,6 @@
           </item>
           <item row="2" column="1">
            <widget class="QGroupBox" name="fsrSection">
-            <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If using the FSR Custom Mode, this sets the screen resolution that is reported to the application. This can be used for more precise rendering resolutions, or for use with games that expects a non-standard resolution, and will crash if it's not detected - examples of the latter include several Sega arcade game dumps, which often demands resolutions of either &lt;span style=&quot; font-style:italic;&quot;&gt;1360x768&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;1024x600.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="accessibleName">
-             <string>FSR Custom Resolution</string>
-            </property>
             <layout class="QGridLayout" name="gridLayout_10">
              <item row="0" column="0">
               <widget class="QLabel" name="label_12">
@@ -318,11 +299,17 @@
              </item>
              <item row="0" column="1">
               <widget class="QLineEdit" name="fsrCustomW">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If using the FSR Custom Mode, this sets the screen resolution that is reported to the application. This can be used for more precise rendering resolutions, or for use with games that expects a non-standard resolution, and will crash if it's not detected - examples of the latter include several Sega arcade game dumps, which often demands resolutions of either &lt;span style=&quot; font-style:italic;&quot;&gt;1360x768&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;1024x600.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>FSR Custom Resolution (Width)</string>
+               </property>
                <property name="maxLength">
                 <number>8</number>
                </property>
                <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
+                <set>Qt::AlignCenter</set>
                </property>
                <property name="placeholderText">
                 <string>Width (px)</string>
@@ -341,11 +328,17 @@
              </item>
              <item row="0" column="3">
               <widget class="QLineEdit" name="fsrCustomH">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If using the FSR Custom Mode, this sets the screen resolution that is reported to the application. This can be used for more precise rendering resolutions, or for use with games that expects a non-standard resolution, and will crash if it's not detected - examples of the latter include several Sega arcade game dumps, which often demands resolutions of either &lt;span style=&quot; font-style:italic;&quot;&gt;1360x768&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;1024x600.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>FSR Custom Resolution (Height)</string>
+               </property>
                <property name="maxLength">
                 <number>8</number>
                </property>
                <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
+                <set>Qt::AlignCenter</set>
                </property>
                <property name="placeholderText">
                 <string>Height (px)</string>
@@ -358,87 +351,49 @@
             </layout>
            </widget>
           </item>
+          <item row="4" column="0" colspan="2">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QCheckBox" name="toggleNVAPI">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This enables support for &lt;a href=&quot;https://github.com/jp7677/dxvk-nvapi?tab=readme-ov-file#dxvk-nvapi&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;DXVK-NVAPI&lt;/span&gt;&lt;/a&gt; for NVIDIA graphics cards, which correctly reports the GPU model and (usually) allows apps to access certain vendor exclusive features, such as DLSS, Ray Tracing, or hardware-accelerated CUDA in some games. &lt;span style=&quot; font-weight:700;&quot;&gt;Full DLSS or CUDA functionality requires the &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;physx&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; verb to be installed, as well as enabling the &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;nvcuda&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; native DLL override.&lt;/span&gt; When disabled, any NVIDIA cards will be reported as an AMD GPU.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;This setting can ONLY be used with NVIDIA GPUs using the NVIDIA Proprietary Driver (either &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Binary&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; or &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Open Kernel Module&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; distributions).&lt;/span&gt;&lt;/p&gt;&lt;p&gt;If unsure, you should enable this only if the application has explicit support for DLSS or RTX features.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Enable NVAPI Support</string>
+            </property>
+            <property name="text">
+             <string>Enable NVAPI Support</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>EnableNVAPI</string>
+            </property>
+           </widget>
+          </item>
           <item row="3" column="1">
            <widget class="QGroupBox" name="gamescopeSection">
-            <layout class="QGridLayout" name="gamescopeStuff" columnstretch="1,0,0,0">
-             <item row="0" column="1" colspan="3">
-              <widget class="QComboBox" name="gamescopeSetScalerBox">
-               <property name="whatsThis">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When using Gamescope, this sets the method it uses to scale the image to the desired display resolution.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Normal, Integer Scaling,&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;Scale to Fit&lt;/span&gt; all maintain aspect ratio.&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Scale to Fill&lt;/span&gt; will crop the image until the entire screen is filled.&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Stretch to Fill&lt;/span&gt; will stretch the image, regardless of aspect ratio, until the entire screen is filled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="accessibleName">
-                <string>Gamescope Scaler Type</string>
-               </property>
-               <property name="isFor" stdset="0">
-                <string>GamescopeScaler</string>
-               </property>
-               <item>
-                <property name="text">
-                 <string>Default</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Integer Scaling</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Scale to Fit</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Scale to Fill</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Stretch Image</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_10">
-               <property name="text">
-                <string>Window Resolution:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="3">
-              <widget class="QLineEdit" name="gamescopeAppHeight">
-               <property name="whatsThis">
-                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This sets the effective resolution that Gamescope reports to the game - in other words, a forced &lt;span style=&quot; font-style:italic;&quot;&gt;render resolution.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="accessibleName">
-                <string>Gamescope App Resolution (Height)</string>
-               </property>
-               <property name="maxLength">
-                <number>8</number>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-               </property>
-               <property name="placeholderText">
-                <string>Height (px)</string>
-               </property>
-               <property name="isFor" stdset="0">
-                <string>GamescopeOutResH</string>
-               </property>
-              </widget>
-             </item>
+            <layout class="QGridLayout" name="gridLayout_9" columnstretch="1,0,0,0">
              <item row="0" column="0">
               <widget class="QLabel" name="label_6">
                <property name="text">
                 <string>Scaler Type:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Upscaling Filter:</string>
                </property>
               </widget>
              </item>
@@ -480,85 +435,17 @@ li.checked::marker { content: &quot;\2612&quot;; }
                </item>
               </widget>
              </item>
-             <item row="2" column="2">
-              <widget class="QLabel" name="label_9">
-               <property name="text">
-                <string>x</string>
-               </property>
-              </widget>
-             </item>
              <item row="2" column="0">
-              <widget class="QLabel" name="label_8">
+              <widget class="QLabel" name="gamescopeWindowLabel">
                <property name="text">
-                <string>App Resolution:</string>
+                <string>Window Resolution:</string>
                </property>
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="QLineEdit" name="gamescopeAppWidth">
-               <property name="whatsThis">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the effective resolution that Gamescope reports to the game - in other words, a forced &lt;span style=&quot; font-style:italic;&quot;&gt;render resolution.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="accessibleName">
-                <string>Gamescope App Resolution (Width)</string>
-               </property>
-               <property name="maxLength">
-                <number>8</number>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-               </property>
-               <property name="placeholderText">
-                <string>Width (px)</string>
-               </property>
-               <property name="isFor" stdset="0">
-                <string>GamescopeOutResW</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_7">
-               <property name="text">
-                <string>Upscaling Filter:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="3">
-              <widget class="QLineEdit" name="gamescopeWindowHeight">
-               <property name="whatsThis">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the resolution of the Gamescope output window. If both fields are unset, Gamescope will default to the &lt;span style=&quot; font-style:italic;&quot;&gt;App Resolution&lt;/span&gt; for the window size.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="accessibleName">
-                <string>Gamescope Window Resolution (Height) [*Optional]</string>
-               </property>
-               <property name="maxLength">
-                <number>8</number>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-               </property>
-               <property name="placeholderText">
-                <string>Height (px)</string>
-               </property>
-               <property name="clearButtonEnabled">
-                <bool>true</bool>
-               </property>
-               <property name="isFor" stdset="0">
-                <string>GamescopeWinResH</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="2">
-              <widget class="QLabel" name="label_11">
-               <property name="text">
-                <string>x</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
               <widget class="QLineEdit" name="gamescopeWindowWidth">
                <property name="whatsThis">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the resolution of the Gamescope output window. If both fields are unset, Gamescope will default to the &lt;span style=&quot; font-style:italic;&quot;&gt;App Resolution&lt;/span&gt; for the window size.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the size of the Gamescope output window. If &lt;span style=&quot; font-style:italic;&quot;&gt;Width&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;Height&lt;/span&gt; are unset, Gamescope will default to the resolution requested by the running application.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="accessibleName">
                 <string>Gamescope Window Resolution (Width) [*Optional]</string>
@@ -567,7 +454,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 <number>8</number>
                </property>
                <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
+                <set>Qt::AlignCenter</set>
                </property>
                <property name="placeholderText">
                 <string>Width (px)</string>
@@ -580,21 +467,136 @@ li.checked::marker { content: &quot;\2612&quot;; }
                </property>
               </widget>
              </item>
+             <item row="2" column="2">
+              <widget class="QLabel" name="gamescopeWindowLabelX">
+               <property name="text">
+                <string>x</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3">
+              <widget class="QLineEdit" name="gamescopeWindowHeight">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the size of the Gamescope output window. If &lt;span style=&quot; font-style:italic;&quot;&gt;Width&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;Height&lt;/span&gt; are unset, Gamescope will default to the resolution requested by the running application.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Gamescope Window Resolution (Height) [*Optional]</string>
+               </property>
+               <property name="maxLength">
+                <number>8</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="placeholderText">
+                <string>Height (px)</string>
+               </property>
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>GamescopeWinResH</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="gamescopeAppLabel">
+               <property name="text">
+                <string>App Resolution:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLineEdit" name="gamescopeAppWidth">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the effective resolution that Gamescope reports to the game - in other words, a forced &lt;span style=&quot; font-style:italic;&quot;&gt;render resolution.&lt;/span&gt; If either &lt;span style=&quot; font-style:italic;&quot;&gt;Width&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;Height&lt;/span&gt; are empty, Gamescope will report the same resolution as &lt;span style=&quot; font-style:italic;&quot;&gt;Window Resolution&lt;/span&gt; (or the resolution of the desktop if set to &lt;span style=&quot; font-style:italic;&quot;&gt;Fullscreen&lt;/span&gt;)&lt;span style=&quot; font-style:italic;&quot;&gt;;&lt;/span&gt; else, both &lt;span style=&quot; font-style:italic;&quot;&gt;Window&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;App&lt;/span&gt; resolution will default to the size requested by the running application.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Gamescope App Resolution (Width)</string>
+               </property>
+               <property name="maxLength">
+                <number>8</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="placeholderText">
+                <string>Width (px)</string>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>GamescopeOutResW</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QLabel" name="label_9">
+               <property name="text">
+                <string>x</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="3">
+              <widget class="QLineEdit" name="gamescopeAppHeight">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the effective resolution that Gamescope reports to the game - in other words, a forced &lt;span style=&quot; font-style:italic;&quot;&gt;render resolution.&lt;/span&gt; If either &lt;span style=&quot; font-style:italic;&quot;&gt;Width&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;Height&lt;/span&gt; are empty, Gamescope will report the same resolution as &lt;span style=&quot; font-style:italic;&quot;&gt;Window Resolution&lt;/span&gt; (or the resolution of the desktop if set to &lt;span style=&quot; font-style:italic;&quot;&gt;Fullscreen&lt;/span&gt;)&lt;span style=&quot; font-style:italic;&quot;&gt;;&lt;/span&gt; else, both &lt;span style=&quot; font-style:italic;&quot;&gt;Window&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;App&lt;/span&gt; resolution will default to the size requested by the running application.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Gamescope App Resolution (Height)</string>
+               </property>
+               <property name="maxLength">
+                <number>8</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="placeholderText">
+                <string>Height (px)</string>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>GamescopeOutResH</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1" colspan="3">
+              <widget class="QComboBox" name="gamescopeSetScalerBox">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When using Gamescope, this sets the method it uses to scale the image to the desired display resolution, if any custom &lt;span style=&quot; font-style:italic;&quot;&gt;App Resolution&lt;/span&gt; is set.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Normal, Integer Scaling,&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;Scale to Fit&lt;/span&gt; all maintain aspect ratio.&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Scale to Fill&lt;/span&gt; will crop the image until the entire screen is filled.&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Stretch to Fill&lt;/span&gt; will stretch the image, regardless of aspect ratio, until the entire screen is filled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Gamescope Scaler Type</string>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>GamescopeScaler</string>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Default</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Integer Scaling</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Scale to Fit</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Scale to Fill</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Stretch to Fill</string>
+                </property>
+               </item>
+              </widget>
+             </item>
             </layout>
            </widget>
-          </item>
-          <item row="4" column="0" colspan="2">
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Orientation::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>0</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </widget>
@@ -605,7 +607,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <string>System Services</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignCenter</set>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
@@ -665,13 +667,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <string>Runner Settings</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignCenter</set>
          </property>
          <layout class="QGridLayout" name="gridLayout_7" columnstretch="1,0,2,1">
           <item row="0" column="0">
            <spacer name="horizontalSpacer_5">
             <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -704,7 +706,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <item row="0" column="3">
            <spacer name="horizontalSpacer_6">
             <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -749,7 +751,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <string>DLL Overrides</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignCenter</set>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
@@ -757,7 +759,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <item>
              <spacer name="horizontalSpacer">
               <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -808,7 +810,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <item>
              <spacer name="horizontalSpacer_2">
               <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -839,7 +841,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <item>
            <widget class="QScrollArea" name="scrollArea">
             <property name="horizontalScrollBarPolicy">
-             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+             <enum>Qt::ScrollBarAlwaysOff</enum>
             </property>
             <property name="widgetResizable">
              <bool>true</bool>
@@ -849,7 +851,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>592</width>
+               <width>618</width>
                <height>347</height>
               </rect>
              </property>
@@ -859,7 +861,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 <item row="0" column="0">
                  <spacer name="horizontalSpacer_11">
                   <property name="orientation">
-                   <enum>Qt::Orientation::Horizontal</enum>
+                   <enum>Qt::Horizontal</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -890,7 +892,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 <item row="0" column="2">
                  <spacer name="horizontalSpacer_12">
                   <property name="orientation">
-                   <enum>Qt::Orientation::Horizontal</enum>
+                   <enum>Qt::Horizontal</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -903,7 +905,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 <item row="1" column="1">
                  <spacer name="verticalSpacer_2">
                   <property name="orientation">
-                   <enum>Qt::Orientation::Vertical</enum>
+                   <enum>Qt::Vertical</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -928,13 +930,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <string>Windows</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignCenter</set>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,0,2,1">
           <item>
            <spacer name="horizontalSpacer_9">
             <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1070,7 +1072,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <item>
            <spacer name="horizontalSpacer_10">
             <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1099,7 +1101,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <string>Shortcut Runner Settings</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignCenter</set>
          </property>
          <layout class="QGridLayout" name="gridLayout_8">
           <item row="0" column="0">
@@ -1202,13 +1204,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <string>Legacy</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignCenter</set>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="0" rowspan="2">
            <spacer name="horizontalSpacer_13">
             <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1221,7 +1223,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <item row="0" column="4" rowspan="2">
            <spacer name="horizontalSpacer_14">
             <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1320,13 +1322,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <string>System</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignCenter</set>
          </property>
          <layout class="QGridLayout" name="gridLayout_6" columnstretch="1,0,2,1">
           <item row="0" column="0">
            <spacer name="horizontalSpacer_7">
             <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1358,7 +1360,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <item row="0" column="3">
            <spacer name="horizontalSpacer_8">
             <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1409,7 +1411,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <string notr="true"/>
             </property>
             <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignCenter</set>
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="flat">
              <bool>true</bool>
@@ -1512,7 +1514,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <item row="1" column="3" rowspan="2">
               <spacer name="horizontalSpacer_16">
                <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -1525,7 +1527,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <item row="1" column="0" rowspan="2">
               <spacer name="horizontalSpacer_15">
                <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -1538,7 +1540,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <item row="0" column="0" colspan="4">
               <widget class="Line" name="line">
                <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
                </property>
               </widget>
              </item>
@@ -1577,13 +1579,13 @@ color: yellow
          <string notr="true">background-color: transparent</string>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Shape::NoFrame</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Shadow::Plain</enum>
+         <enum>QFrame::Plain</enum>
         </property>
         <property name="horizontalScrollBarPolicy">
-         <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+         <enum>Qt::ScrollBarAlwaysOff</enum>
         </property>
         <property name="widgetResizable">
          <bool>true</bool>
@@ -1593,8 +1595,8 @@ color: yellow
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>610</width>
-           <height>148</height>
+           <width>636</width>
+           <height>228</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -1607,7 +1609,7 @@ color: yellow
              <string>Hover over a setting to view info about it here.</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -1624,10 +1626,10 @@ color: yellow
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
+      <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Reset|QDialogButtonBox::StandardButton::Save</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Reset|QDialogButtonBox::Save</set>
      </property>
     </widget>
    </item>

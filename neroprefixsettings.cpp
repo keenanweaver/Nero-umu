@@ -141,9 +141,6 @@ NeroPrefixSettingsWindow::NeroPrefixSettingsWindow(QWidget *parent, const QStrin
         // QComboboxes aren't new syntax friendly?
         if(!child->property("isFor").isNull()) connect(child, SIGNAL(activated(int)), this, SLOT(OptionSet()));
     }
-    for(const auto child : this->findChildren<QGroupBox*>()) {
-        if(!child->property("whatsThis").isNull()) child->installEventFilter(this);
-    }
 }
 
 bool NeroPrefixSettingsWindow::eventFilter(QObject* object, QEvent* event)
@@ -334,8 +331,20 @@ void NeroPrefixSettingsWindow::on_setScalingBox_activated(int index)
     if(ui->setScalingBox->currentText() == "AMD FSR 1 - Custom Resolution") ui->fsrSection->setVisible(true);
     else ui->fsrSection->setVisible(false);
 
-    if(ui->setScalingBox->currentText().startsWith("Gamescope")) ui->gamescopeSection->setVisible(true);
-    else ui->gamescopeSection->setVisible(false);
+    if(ui->setScalingBox->currentText().startsWith("Gamescope")) {
+        ui->gamescopeSection->setVisible(true);
+        if(ui->setScalingBox->currentText().endsWith("Fullscreen")) {
+            ui->gamescopeWindowLabelX->setVisible(false);
+            ui->gamescopeWindowLabel->setVisible(false);
+            ui->gamescopeWindowHeight->setVisible(false);
+            ui->gamescopeWindowWidth->setVisible(false);
+        } else {
+            ui->gamescopeWindowLabelX->setVisible(true);
+            ui->gamescopeWindowLabel->setVisible(true);
+            ui->gamescopeWindowHeight->setVisible(true);
+            ui->gamescopeWindowWidth->setVisible(true);
+        }
+    } else ui->gamescopeSection->setVisible(false);
     ui->setScalingBox->setFont(boldFont);
 }
 
