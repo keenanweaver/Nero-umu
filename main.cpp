@@ -31,7 +31,8 @@ void PrintHelp()
         "Nero-umu CLI: Launch Windows executables within a Nero-managed Prefix\n\n"
         "options:\n"
         "  --prefix \"Prefix Name\"  Run executable within \"Prefix Name\"\n"
-        "  -h, --help                  Show this help. Helpful, huh? c:\n");
+        "  -h, --help                  Show this help. Helpful, huh? c:\n"
+        );
 }
 
 int main(int argc, char *argv[])
