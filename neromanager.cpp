@@ -466,7 +466,16 @@ void NeroManagerWindow::on_backButton_clicked()
 {
     // this also handles the page toggling
     if(prefixIsSelected) {
-        SetHeader();
+        if(currentlyRunning.count() > 0) {
+            // TODO: confirmation to close all?
+            for(int i = threadsCount; i > 0; i--) {
+                // for the current prefix, we only need to run the prefix kill command once to end them all!
+                if(umuController[i-1] != nullptr) {
+                    umuController.at(i-1)->Stop();
+                    break;
+                }
+            }
+        } else SetHeader();
     } else {
         qDebug() << "TODO: implement favorites";
     }
@@ -517,9 +526,7 @@ void NeroManagerWindow::prefixShortcutPlayButtons_clicked()
 
     int slot = sender()->property("slot").toInt();
 
-    // TODO: when playing, disable back buttons, and mayhaps provide a popup to indicate launching?
     if(currentlyRunning.contains(slot)) {
-
         if(runnerWindow == nullptr) {
             runnerWindow = new NeroRunnerDialog(this);
             runnerWindow->SetupWindow(false, prefixShortcutLabel.at(slot)->text(), prefixShortcutIco.at(slot));
@@ -574,7 +581,7 @@ void NeroManagerWindow::on_oneTimeRunBtn_clicked()
                                                       QFileDialog::DontResolveSymlinks));
 
     if(!oneTimeApp.isEmpty()) {
-        ui->oneTimeRunBtn->setIcon(QIcon::fromTheme("media-playback-stop"));
+        ui->backButton->setIcon(QIcon::fromTheme("media-playback-stop"));
         threadsCount += 1;
         currentlyRunning.append(-1);
 
@@ -595,7 +602,7 @@ void NeroManagerWindow::on_oneTimeRunBtn_clicked()
         if(currentlyRunning.count() > 1)
             umuController << new NeroThreadController(-1, oneTimeApp, ui->oneTimeRunArgs->text().split(' '), true);
         else umuController << new NeroThreadController(-1, oneTimeApp, ui->oneTimeRunArgs->text().split(' '));
-        umuController << new NeroThreadController(-1, oneTimeApp, ui->oneTimeRunArgs->text().split(' '));
+
         umuController.last()->setProperty("slot", threadsCount-1);
         connect(umuController.last(), &NeroThreadController::passUmuResults, this, &NeroManagerWindow::handleUmuResults);
         connect(&umuController.last()->umuWorker->Runner, &NeroRunner::StatusUpdate, this, &NeroManagerWindow::handleUmuSignal);
@@ -777,12 +784,17 @@ void NeroManagerWindow::handleUmuResults(const int &buttonSlot, const int &resul
     const unsigned int threadSlot = sender()->property("slot").toInt();
 
     if(buttonSlot >= 0) prefixShortcutPlayButton.at(buttonSlot)->setIcon(QIcon::fromTheme("media-playback-start"));
-    else ui->oneTimeRunBtn->setIcon(QIcon::fromTheme("media-playback-start"));
+
+    delete umuController[threadSlot];
+    umuController[threadSlot] = nullptr;
 
     currentlyRunning.removeOne(buttonSlot);
-
-    // TODO: better memory management should be done here tbh.
-    delete umuController[threadSlot];
+    if(currentlyRunning.count() == 0) {
+        currentlyRunning.clear();
+        threadsCount = 0;
+        umuController.clear();
+        ui->backButton->setIcon(QIcon::fromTheme("go-previous"));
+    }
 }
 
 void NeroManagerWindow::handleUmuSignal(const int &signalType)

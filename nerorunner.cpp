@@ -379,7 +379,7 @@ int NeroRunner::StartOnetime(const QString &path, const QStringList args, const 
     runner.setProcessChannelMode(QProcess::ForwardedOutputChannel);
     runner.setReadChannel(QProcess::StandardError);
 
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env = QProcessEnvironment::systemEnvironment();
     env.insert("WINEPREFIX", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
     env.insert("GAMEID", "0");
     env.insert("PROTONPATH", NeroFS::GetProtonsPath().path()+'/'+settings->value("PrefixSettings/CurrentRunner").toString());
@@ -568,7 +568,7 @@ void NeroRunner::WaitLoop(QProcess &runner, QFile &log)
                     emit StatusUpdate(NeroRunner::RunnerStarting);
                 else if(stdout.contains("steamrt is up to date"))
                     emit StatusUpdate(NeroRunner::RunnerUpdated);
-                else if(stdout == "fsync: up and running.\n")
+                else if(stdout.startsWith("Proton: Executable"))
                     emit StatusUpdate(NeroRunner::RunnerProtonStarted);
             }
         } else {
@@ -591,6 +591,5 @@ void NeroRunner::StopProcess()
     env.insert("UMU_RUNTIME_UPDATE", "0");
     wineStopper.setProcessEnvironment(env);
     wineStopper.start("umu-run", { NeroFS::GetProtonsPath().path()+'/'+NeroFS::GetCurrentRunner()+'/'+"proton", "runinprefix", "wineboot", "-e" });
-    while(wineStopper.state() != QProcess::NotRunning)
-        QApplication::processEvents();
+    wineStopper.waitForFinished();
 }
