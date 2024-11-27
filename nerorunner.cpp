@@ -24,6 +24,7 @@
 #include <QApplication>
 #include <QProcess>
 #include <QDir>
+#include <QDebug>
 
 int NeroRunner::StartShortcut(const QString &hash)
 {
@@ -60,7 +61,7 @@ int NeroRunner::StartShortcut(const QString &hash)
         if(!settings->value("Shortcuts--"+hash+"/DLLoverrides").isNull()) {
             if(settings->value("Shortcuts--"+hash+"/IgnoreGlobalDLLs").toBool() || settings->value("PrefixSettings/DLLoverrides").isNull())
                 env.insert("WINEDLLOVERRIDES", settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';'));
-            else env.insert("WINEDLLOVERRIDES", settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';')+';'
+            else env.insert("WINEDLLOVERRIDES", settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';')
                                                 + settings->value("PrefixSettings/DLLoverrides").toStringList().join(';'));
         } else if(!settings->value("PrefixSettings/DLLoverrides").isNull())
             env.insert("WINEDLLOVERRIDES", settings->value("PrefixSettings/DLLoverrides").toStringList().join(';'));
@@ -344,6 +345,7 @@ int NeroRunner::StartShortcut(const QString &hash)
         log.resize(0);
 
         runner.start(command, arguments);
+        qDebug() << env.toStringList() << command << arguments;
         runner.waitForStarted(-1);
 
         WaitLoop(runner, log);
