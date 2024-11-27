@@ -396,7 +396,7 @@ void NeroManagerWindow::on_addButton_clicked()
                 NeroFS::AddNewShortcut(hashName, shortcutAdd.shortcutName, shortcutAdd.appPath);
 
                 // because the Shortcuts getter always returns a resorted list, just add to the bottom for user convenience.
-                unsigned int pos = NeroFS::GetCurrentPrefixShortcuts().count()-1;
+                unsigned int pos = ui->prefixContentsGrid->rowCount();
 
                 if(shortcutAdd.appIcon.isEmpty()) {
                     prefixShortcutIco << new QIcon(QIcon::fromTheme("application-x-executable"));
