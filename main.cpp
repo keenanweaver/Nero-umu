@@ -57,17 +57,17 @@ int main(int argc, char *argv[])
                 if(!oneTimeDiag.selected.isEmpty()) {
                     NeroFS::SetCurrentPrefix(oneTimeDiag.selected);
                     NeroRunner runner;
-                    runner.StartOnetime(arguments.last(), {});
-                } else printf("No prefix selected! Aborting...\n");
+                    return runner.StartOnetime(arguments.last(), {});
+                } else {
+                    printf("No prefix selected! Aborting...\n");
+                    return 1;
+                }
             } else {
                 printf("Nero cannot run without a home directory set! Aborting...\n");
-                a.exit(1);
+                return 1;
             }
         }
-
-        // TODO: replace with executing launcher window using the arguments provided.
         a.exit();
-        //return a.exec();
     } else {
         NeroManagerWindow w;
         w.show();
