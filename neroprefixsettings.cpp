@@ -130,14 +130,15 @@ NeroPrefixSettingsWindow::NeroPrefixSettingsWindow(QWidget *parent, const QStrin
     }
     for(const auto child : this->findChildren<QCheckBox*>()) {
         if(!child->property("whatsThis").isNull()) child->installEventFilter(this);
-        if(!child->property("isFor").isNull()) connect(child, SIGNAL(stateChanged(int)), this, SLOT(OptionSet()));
+        if(!child->property("isFor").isNull()) connect(child, &QCheckBox::stateChanged, this, &NeroPrefixSettingsWindow::OptionSet);
     }
     for(const auto child : this->findChildren<QLineEdit*>()) {
         if(!child->property("whatsThis").isNull()) child->installEventFilter(this);
-        if(!child->property("isFor").isNull()) connect(child, SIGNAL(textEdited(QString)), this, SLOT(OptionSet()));
+        if(!child->property("isFor").isNull()) connect(child, &QLineEdit::textEdited, this, &NeroPrefixSettingsWindow::OptionSet);
     }
     for(const auto child : this->findChildren<QComboBox*>()) {
         if(!child->property("whatsThis").isNull()) child->installEventFilter(this);
+        // QComboboxes aren't new syntax friendly?
         if(!child->property("isFor").isNull()) connect(child, SIGNAL(activated(int)), this, SLOT(OptionSet()));
     }
     for(const auto child : this->findChildren<QGroupBox*>()) {
@@ -378,8 +379,8 @@ void NeroPrefixSettingsWindow::AddDLL(const QString newDLL, const int newDLLtype
     dllDelete.last()->setFlat(true);
     dllDelete.last()->setProperty("slot", dllDelete.size()-1);
 
-    connect(dllSetting.last(), SIGNAL(triggered(QAction*)), this, SLOT(dll_action_triggered(QAction*)));
-    connect(dllDelete.last(), SIGNAL(clicked()), this, SLOT(dll_delete_clicked()));
+    connect(dllSetting.last(), &QToolButton::triggered, this, &NeroPrefixSettingsWindow::dll_action_triggered);
+    connect(dllDelete.last(), &QPushButton::clicked, this, &NeroPrefixSettingsWindow::dll_delete_clicked);
 
     ui->dllOverridesGrid->addWidget(dllSetting.last(), dllDelete.size()-1, 0);
     ui->dllOverridesGrid->addWidget(dllDelete.last(), dllDelete.size()-1, 1);
@@ -419,6 +420,8 @@ void NeroPrefixSettingsWindow::dll_delete_clicked()
     dllOverrides.remove(dllSetting.at(slot)->text().left(dllSetting.at(slot)->text().indexOf('[')-1).trimmed());
     delete dllSetting.at(slot);
     delete dllDelete.at(slot);
+    dllSetting[slot] = nullptr;
+    dllDelete[slot] = nullptr;
 }
 
 

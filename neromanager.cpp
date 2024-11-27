@@ -503,8 +503,8 @@ void NeroManagerWindow::prefixDeleteButtons_clicked()
 
             delete prefixMainButton.at(slot);
             delete prefixDeleteButton.at(slot);
-            prefixMainButton[slot] = new QPushButton;
-            prefixDeleteButton[slot] = new QPushButton;
+            prefixMainButton[slot] = nullptr;
+            prefixDeleteButton[slot] = nullptr;
         }
     }
 }
