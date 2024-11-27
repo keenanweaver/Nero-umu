@@ -65,7 +65,7 @@
            <string>Top Text</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -89,7 +89,7 @@
            <string>Subtitle</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -125,7 +125,7 @@
         <item>
          <spacer name="horizontalSpacer">
           <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
+           <enum>Qt::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -173,7 +173,7 @@
         <item>
          <spacer name="horizontalSpacer_2">
           <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
+           <enum>Qt::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -190,7 +190,7 @@
     <item>
      <widget class="Line" name="line">
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <property name="lineWidth">
        <number>2</number>
@@ -199,7 +199,7 @@
        <number>1</number>
       </property>
       <property name="orientation">
-       <enum>Qt::Orientation::Horizontal</enum>
+       <enum>Qt::Horizontal</enum>
       </property>
      </widget>
     </item>
@@ -212,19 +212,19 @@
        </sizepolicy>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::NoFrame</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Plain</enum>
+       <enum>QFrame::Plain</enum>
       </property>
       <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+       <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
       <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+       <set>Qt::AlignHCenter|Qt::AlignTop</set>
       </property>
       <widget class="QWidget" name="prefixesScrollContents">
        <property name="geometry">
@@ -241,14 +241,14 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout2" stretch="0,1,2,1">
+       <layout class="QVBoxLayout" name="verticalLayout2" stretch="0,1,2,1,0">
         <item>
          <layout class="QGridLayout" name="prefixesList"/>
         </item>
         <item>
          <spacer name="verticalSpacer_2">
           <property name="orientation">
-           <enum>Qt::Orientation::Vertical</enum>
+           <enum>Qt::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -267,14 +267,14 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;There are no Proton prefixes available!&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Press the + button above to create one.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
         <item>
          <spacer name="verticalSpacer_3">
           <property name="orientation">
-           <enum>Qt::Orientation::Vertical</enum>
+           <enum>Qt::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -284,6 +284,25 @@
           </property>
          </spacer>
         </item>
+        <item alignment="Qt::AlignmentFlag::AlignRight">
+         <widget class="QPushButton" name="managerSettings">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset theme="preferences-system"/>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </widget>
@@ -291,19 +310,19 @@
     <item>
      <widget class="QScrollArea" name="prefixContentsScrollArea">
       <property name="frameShape">
-       <enum>QFrame::Shape::NoFrame</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Plain</enum>
+       <enum>QFrame::Plain</enum>
       </property>
       <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+       <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
       <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+       <set>Qt::AlignHCenter|Qt::AlignTop</set>
       </property>
       <widget class="QWidget" name="prefixContentsScrollContents">
        <property name="geometry">
@@ -320,14 +339,14 @@
           <item>
            <layout class="QGridLayout" name="prefixContentsGrid">
             <property name="sizeConstraint">
-             <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
+             <enum>QLayout::SetNoConstraint</enum>
             </property>
            </layout>
           </item>
           <item>
            <spacer name="verticalSpacer">
             <property name="orientation">
-             <enum>Qt::Orientation::Vertical</enum>
+             <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -340,7 +359,7 @@
           <item>
            <widget class="Line" name="separator">
             <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
            </widget>
           </item>
@@ -356,14 +375,14 @@
              <string>Prefix Management:</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignCenter</set>
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
           <item>
            <layout class="QHBoxLayout" name="prefixManagementRow">
             <property name="sizeConstraint">
-             <enum>QLayout::SizeConstraint::SetFixedSize</enum>
+             <enum>QLayout::SetFixedSize</enum>
             </property>
             <item>
              <widget class="QPushButton" name="prefixSettingsBtn">

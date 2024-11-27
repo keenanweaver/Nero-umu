@@ -24,9 +24,6 @@
 #include "neroprefixsettings.h"
 #include "nerorunner.h"
 #include "nerorunnerdialog.h"
-#include "neroshortcut.h"
-#include "nerotricks.h"
-#include "nerowizard.h"
 
 #include <QMainWindow>
 #include <QDir>
@@ -35,6 +32,7 @@
 #include <QBoxLayout>
 #include <QTimer>
 #include <QThread>
+#include <QSettings>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -122,8 +120,11 @@ private slots:
 
     void on_oneTimeRunBtn_clicked();
 
+    void on_managerSettings_clicked();
+
 private:
     Ui::NeroManagerWindow *ui;
+    NeroManagerPreferences *prefs = nullptr;
     NeroPrefixSettingsWindow *prefixSettings = nullptr;
     NeroRunnerDialog *runnerWindow = nullptr;
 
@@ -150,6 +151,8 @@ private:
     QList<QPushButton*> prefixShortcutPlayButton;
     QList<QPushButton*> prefixShortcutEditButton;
     QList<QSpacerItem*> prefixShortcutSpacer;
+
+    QSettings *managerCfg;
 
     QFont listFont;
 

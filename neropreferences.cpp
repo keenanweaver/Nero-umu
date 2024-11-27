@@ -29,5 +29,9 @@ NeroManagerPreferences::NeroManagerPreferences(QWidget *parent)
 
 NeroManagerPreferences::~NeroManagerPreferences()
 {
+    if(accepted) {
+        managerCfg->setValue("UseNotifier", ui->runnerNotifs->isChecked());
+        managerCfg->setValue("ShortcutHidesManager", ui->shortcutHide->isChecked());
+    }
     delete ui;
 }

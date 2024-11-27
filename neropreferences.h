@@ -21,6 +21,7 @@
 #define NEROPREFERENCES_H
 
 #include <QDialog>
+#include <QSettings>
 
 namespace Ui {
 class NeroManagerPreferences;
@@ -33,9 +34,15 @@ class NeroManagerPreferences : public QDialog
 public:
     explicit NeroManagerPreferences(QWidget *parent = nullptr);
     ~NeroManagerPreferences();
+    void BindSettings(QSettings *cfg) { managerCfg = cfg; }
+
+private slots:
+    void on_buttonBox_accepted() { accepted = true; }
 
 private:
     Ui::NeroManagerPreferences *ui;
+    QSettings *managerCfg;
+    bool accepted = false;
 };
 
 #endif // NEROPREFERENCES_H

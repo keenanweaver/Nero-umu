@@ -21,10 +21,12 @@
 #include "./ui_neromanager.h"
 #include "nerofs.h"
 #include "neroico.h"
-//#include "neropreferences.h"
+#include "neropreferences.h"
 #include "neroprefixsettings.h"
 #include "nerorunner.h"
 #include "nerorunnerdialog.h"
+#include "neroshortcut.h"
+#include "nerotricks.h"
 #include "nerowizard.h"
 
 #include <QCryptographicHash>
@@ -66,6 +68,8 @@ NeroManagerWindow::NeroManagerWindow(QWidget *parent)
     // load initial data
     if(!NeroFS::InitPaths()) { exit(1); }
     NeroFS::GetAvailableProtons();
+    managerCfg = new QSettings(NeroFS::GetManagerCfg());
+    managerCfg->beginGroup("NeroSettings");
 
     listFont.setPointSize(12);
 
@@ -239,7 +243,7 @@ void NeroManagerWindow::RenderPrefixList()
 void NeroManagerWindow::CreatePrefix(const QString newPrefix, const QString runner, QStringList tricksToInstall)
 {
     QProcess umu;
-    QMessageBox waitBox(QMessageBox::NoIcon, "Generating Prefix", "Please wait...");
+    QMessageBox waitBox(QMessageBox::NoIcon, "Generating Prefix", "Please wait...", QMessageBox::NoButton, this, Qt::Dialog | Qt::FramelessWindowHint | Qt::MSWindowsFixedSizeDialogHint);
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 
     env.insert("WINEPREFIX", QString("%1/%2").arg(NeroFS::GetPrefixesPath().path(), newPrefix));
@@ -315,7 +319,7 @@ void NeroManagerWindow::CreatePrefix(const QString newPrefix, const QString runn
 void NeroManagerWindow::AddTricks(QStringList verbs, const QString prefix)
 {
     QProcess umu;
-    QMessageBox waitBox(QMessageBox::NoIcon, "Generating Prefix", "Please wait...");
+    QMessageBox waitBox(QMessageBox::NoIcon, "Generating Prefix", "Please wait...", QMessageBox::NoButton, this, Qt::Dialog | Qt::FramelessWindowHint | Qt::MSWindowsFixedSizeDialogHint);
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 
     QMap<QString, QVariant> settingsMap = NeroFS::GetCurrentPrefixSettings();
@@ -548,6 +552,9 @@ void NeroManagerWindow::prefixShortcutPlayButtons_clicked()
 
         QMap<QString, QString> settings = NeroFS::GetCurrentShortcutsMap();
 
+        if(managerCfg->value("ShortcutHidesManager").toBool())
+            this->hide();
+
         if(runnerWindow == nullptr) {
             runnerWindow = new NeroRunnerDialog(this);
             runnerWindow->SetupWindow(true, prefixShortcutLabel.at(slot)->text(), prefixShortcutIco.at(slot));
@@ -717,7 +724,14 @@ void NeroManagerWindow::prefixSettings_result()
             prefixShortcutEditButton[slot] = nullptr;
         }
     }
+}
 
+void NeroManagerWindow::on_managerSettings_clicked()
+{
+    prefs = new NeroManagerPreferences(this);
+    prefs->BindSettings(managerCfg);
+    prefs->setAttribute(Qt::WA_DeleteOnClose);
+    prefs->show();
 }
 
 void NeroManagerWindow::on_actionAbout_Nero_triggered()
@@ -829,6 +843,8 @@ void NeroManagerWindow::handleUmuSignal(const int &signalType)
         case NeroRunner::RunnerProtonStopped:
             delete runnerWindow;
             runnerWindow = nullptr;
+            if(managerCfg->value("ShortcutHidesManager").toBool())
+                if(this->isHidden()) this->show();
             break;
         }
     }

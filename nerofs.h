@@ -56,6 +56,7 @@ public:
     static QMap<QString, QVariant> GetCurrentPrefixSettings();
     static QMap<QString, QString> GetCurrentShortcutsMap();
     static QMap<QString, QVariant> GetShortcutSettings(const QString);
+    static QSettings GetManagerCfg() { return QSettings(QString("%1/NeroLauncher.ini").arg(qEnvironmentVariable("XDG_CONFIG_HOME")), QSettings::IniFormat); }
     static void CreateUserLinks(const QString);
     static void AddNewPrefix(const QString, const QString);
     static void AddNewShortcut(const QString, const QString, const QString);
