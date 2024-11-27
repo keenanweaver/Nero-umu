@@ -45,6 +45,12 @@ set(PROJECT_SOURCES
         nerodrives.h
         nerodrives.cpp
         nerodrives.ui
+        nerorunnerdialog.h
+        nerorunnerdialog.cpp
+        nerorunnerdialog.ui
+        neroonetimedialog.h
+        neroonetimedialog.cpp
+        neroonetimedialog.ui
         ${TS_FILES}
 )
 
@@ -60,7 +66,6 @@ else()
     add_executable(nero-launcher
         ${PROJECT_SOURCES}
         pics.qrc
-        nerorunnerdialog.h nerorunnerdialog.cpp nerorunnerdialog.ui
     )
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()

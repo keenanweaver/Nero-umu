@@ -16,6 +16,9 @@
 */
 
 #include "neromanager.h"
+#include "nerofs.h"
+#include "neroonetimedialog.h"
+#include "nerorunner.h"
 
 #include <QApplication>
 #include <QLocale>
@@ -35,7 +38,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    printf("Arguments count: %d\nArguments: \"%s\"\n", argc, *argv);
     if(argc > 1) {
         // TODO: if arguments are used, only invoke the launcher process;
         //       else, start the manager.
@@ -43,14 +45,24 @@ int main(int argc, char *argv[])
 
         QStringList arguments;
 
-        for(uint8_t i = 2; i <= argc; i++) {
+        for(uint8_t i = 1; i < argc; i++)
             arguments.append(argv[i]);
-        }
 
-        if(arguments.indexOf("-v") != -1) {
-            //mainApp.verbosity = true;
-            printf("Enabling verbose output!\n");
-            arguments.removeAt(arguments.indexOf("-v"));
+        if(argc < 3 && (arguments.last().endsWith(".exe") || arguments.last().endsWith(".msi") || arguments.last().endsWith(".bat"))) {
+            printf("Requested to open file!\n");
+
+            if(NeroFS::InitPaths()) {
+                NeroOneTimeDialog oneTimeDiag;
+                oneTimeDiag.exec();
+                if(!oneTimeDiag.selected.isEmpty()) {
+                    NeroFS::SetCurrentPrefix(oneTimeDiag.selected);
+                    NeroRunner runner;
+                    runner.StartOnetime(arguments.last(), {});
+                } else printf("No prefix selected! Aborting...\n");
+            } else {
+                printf("Nero cannot run without a home directory set! Aborting...\n");
+                a.exit(1);
+            }
         }
 
         // TODO: replace with executing launcher window using the arguments provided.
