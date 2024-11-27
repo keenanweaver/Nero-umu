@@ -82,6 +82,15 @@ NeroManagerWindow::NeroManagerWindow(QWidget *parent)
 
     /* vv post-UI popup */
 
+    sysTray = new QSystemTrayIcon(this->windowIcon(), this);
+    for(auto &action : sysTrayActions)
+        sysTrayMenu.addAction(&action);
+    connect(&sysTrayActions[0], &QAction::triggered, this, &NeroManagerWindow::actionExit_activated);
+    sysTray->setContextMenu(&sysTrayMenu);
+    sysTray->show();
+    sysTray->setToolTip("Nero Manager");
+    connect(sysTray, &QSystemTrayIcon::activated, this, &NeroManagerWindow::sysTray_activated);
+
     ui->prefixContentsScrollArea->setVisible(false);
 
     if(NeroFS::GetWinetricks().isEmpty()) {
@@ -732,6 +741,25 @@ void NeroManagerWindow::on_managerSettings_clicked()
     prefs->BindSettings(managerCfg);
     prefs->setAttribute(Qt::WA_DeleteOnClose);
     prefs->show();
+}
+
+void NeroManagerWindow::sysTray_activated(QSystemTrayIcon::ActivationReason reason)
+{
+    switch(reason) {
+    case QSystemTrayIcon::Trigger:
+        if(this->isHidden()) this->show();
+        else this->hide();
+        break;
+    //case QSystemTrayIcon::Context:
+    //    break;
+    default:
+        break;
+    }
+}
+
+void NeroManagerWindow::actionExit_activated()
+{
+    close();
 }
 
 void NeroManagerWindow::on_actionAbout_Nero_triggered()

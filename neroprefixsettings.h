@@ -94,15 +94,9 @@ private:
     void AddDLL(const QString, const int);
     void StartUmu(const QString, QStringList = {});
 
-    void SetComboBoxItemEnabled(QComboBox * comboBox, const int index, const bool enabled)
-    {
+    void SetComboBoxItemEnabled(QComboBox * comboBox, const int index, const bool enabled) {
         auto * model = qobject_cast<QStandardItemModel*>(comboBox->model());
-        //assert(model);
-        //if(!model) return;
-
         auto * item = model->item(index);
-        //assert(item);
-        //if(!item) return;
         item->setEnabled(enabled);
     }
 

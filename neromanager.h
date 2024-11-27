@@ -33,6 +33,8 @@
 #include <QTimer>
 #include <QThread>
 #include <QSettings>
+#include <QSystemTrayIcon>
+#include <QMenu>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -96,6 +98,10 @@ public:
     NeroManagerWindow(QWidget *parent = nullptr);
     ~NeroManagerWindow();
 
+// needed to prevent sysTray from holding up close events.
+protected:
+    void closeEvent(QCloseEvent *event) { delete sysTray; }
+
 public slots:
     void handleUmuResults(const int &, const int &);
     void handleUmuSignal(const int &);
@@ -107,6 +113,9 @@ private slots:
     void prefixShortcutEditButtons_clicked();
     void blinkTimer_timeout();
     void prefixSettings_result();
+    void actionExit_activated();
+
+    void sysTray_activated(QSystemTrayIcon::ActivationReason reason);
 
     void on_addButton_clicked();
 
@@ -143,6 +152,9 @@ private:
     unsigned int LOLRANDOM;
 
     // General manager stuff
+    QSystemTrayIcon *sysTray;
+    QMenu sysTrayMenu;
+    QAction sysTrayActions[1] = { QAction("Exit Nero") };
     QSettings *managerCfg;
     QTimer *blinkTimer;
     int blinkingState = 1;
