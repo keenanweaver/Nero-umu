@@ -57,9 +57,11 @@ int NeroRunner::StartShortcut(const QString &hash)
         // so all booleans have to be converted to an int string.
         //if(!settings->value(QString("Shortcuts--%1/CustomEnvVars").arg(hash)).toString().isEmpty())
         //    env.insert("")
-        if(!settings->value("Shortcuts--"+hash+"/IgnoreGlobalDLLs").toBool()) {
-            if(!settings->value("Shortcuts--"+hash+"/DLLoverrides").isNull())
-                env.insert("WINEDLLOVERRIDES", settings->value("Shortcuts--"+hash+"/IgnoreGlobalDLLs").toStringList().join(';'));
+        if(!settings->value("Shortcuts--"+hash+"/DLLoverrides").isNull()) {
+            if(settings->value("Shortcuts--"+hash+"/IgnoreGlobalDLLs").toBool() || settings->value("PrefixSettings/DLLoverrides").isNull())
+                env.insert("WINEDLLOVERRIDES", settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';'));
+            else env.insert("WINEDLLOVERRIDES", settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';')+';'
+                                                + settings->value("PrefixSettings/DLLoverrides").toStringList().join(';'));
         } else if(!settings->value("PrefixSettings/DLLoverrides").isNull())
             env.insert("WINEDLLOVERRIDES", settings->value("PrefixSettings/DLLoverrides").toStringList().join(';'));
 
