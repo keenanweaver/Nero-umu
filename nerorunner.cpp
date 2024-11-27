@@ -24,7 +24,6 @@
 #include <QApplication>
 #include <QProcess>
 #include <QDir>
-#include <QDebug>
 
 int NeroRunner::StartShortcut(const QString &hash)
 {
@@ -329,7 +328,6 @@ int NeroRunner::StartShortcut(const QString &hash)
                 else arguments.prepend("mangohud");
             }
         } else if(settings->value("PrefixSettings/Mangohud").toBool()) {
-            qDebug() << "Mangohud exists";
             if(arguments.contains("gamescope"))
                 arguments.insert(1, "--mangoapp");
             else arguments.prepend("mangohud");
@@ -348,7 +346,6 @@ int NeroRunner::StartShortcut(const QString &hash)
         log.resize(0);
 
         runner.start(command, arguments);
-        qDebug() << env.toStringList() << command << arguments;
         runner.waitForStarted(-1);
 
         WaitLoop(runner, log);
