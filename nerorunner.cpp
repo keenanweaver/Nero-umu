@@ -25,7 +25,7 @@
 #include <QProcess>
 #include <QDir>
 
-int NeroRunner::StartShortcut(const QString &hash)
+int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunning)
 {
     QSettings *settings = NeroFS::GetCurrentPrefixCfg();
     QFileInfo fileToRun(settings->value("Shortcuts--"+hash+"/Path").toString());
@@ -52,6 +52,10 @@ int NeroRunner::StartShortcut(const QString &hash)
 
         if(settings->value("PrefixSettings/RuntimeUpdateOnLaunch").toBool())
             env.insert("UMU_RUNTIME_UPDATE", "1");
+
+        if(prefixAlreadyRunning)
+            env.insert("PROTON_VERB", "run");
+        else env.insert("PROTON_VERB", "waitforexitandrun");
 
         // unfortunately, env insert does NOT allow settings bools properly as-is,
         // so all booleans have to be converted to an int string.
@@ -365,7 +369,7 @@ int NeroRunner::StartShortcut(const QString &hash)
     }
 }
 
-int NeroRunner::StartOnetime(const QString &path, const QStringList args)
+int NeroRunner::StartOnetime(const QString &path, const QStringList args, const bool &prefixAlreadyRunning)
 {
     QSettings *settings = NeroFS::GetCurrentPrefixCfg();
 
@@ -379,6 +383,10 @@ int NeroRunner::StartOnetime(const QString &path, const QStringList args)
     env.insert("WINEPREFIX", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
     env.insert("GAMEID", "0");
     env.insert("PROTONPATH", NeroFS::GetProtonsPath().path()+'/'+settings->value("PrefixSettings/CurrentRunner").toString());
+
+    if(prefixAlreadyRunning)
+        env.insert("PROTON_VERB", "run");
+    else env.insert("PROTON_VERB", "waitforexitandrun");
 
     //if(!settings->value("PrefixSettings/CustomEnvVars").toStringList().isEmpty())
     //    env.insert("WINEDLLOVERRIDES", settings->value("PrefixSettings/CustomEnvVars").toStringList().join(";"));
@@ -561,8 +569,6 @@ void NeroRunner::WaitLoop(QProcess &runner, QFile &log)
                 else if(stdout.contains("steamrt is up to date"))
                     emit StatusUpdate(NeroRunner::RunnerUpdated);
                 else if(stdout == "fsync: up and running.\n")
-                    emit StatusUpdate(NeroRunner::RunnerProtonBooting);
-                else if(stdout == "Command exited with status: 0\n")
                     emit StatusUpdate(NeroRunner::RunnerProtonStarted);
             }
         } else {

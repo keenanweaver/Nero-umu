@@ -83,7 +83,9 @@ void NeroShortcutWizard::on_selectBox_clicked()
     QString newApp = QFileDialog::getOpenFileName(this,
                                                   "Select a Windows Executable",
                                                   qEnvironmentVariable("HOME"),
-    "Compatible Windows Executables (*.bat *.exe *.msi);;Windows Batch Script Files (*.bat);;Windows Portable Executable (*.exe);;Windows Installer Package (*.msi)");
+    "Compatible Windows Executables (*.bat *.exe *.msi);;Windows Batch Script Files (*.bat);;Windows Portable Executable (*.exe);;Windows Installer Package (*.msi)",
+                                                  nullptr,
+                                                  QFileDialog::DontResolveSymlinks);
 
     if(!newApp.isEmpty()) {
         ui->appPath->setText(newApp);
@@ -106,7 +108,9 @@ void NeroShortcutWizard::on_appIcon_clicked()
     QString newIcon = QFileDialog::getOpenFileName(this,
                                                    "Select a Windows Executable",
                                                    qEnvironmentVariable("HOME"),
-    "Windows Executable, Dynamic Link Library, Icon Resource File, or Portable Network Graphics File (*.dll *.exe *.ico *.png);;Windows Dynamic Link Library (*.dll);;Windows Executable (*.exe);;Windows Icon Resource (*.ico);;Portable Network Graphics File (*.png)");
+    "Windows Executable, Dynamic Link Library, Icon Resource File, or Portable Network Graphics File (*.dll *.exe *.ico *.png);;Windows Dynamic Link Library (*.dll);;Windows Executable (*.exe);;Windows Icon Resource (*.ico);;Portable Network Graphics File (*.png)",
+                                                   nullptr,
+                                                   QFileDialog::DontResolveSymlinks);
 
     if(!newIcon.isEmpty()) {
         QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));

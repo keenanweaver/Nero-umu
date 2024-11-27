@@ -369,7 +369,9 @@ void NeroManagerWindow::on_addButton_clicked()
         QString newApp(QFileDialog::getOpenFileName(this,
                                                     "Select a Windows Executable",
                                                     qEnvironmentVariable("HOME"),
-        "Compatible Windows Files (*.bat *.exe *.msi);;Windows Batch Script Files (*.bat);;Windows Executable (*.exe);;Windows Installer Package (*.msi)"));
+        "Compatible Windows Files (*.bat *.exe *.msi);;Windows Batch Script Files (*.bat);;Windows Executable (*.exe);;Windows Installer Package (*.msi)",
+                                                    nullptr,
+                                                    QFileDialog::DontResolveSymlinks));
 
         if(!newApp.isEmpty()) {
             NeroShortcutWizard shortcutAdd(this, newApp);
@@ -538,7 +540,10 @@ void NeroManagerWindow::prefixShortcutPlayButtons_clicked()
             runnerWindow->show();
         }
 
-        umuController << new NeroThreadController(slot, settings.value(prefixShortcutLabel.at(slot)->text()), {""});
+        if(currentlyRunning.count() > 1)
+            umuController << new NeroThreadController(slot, settings.value(prefixShortcutLabel.at(slot)->text()), {""}, true);
+        else umuController << new NeroThreadController(slot, settings.value(prefixShortcutLabel.at(slot)->text()), {""});
+
         umuController.last()->setProperty("slot", threadsCount-1);
         prefixShortcutPlayButton.at(slot)->setProperty("thread", threadsCount-1);
         connect(umuController.last(), &NeroThreadController::passUmuResults, this, &NeroManagerWindow::handleUmuResults);
@@ -561,13 +566,17 @@ void NeroManagerWindow::prefixShortcutEditButtons_clicked()
 
 void NeroManagerWindow::on_oneTimeRunBtn_clicked()
 {
-    QString oneTimeApp = QFileDialog::getOpenFileName(this,
+    QString oneTimeApp(QFileDialog::getOpenFileName(this,
                                                       "Select an Executable to Start in Prefix",
                                                       qEnvironmentVariable("HOME"),
-    "Compatible Windows Executables (*.bat *.exe *.msi);;Windows Batch Script Files (*.bat);;Windows Portable Executable (*.exe);;Windows Installer Package (*.msi)");
+    "Compatible Windows Executables (*.bat *.exe *.msi);;Windows Batch Script Files (*.bat);;Windows Portable Executable (*.exe);;Windows Installer Package (*.msi)",
+                                                      nullptr,
+                                                      QFileDialog::DontResolveSymlinks));
 
     if(!oneTimeApp.isEmpty()) {
+        ui->oneTimeRunBtn->setIcon(QIcon::fromTheme("media-playback-stop"));
         threadsCount += 1;
+        currentlyRunning.append(-1);
 
         if(runnerWindow == nullptr) {
             QIcon icon;
@@ -583,6 +592,9 @@ void NeroManagerWindow::on_oneTimeRunBtn_clicked()
         }
 
         // TODO: flawed args split if the argument contains a path :/
+        if(currentlyRunning.count() > 1)
+            umuController << new NeroThreadController(-1, oneTimeApp, ui->oneTimeRunArgs->text().split(' '), true);
+        else umuController << new NeroThreadController(-1, oneTimeApp, ui->oneTimeRunArgs->text().split(' '));
         umuController << new NeroThreadController(-1, oneTimeApp, ui->oneTimeRunArgs->text().split(' '));
         umuController.last()->setProperty("slot", threadsCount-1);
         connect(umuController.last(), &NeroThreadController::passUmuResults, this, &NeroManagerWindow::handleUmuResults);
@@ -751,10 +763,10 @@ void NeroThreadWorker::umuRunnerProcess()
     int result;
     if(currentSlot >= 0) {
         // for shortcuts, parameters = hash
-        result = Runner.StartShortcut(currentParameters);
+        result = Runner.StartShortcut(currentParameters, alreadyRunning);
     } else {
         // for one time, parameters = path, oneTimeArgs = contents of oneTimeArguments
-        result = Runner.StartOnetime(currentParameters, oneTimeArgs);
+        result = Runner.StartOnetime(currentParameters, oneTimeArgs, alreadyRunning);
     }
 
     emit umuExited(currentSlot, result);
@@ -763,10 +775,11 @@ void NeroThreadWorker::umuRunnerProcess()
 void NeroManagerWindow::handleUmuResults(const int &buttonSlot, const int &result)
 {
     const unsigned int threadSlot = sender()->property("slot").toInt();
-    if(buttonSlot >= 0) {
-        prefixShortcutPlayButton.at(buttonSlot)->setIcon(QIcon::fromTheme("media-playback-start"));
-        currentlyRunning.removeOne(buttonSlot);
-    }
+
+    if(buttonSlot >= 0) prefixShortcutPlayButton.at(buttonSlot)->setIcon(QIcon::fromTheme("media-playback-start"));
+    else ui->oneTimeRunBtn->setIcon(QIcon::fromTheme("media-playback-start"));
+
+    currentlyRunning.removeOne(buttonSlot);
 
     // TODO: better memory management should be done here tbh.
     delete umuController[threadSlot];
@@ -780,10 +793,7 @@ void NeroManagerWindow::handleUmuSignal(const int &signalType)
             runnerWindow->SetText("umu launching...");
             break;
         case NeroRunner::RunnerUpdated:
-            runnerWindow->SetText("umu runtime updated.");
-            break;
-        case NeroRunner::RunnerProtonBooting:
-            runnerWindow->SetText("Starting Proton...");
+            runnerWindow->SetText("umu runtime updated, starting Proton...");
             break;
         case NeroRunner::RunnerProtonStarted:
             delete runnerWindow;

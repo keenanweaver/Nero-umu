@@ -31,8 +31,8 @@ class NeroRunner : public QObject
 public:
     NeroRunner() {};
 
-    int StartShortcut(const QString &);
-    int StartOnetime(const QString &, const QStringList);
+    int StartShortcut(const QString &, const bool & = false);
+    int StartOnetime(const QString &, const QStringList, const bool & = false);
     void WaitLoop(QProcess &, QFile &);
     void StopProcess();
 
@@ -42,7 +42,6 @@ public:
     enum {
         RunnerStarting = 0,
         RunnerUpdated,
-        RunnerProtonBooting,
         RunnerProtonStarted,
         RunnerProtonStopping,
         RunnerProtonStopped

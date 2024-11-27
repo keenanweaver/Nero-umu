@@ -48,8 +48,8 @@ class NeroThreadWorker : public QObject
     Q_OBJECT
 
 public:
-    NeroThreadWorker(const int &slot, const QString &params, const QStringList &extArgs = {}) {
-        currentSlot = slot, currentParameters = params, oneTimeArgs = extArgs;
+    NeroThreadWorker(const int &slot, const QString &params, const QStringList &extArgs = {}, const bool &prefixAlreadyRunning = false) {
+        currentSlot = slot, currentParameters = params, oneTimeArgs = extArgs, alreadyRunning = prefixAlreadyRunning;
     }
     ~NeroThreadWorker() {};
     NeroRunner Runner;
@@ -58,6 +58,7 @@ public slots:
 signals:
     void umuExited(const int &, const int &);
 private:
+    bool alreadyRunning = false;
     int currentSlot;
     QString currentParameters;
     QStringList oneTimeArgs;
@@ -68,13 +69,12 @@ class NeroThreadController : public QObject
     Q_OBJECT
     QThread umuThread;
 public:
-    NeroThreadController(const int &slot, const QString &params, const QStringList &extArgs = {}) {
-        umuWorker = new NeroThreadWorker(slot, params, extArgs);
+    NeroThreadController(const int &slot, const QString &params, const QStringList &extArgs = {}, const bool &prefixAlreadyRunning = false) {
+        umuWorker = new NeroThreadWorker(slot, params, extArgs, prefixAlreadyRunning);
         umuWorker->moveToThread(&umuThread);
         connect(&umuThread, &QThread::finished, umuWorker, &QObject::deleteLater);
         connect(this, &NeroThreadController::operate, umuWorker, &NeroThreadWorker::umuRunnerProcess);
         connect(umuWorker, &NeroThreadWorker::umuExited, this, &NeroThreadController::handleUmuResults);
-        //connect(&umuWorker->Runner, &NeroRunner::StatusUpdate, this, &NeroThreadController::handleUmuStatus);
         umuThread.start();
     }
     ~NeroThreadController() {
@@ -82,18 +82,12 @@ public:
         umuThread.wait();
     }
     NeroThreadWorker *umuWorker;
-    void Stop() {
-        umuWorker->Runner.halt = true;
-        //umuThread.quit();
-        //umuThread.wait();
-    }
+    void Stop() { umuWorker->Runner.halt = true; }
 signals:
     void operate();
     void passUmuResults(const int &, const int &);
-    //void passUmuStatus(const int &);
 public slots:
     void handleUmuResults(const int &buttonSlot, const int &result) { emit passUmuResults(buttonSlot, result); }
-    //void handleUmuStatus(const int &res) { emit passUmuStatus(res); }
 };
 
 class NeroManagerWindow : public QMainWindow
