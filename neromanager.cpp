@@ -750,6 +750,7 @@ void NeroManagerWindow::sysTray_activated(QSystemTrayIcon::ActivationReason reas
         if(this->isHidden()) this->show();
         else this->hide();
         break;
+    // this doesn't seem to get used?
     //case QSystemTrayIcon::Context:
     //    break;
     default:
