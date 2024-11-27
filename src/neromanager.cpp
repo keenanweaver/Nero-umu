@@ -709,15 +709,17 @@ void NeroManagerWindow::prefixSettings_result()
 
     if(slot >= 0) {
         if(prefixSettings->result() == QDialog::Accepted) {
+            // update app icon if changed
             if(!prefixSettings->newAppIcon.isEmpty()) {
                 prefixShortcutIco.at(slot)->addFile(prefixSettings->newAppIcon);
                 if(prefixShortcutIco.at(slot)->actualSize(QSize(24,24)).height() < 24)
                     prefixShortcutIcon.at(slot)->setPixmap(prefixShortcutIco.at(slot)->pixmap(prefixShortcutIco.at(slot)->actualSize(QSize(24,24))).scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation));
                 else prefixShortcutIcon.at(slot)->setPixmap(prefixShortcutIco.at(slot)->pixmap(24,24));
             }
-
+            // update app name if changed
             if(prefixSettings->appName != prefixShortcutLabel.at(slot)->text())
                 prefixShortcutLabel.at(slot)->setText(prefixSettings->appName);
+        // delete shortcut signal
         } else if(prefixSettings->result() == -1) {
             QMap<QString, QString> settings = NeroFS::GetCurrentShortcutsMap();
             NeroFS::DeleteShortcut(settings.value(prefixShortcutLabel.at(slot)->text()));
@@ -731,8 +733,11 @@ void NeroManagerWindow::prefixSettings_result()
             prefixShortcutLabel[slot] = nullptr;
             prefixShortcutPlayButton[slot] = nullptr;
             prefixShortcutEditButton[slot] = nullptr;
+
+            SetHeader(NeroFS::GetCurrentPrefix(), NeroFS::GetCurrentPrefixShortcuts().count());
         }
     }
+    delete prefixSettings;
 }
 
 void NeroManagerWindow::on_managerSettings_clicked()
