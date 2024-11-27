@@ -837,6 +837,9 @@ void NeroManagerWindow::handleUmuResults(const int &buttonSlot, const int &resul
     if(buttonSlot >= 0) {
         prefixShortcutPlayButton.at(buttonSlot)->setIcon(QIcon::fromTheme("media-playback-start"));
         prefixShortcutPlayButton.at(buttonSlot)->setToolTip("Start " + prefixShortcutLabel.at(buttonSlot)->text());
+
+        if(managerCfg->value("ShortcutHidesManager").toBool())
+            if(this->isHidden()) this->show();
     }
 
     delete umuController[threadSlot];
@@ -872,8 +875,6 @@ void NeroManagerWindow::handleUmuSignal(const int &signalType)
         case NeroRunner::RunnerProtonStopped:
             delete runnerWindow;
             runnerWindow = nullptr;
-            if(managerCfg->value("ShortcutHidesManager").toBool())
-                if(this->isHidden()) this->show();
             break;
         }
     }
