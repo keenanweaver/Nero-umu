@@ -20,6 +20,7 @@
 #include "neroprefixsettings.h"
 #include "ui_neroprefixsettings.h"
 #include "neroconstants.h"
+#include "nerodrives.h"
 #include "nerofs.h"
 #include "neroico.h"
 
@@ -525,9 +526,8 @@ void NeroPrefixSettingsWindow::on_prefixInstallDiscordRPC_clicked()
 
 void NeroPrefixSettingsWindow::on_prefixDrivesBtn_clicked()
 {
-    drives = new NeroVirtualDriveDialog(this);
-    drives->exec();
-    delete drives;
+    NeroVirtualDriveDialog drives(this);
+    drives.exec();
 }
 
 

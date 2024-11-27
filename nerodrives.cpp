@@ -100,6 +100,7 @@ void NeroVirtualDriveDialog::AddDir(const QString newPath, const QString letter)
         windowsLabel.open(QIODevice::ReadWrite);
         dirWinLabel << new QLineEdit(windowsLabel.readLine().trimmed());
     } else dirWinLabel << new QLineEdit();
+    dirWinLabel.last()->setPlaceholderText("Drive label");
     dirWinLabel.last()->setFont(lineEditFont);
     dirWinLabel.last()->setFrame(false);
     dirWinLabel.last()->setMaxLength(16);

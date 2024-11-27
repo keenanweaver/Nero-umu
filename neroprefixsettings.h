@@ -20,8 +20,6 @@
 #ifndef NEROPREFIXSETTINGS_H
 #define NEROPREFIXSETTINGS_H
 
-#include "nerodrives.h"
-
 #include <QDialog>
 #include <QLabel>
 #include <QMap>
@@ -87,8 +85,6 @@ private slots:
 
 private:
     Ui::NeroPrefixSettingsWindow *ui;
-
-    NeroVirtualDriveDialog *drives;
 
     void LoadSettings();
     void AddDLL(const QString, const int);
