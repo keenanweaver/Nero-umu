@@ -20,6 +20,7 @@
 #include "neromanager.h"
 #include "./ui_neromanager.h"
 #include "nerofs.h"
+#include "neroico.h"
 //#include "neropreferences.h"
 #include "neroprefixsettings.h"
 #include "nerorunner.h"
@@ -572,11 +573,11 @@ void NeroManagerWindow::prefixShortcutEditButtons_clicked()
         delete prefixShortcutLabel[slot];
         delete prefixShortcutPlayButton[slot];
         delete prefixShortcutEditButton[slot];
-        prefixShortcutIco[slot] = new QIcon;
-        prefixShortcutIcon[slot] = new QLabel;
-        prefixShortcutLabel[slot] = new QLabel;
-        prefixShortcutPlayButton[slot] = new QPushButton;
-        prefixShortcutEditButton[slot] = new QPushButton;
+        prefixShortcutIco[slot] = nullptr;
+        prefixShortcutIcon[slot] = nullptr;
+        prefixShortcutLabel[slot] = nullptr;
+        prefixShortcutPlayButton[slot] = nullptr;
+        prefixShortcutEditButton[slot] = nullptr;
     }
 }
 
@@ -591,11 +592,16 @@ void NeroManagerWindow::on_oneTimeRunBtn_clicked()
         threadsCount += 1;
 
         if(runnerWindow == nullptr) {
-            qDebug() << "Opening window";
+            QIcon icon;
+            QString iconPath = NeroIcoExtractor::GetIcon(oneTimeApp);
+            if(!iconPath.isEmpty())
+                icon = QIcon(QPixmap(iconPath));
             runnerWindow = new NeroRunnerDialog(this);
             runnerWindow->setModal(true);
-            runnerWindow->SetupWindow(true, oneTimeApp.mid(oneTimeApp.lastIndexOf('/')+1));
+            runnerWindow->SetupWindow(true, oneTimeApp.mid(oneTimeApp.lastIndexOf('/')+1), &icon);
             runnerWindow->show();
+            QDir tempDir(QString("%1/nero-manager").arg(QDir::tempPath()));
+            tempDir.removeRecursively();
         }
 
         // TODO: flawed args split if the argument contains a path :/

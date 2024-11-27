@@ -34,7 +34,6 @@
 #include <QDir>
 #include <QString>
 #include <QProcess>
-//#include <QDebug>
 
 QString NeroIcoExtractor::GetIcon(QString sourceFile)
 {

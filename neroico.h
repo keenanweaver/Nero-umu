@@ -28,9 +28,6 @@ class NeroIcoExtractor
 public:
     static QString GetIcon(QString sourceFile);
     static void CheckIcoCache(QDir cache) { if(!cache.exists(".icoCache")) { cache.mkdir(".icoCache"); } }
-
-private:
-
 };
 
 #endif // NEROICO_H

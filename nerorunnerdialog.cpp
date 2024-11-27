@@ -26,7 +26,7 @@ void NeroRunnerDialog::SetupWindow(const bool &isStarting,
         ui->statusText->setText("Stopping umu...");
     }
 
-    if(icon != nullptr) {
+    if(!icon->isNull()) {
         if(icon->actualSize(QSize(64,64)).height() < 64)
             ui->icoLabel->setPixmap(icon->pixmap(icon->actualSize(QSize(64,64))).scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation));
         else ui->icoLabel->setPixmap(icon->pixmap(64,64));
