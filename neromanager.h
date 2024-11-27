@@ -130,11 +130,6 @@ private slots:
 
 private:
     Ui::NeroManagerWindow *ui;
-    NeroManagerPreferences *prefs;
-    NeroPrefixWizard *wizard;
-    NeroTricksWindow *tricks;
-    NeroShortcutWizard *shortcutAdd;
-    NeroPrefixSettingsWindow *prefixSettings;
     NeroRunnerDialog *runnerWindow = nullptr;
 
     // METHODS

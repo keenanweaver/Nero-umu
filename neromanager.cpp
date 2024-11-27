@@ -20,7 +20,7 @@
 #include "neromanager.h"
 #include "./ui_neromanager.h"
 #include "nerofs.h"
-#include "neropreferences.h"
+//#include "neropreferences.h"
 #include "neroprefixsettings.h"
 #include "nerorunner.h"
 #include "nerorunnerdialog.h"
@@ -371,10 +371,10 @@ void NeroManagerWindow::on_addButton_clicked()
         "Compatible Windows Files (*.bat *.exe *.msi);;Windows Batch Script Files (*.bat);;Windows Executable (*.exe);;Windows Installer Package (*.msi)"));
 
         if(!newApp.isEmpty()) {
-            shortcutAdd = new NeroShortcutWizard(this, newApp);
-            shortcutAdd->exec();
+            NeroShortcutWizard shortcutAdd(this, newApp);
+            shortcutAdd.exec();
 
-            if(!shortcutAdd->appPath.isEmpty()) {
+            if(!shortcutAdd.appPath.isEmpty()) {
                 // hash function here
                 QString hashName(QCryptographicHash::hash(QString(LOLRANDOM).toLocal8Bit(), QCryptographicHash::Md5).toHex(0));
 
@@ -390,20 +390,20 @@ void NeroManagerWindow::on_addButton_clicked()
                     }
                 }
 
-                NeroFS::AddNewShortcut(hashName, shortcutAdd->shortcutName, shortcutAdd->appPath);
+                NeroFS::AddNewShortcut(hashName, shortcutAdd.shortcutName, shortcutAdd.appPath);
 
                 // because the Shortcuts getter always returns a resorted list, just add to the bottom for user convenience.
                 unsigned int pos = NeroFS::GetCurrentPrefixShortcuts().count()-1;
 
-                if(shortcutAdd->appIcon.isEmpty()) {
+                if(shortcutAdd.appIcon.isEmpty()) {
                     prefixShortcutIco << new QIcon(QIcon::fromTheme("application-x-executable"));
                 } else {
-                    QFile::copy(shortcutAdd->appIcon, QString("%1/%2/.icoCache/%3").arg(NeroFS::GetPrefixesPath().path(),
+                    QFile::copy(shortcutAdd.appIcon, QString("%1/%2/.icoCache/%3").arg(NeroFS::GetPrefixesPath().path(),
                                                                                         NeroFS::GetCurrentPrefix(),
-                                                                                        QString("%1-%2.png").arg(shortcutAdd->shortcutName, hashName)));
+                                                                                        QString("%1-%2.png").arg(shortcutAdd.shortcutName, hashName)));
                     prefixShortcutIco << new QIcon(QPixmap(QString("%1/%2/.icoCache/%3").arg(NeroFS::GetPrefixesPath().path(),
                                                                                         NeroFS::GetCurrentPrefix(),
-                                                                                        QString("%1-%2.png").arg(shortcutAdd->shortcutName, hashName))));
+                                                                                        QString("%1-%2.png").arg(shortcutAdd.shortcutName, hashName))));
                 }
 
                 prefixShortcutIcon << new QLabel();
@@ -413,20 +413,20 @@ void NeroManagerWindow::on_addButton_clicked()
                 else prefixShortcutIcon.at(pos)->setPixmap(prefixShortcutIco.at(pos)->pixmap(24,24));
                 prefixShortcutIcon.at(pos)->setAlignment(Qt::AlignCenter);
 
-                prefixShortcutLabel << new QLabel(shortcutAdd->shortcutName);
+                prefixShortcutLabel << new QLabel(shortcutAdd.shortcutName);
                 prefixShortcutLabel.at(pos)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
                 // media-playback-start should change to media-playback-stop when playing
                 prefixShortcutPlayButton << new QPushButton(QIcon::fromTheme("media-playback-start"), "");
                 prefixShortcutPlayButton.at(pos)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
                 prefixShortcutPlayButton.at(pos)->setIconSize(QSize(16, 16));
-                prefixShortcutPlayButton.at(pos)->setToolTip(QString("Start %1.").arg(shortcutAdd->shortcutName));
+                prefixShortcutPlayButton.at(pos)->setToolTip(QString("Start %1.").arg(shortcutAdd.shortcutName));
                 prefixShortcutPlayButton.at(pos)->setProperty("slot", pos);
 
                 prefixShortcutEditButton << new QPushButton(QIcon::fromTheme("document-properties"), "");
                 prefixShortcutEditButton.at(pos)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
                 prefixShortcutEditButton.at(pos)->setIconSize(QSize(16, 16));
-                prefixShortcutEditButton.at(pos)->setToolTip(QString("Edit properties of %1.").arg(shortcutAdd->shortcutName));
+                prefixShortcutEditButton.at(pos)->setToolTip(QString("Edit properties of %1.").arg(shortcutAdd.shortcutName));
                 prefixShortcutEditButton.at(pos)->setFlat(true);
                 prefixShortcutEditButton.at(pos)->setProperty("slot", pos);
 
@@ -442,23 +442,20 @@ void NeroManagerWindow::on_addButton_clicked()
 
                 SetHeader(NeroFS::GetCurrentPrefix(), NeroFS::GetCurrentPrefixShortcuts().count());
             }
-
-            delete shortcutAdd;
         }
 
     } else {
-        wizard = new NeroPrefixWizard(this);
-        wizard->setFixedSize(wizard->size());
-        wizard->exec();
+        NeroPrefixWizard wizard(this);
+        wizard.setFixedSize(wizard.size());
+        wizard.exec();
 
-        if(wizard->result() == QDialog::Accepted) {
-            CreatePrefix(wizard->prefixName, NeroFS::GetAvailableProtons().at(wizard->protonRunner), wizard->verbsToInstall);
+        if(wizard.result() == QDialog::Accepted) {
+            CreatePrefix(wizard.prefixName, NeroFS::GetAvailableProtons().at(wizard.protonRunner), wizard.verbsToInstall);
 
-            if(wizard->userSymlinks) { NeroFS::CreateUserLinks(wizard->prefixName); }
+            if(wizard.userSymlinks) { NeroFS::CreateUserLinks(wizard.prefixName); }
         } else {
             if(NeroFS::GetPrefixes().isEmpty()) { StartBlinkTimer(); }
         }
-        delete wizard;
     }
 }
 
@@ -555,20 +552,20 @@ void NeroManagerWindow::prefixShortcutEditButtons_clicked()
 
     QMap<QString, QString> settings = NeroFS::GetCurrentShortcutsMap();
 
-    prefixSettings = new NeroPrefixSettingsWindow(this, settings.value(prefixShortcutLabel.at(slot)->text()));
-    prefixSettings->exec();
+    NeroPrefixSettingsWindow prefixSettings(this, settings.value(prefixShortcutLabel.at(slot)->text()));
+    prefixSettings.exec();
 
-    if(prefixSettings->result() == QDialog::Accepted) {
-        if(!prefixSettings->newAppIcon.isEmpty()) {
-            prefixShortcutIco.at(slot)->addFile(prefixSettings->newAppIcon);
+    if(prefixSettings.result() == QDialog::Accepted) {
+        if(!prefixSettings.newAppIcon.isEmpty()) {
+            prefixShortcutIco.at(slot)->addFile(prefixSettings.newAppIcon);
             if(prefixShortcutIco.at(slot)->actualSize(QSize(24,24)).height() < 24)
                 prefixShortcutIcon.at(slot)->setPixmap(prefixShortcutIco.at(slot)->pixmap(prefixShortcutIco.at(slot)->actualSize(QSize(24,24))).scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation));
             else prefixShortcutIcon.at(slot)->setPixmap(prefixShortcutIco.at(slot)->pixmap(24,24));
         }
 
-        if(prefixSettings->appName != prefixShortcutLabel.at(slot)->text())
-            prefixShortcutLabel.at(slot)->setText(prefixSettings->appName);
-    } else if(prefixSettings->result() == -1) {
+        if(prefixSettings.appName != prefixShortcutLabel.at(slot)->text())
+            prefixShortcutLabel.at(slot)->setText(prefixSettings.appName);
+    } else if(prefixSettings.result() == -1) {
         NeroFS::DeleteShortcut(settings.value(prefixShortcutLabel.at(slot)->text()));
         delete prefixShortcutIco[slot];
         delete prefixShortcutIcon[slot];
@@ -581,8 +578,6 @@ void NeroManagerWindow::prefixShortcutEditButtons_clicked()
         prefixShortcutPlayButton[slot] = new QPushButton;
         prefixShortcutEditButton[slot] = new QPushButton;
     }
-
-    delete prefixSettings;
 }
 
 void NeroManagerWindow::on_oneTimeRunBtn_clicked()
@@ -632,10 +627,8 @@ void NeroManagerWindow::CleanupShortcuts()
 
 void NeroManagerWindow::on_prefixSettingsBtn_clicked()
 {
-    prefixSettings = new NeroPrefixSettingsWindow(this);
-    prefixSettings->exec();
-
-    delete prefixSettings;
+    NeroPrefixSettingsWindow prefixSettings(this);
+    prefixSettings.exec();
 }
 
 void NeroManagerWindow::on_prefixTricksBtn_clicked()
@@ -654,17 +647,17 @@ void NeroManagerWindow::on_prefixTricksBtn_clicked()
         printf("Prefix has no winetricks file, skipping...\n");
     }
 
-    tricks = new NeroTricksWindow();
+    NeroTricksWindow tricks(this);
 
-    if(!verbsInstalled.isEmpty()) tricks->SetPreinstalledVerbs(verbsInstalled);
+    if(!verbsInstalled.isEmpty()) tricks.SetPreinstalledVerbs(verbsInstalled);
 
     bool confirmed = false;
     QStringList verbsToInstall;
 
     while(!confirmed) {
-        tricks->exec();
-        if(tricks->result() == QDialog::Accepted) {
-            verbsToInstall.append(tricks->verbIsSelected.keys(true));
+        tricks.exec();
+        if(tricks.result() == QDialog::Accepted) {
+            verbsToInstall.append(tricks.verbIsSelected.keys(true));
             verbsToInstall.removeDuplicates();
             if(QMessageBox::question(this,
                                       "Verbs Confirmation",
@@ -679,8 +672,6 @@ void NeroManagerWindow::on_prefixTricksBtn_clicked()
             confirmed = true;
         }
     }
-
-    delete tricks;
 }
 
 void NeroManagerWindow::on_actionAbout_Nero_triggered()
