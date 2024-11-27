@@ -58,38 +58,38 @@ int NeroRunner::StartShortcut(const QString &hash)
         // so all booleans have to be converted to an int string.
         //if(!settings->value(QString("Shortcuts--%1/CustomEnvVars").arg(hash)).toString().isEmpty())
         //    env.insert("")
-        if(!settings->value("Shortcuts--"+hash+"/DLLoverrides").isNull()) {
-            if(settings->value("Shortcuts--"+hash+"/IgnoreGlobalDLLs").toBool() || settings->value("PrefixSettings/DLLoverrides").isNull())
+        if(!settings->value("Shortcuts--"+hash+"/DLLoverrides").toString().isEmpty()) {
+            if(settings->value("Shortcuts--"+hash+"/IgnoreGlobalDLLs").toBool() || settings->value("PrefixSettings/DLLoverrides").toString().isEmpty())
                 env.insert("WINEDLLOVERRIDES", settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';'));
             else env.insert("WINEDLLOVERRIDES", settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';')
                                                 + settings->value("PrefixSettings/DLLoverrides").toStringList().join(';'));
-        } else if(!settings->value("PrefixSettings/DLLoverrides").isNull())
+        } else if(!settings->value("PrefixSettings/DLLoverrides").toString().isEmpty())
             env.insert("WINEDLLOVERRIDES", settings->value("PrefixSettings/DLLoverrides").toStringList().join(';'));
 
-        if(settings->value("Shortcuts--"+hash+"/ForceWineD3D").isNull())
+        if(settings->value("Shortcuts--"+hash+"/ForceWineD3D").toString().isEmpty())
             env.insert("PROTON_USE_WINED3D", QString(settings->value("Shortcuts--"+hash+"/ForceWineD3D").toInt()));
         else env.insert("PROTON_USE_WINED3D", QString(settings->value("PrefixSettings/ForceWineD3D").toInt()));
 
-        if(settings->value("Shortcuts--"+hash+"/NoD8VK").isNull()) {
+        if(settings->value("Shortcuts--"+hash+"/NoD8VK").toString().isEmpty()) {
             if(!settings->value("Shortcuts--"+hash+"/NoD8VK").toBool()) env.insert("PROTON_DXVK_D3D8", "1");
         } else if(!settings->value("PrefixSettings/NoD8VK").toBool()) env.insert("PROTON_DXVK_D3D8", "1");
 
-        if(!settings->value("Shortcuts--"+hash+"/EnableNVAPI").isNull()) {
+        if(!settings->value("Shortcuts--"+hash+"/EnableNVAPI").toString().isEmpty()) {
             if(settings->value("Shortcuts--"+hash+"/EnableNVAPI").toBool()) env.insert("PROTON_ENABLE_NVAPI", "1");
         } else if(settings->value("PrefixSettings/EnableNVAPI").toBool())
             env.insert("PROTON_ENABLE_NVAPI", "1");
 
-        if(!settings->value("Shortcuts--"+hash+"/LimitGLextensions").isNull()) {
+        if(!settings->value("Shortcuts--"+hash+"/LimitGLextensions").toString().isEmpty()) {
             if(settings->value("Shortcuts--"+hash+"LimitGLextensions").toBool()) env.insert("PROTON_OLD_GL_STRING", "1");
         } else if(settings->value("PrefixSettings/LimitGLextensions").toBool())
             env.insert("PROTON_OLD_GL_STRING", "1");
 
-        if(!settings->value("Shortcuts--"+hash+"/VKcapture").isNull()) {
+        if(!settings->value("Shortcuts--"+hash+"/VKcapture").toString().isEmpty()) {
             if(settings->value("Shortcuts--"+hash+"VKcapture").toBool()) env.insert("OBS_VKCAPTURE", "1");
         } else if(settings->value("PrefixSettings/VKcapture").toBool())
             env.insert("OBS_VKCAPTURE", "1");
 
-        if(!settings->value("Shortcuts--"+hash+"/FileSyncMode").isNull()) {
+        if(!settings->value("Shortcuts--"+hash+"/FileSyncMode").toString().isEmpty()) {
             switch(settings->value("Shortcuts--"+hash+"/FileSyncMode").toInt()) {
             case NeroConstant::NoSync:
                 env.insert("PROTON_NO_ESYNC", "1");
@@ -103,7 +103,7 @@ int NeroRunner::StartShortcut(const QString &hash)
                 env.insert("PROTON_NO_FSYNC", "1"); break;
             }
 
-        if(!settings->value("Shortcuts--"+hash+"/DebugOutput").isNull()) {
+        if(!settings->value("Shortcuts--"+hash+"/DebugOutput").toString().isEmpty()) {
             switch(settings->value("Shortcuts--"+hash+"/DebugOutput").toInt()) {
             case NeroConstant::DebugFull:
                 env.insert("WINEDEBUG", "+loaddll,debugstr,mscoree");
@@ -124,16 +124,16 @@ int NeroRunner::StartShortcut(const QString &hash)
         QStringList arguments;
         arguments.append("umu-run");
         arguments.append(settings->value("Shortcuts--"+hash+"/Path").toString());
-        if(!settings->value("Shortcuts--"+hash+"/Args").isNull())
+        if(!settings->value("Shortcuts--"+hash+"/Args").toString().isEmpty())
             arguments.append(settings->value("Shortcuts--"+hash+"/Args").toStringList());
 
-        if(!settings->value("Shortcuts--"+hash+"/Gamemode").isNull()) {
+        if(!settings->value("Shortcuts--"+hash+"/Gamemode").toString().isEmpty()) {
             if(settings->value("Shortcuts--"+hash+"/Gamemode").toBool())
                 arguments.prepend("gamemoderun");
         } else if(settings->value("PrefixSettings/Gamemode").toBool())
             arguments.prepend("gamemoderun");
 
-        if(!settings->value("Shortcuts--"+hash+"/ScalingMode").isNull()) {
+        if(!settings->value("Shortcuts--"+hash+"/ScalingMode").toString().isEmpty()) {
             switch(settings->value("Shortcuts--"+hash+"/ScalingMode").toInt()) {
             case NeroConstant::ScalingIntegerScale:
                 env.insert("WINE_FULLSCREEN_INTEGER_SCALING", "1"); break;
@@ -320,13 +320,14 @@ int NeroRunner::StartShortcut(const QString &hash)
                 break;
         }
 
-        if(!settings->value("Shortcuts--"+hash+"/Mangohud").isNull()) {
+        if(!settings->value("Shortcuts--"+hash+"/Mangohud").toString().isEmpty()) {
             if(settings->value("Shortcuts--"+hash+"/Mangohud").toBool()) {
                 if(arguments.contains("gamescope"))
                     arguments.insert(1, "--mangoapp");
                 else arguments.prepend("mangohud");
             }
         } else if(settings->value("PrefixSettings/Mangohud").toBool()) {
+            qDebug() << "Mangohud exists";
             if(arguments.contains("gamescope"))
                 arguments.insert(1, "--mangoapp");
             else arguments.prepend("mangohud");

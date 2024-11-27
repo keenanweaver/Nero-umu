@@ -297,8 +297,6 @@ void NeroFS::AddNewPrefix(const QString newPrefix, const QString runner)
     prefixCfg->setValue("NoD8VK", false);
     prefixCfg->setValue("ForceWineD3D", false);
     prefixCfg->setValue("CustomEnvVars", {""});
-    prefixCfg->setValue("PreRunScript", "");
-    prefixCfg->setValue("PostRunScript", "");
     prefixCfg->setValue("RuntimeUpdateOnLaunch", true);
     prefixCfg->setValue("DiscordRPCinstalled", false);
     prefixCfg->endGroup();
