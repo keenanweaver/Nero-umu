@@ -86,6 +86,13 @@ QString NeroIcoExtractor::GetIcon(QString sourceFile)
                         }
                     }
 
+                    // Some games, like Need for Speed Underground 2, don't seem to have an icon that's parseable by icotool
+                    // so exit if no scored indexes could be found
+                    if(icoScoreTable.size() == 0) {
+                        printf("No icons were parsed by icotool, aborting...\n");
+                        return "";
+                    }
+
                     if(extProcess.exitCode() == 0) {
                         // now we actually extract the file, using the highest scored icon
                         extProcess.start(NeroFS::GetIcoutils(), { "-x",

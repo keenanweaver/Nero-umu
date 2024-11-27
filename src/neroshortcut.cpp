@@ -119,7 +119,9 @@ void NeroShortcutWizard::on_appIcon_clicked()
 
         if(!newIcon.isEmpty()) {
             appIcon = newIcon;
-            ui->appIcon->setIcon(QPixmap(appIcon));
+            if(QPixmap(appIcon).height() < 48)
+                ui->appIcon->setIcon(QPixmap(appIcon).scaled(48,48,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+            else ui->appIcon->setIcon(QPixmap(appIcon));
         }
     }
 }
