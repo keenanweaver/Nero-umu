@@ -24,6 +24,16 @@
 #include <QLocale>
 #include <QTranslator>
 
+void PrintHelp()
+{
+    printf(
+        "usage: nero-umu [--prefix \"Prefix Name\"] executable [arg1] [arg2] [...]\n\n"
+        "Nero-umu CLI: Launch Windows executables within a Nero-managed Prefix\n\n"
+        "options:\n"
+        "  --prefix \"Prefix Name\"  Run executable within \"Prefix Name\"\n"
+        "  -h, --help                  Show this help. Helpful, huh? c:\n");
+}
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -39,10 +49,6 @@ int main(int argc, char *argv[])
     }
 
     if(argc > 1) {
-        // TODO: if arguments are used, only invoke the launcher process;
-        //       else, start the manager.
-        printf("Additional arguments detected!\n");
-
         QStringList arguments;
 
         for(uint8_t i = 1; i < argc; i++)
@@ -66,8 +72,24 @@ int main(int argc, char *argv[])
                 printf("Nero cannot run without a home directory set! Aborting...\n");
                 return 1;
             }
+        } else if(argc > 3 && arguments.contains("--prefix") && (arguments.last().endsWith(".exe") || arguments.last().endsWith(".msi") || arguments.last().endsWith(".bat"))) {
+            if(NeroFS::InitPaths()) {
+                NeroFS::SetCurrentPrefix(arguments.takeAt(arguments.indexOf("--prefix")+1));
+                arguments.removeAt(arguments.indexOf("--prefix"));
+                NeroRunner runner;
+                QString executable = arguments.takeFirst();
+                return runner.StartOnetime(executable, arguments);
+            } else {
+                printf("Nero cannot run without a home directory set! Aborting...\n");
+                return 1;
+            }
+        } else if(argc < 3 && (arguments.last() == "-h" || arguments.last() == "--help")) {
+            PrintHelp();
+            return 0;
+        } else {
+            PrintHelp();
+            return 1;
         }
-        a.exit();
     } else {
         NeroManagerWindow w;
         w.show();
