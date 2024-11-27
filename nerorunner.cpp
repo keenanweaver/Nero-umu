@@ -419,7 +419,8 @@ int NeroRunner::StartOnetime(const QString &path, const QStringList args)
 
     switch(settings->value("PrefixSettings/ScalingMode").toInt()) {
     case NeroConstant::ScalingIntegerScale:
-        env.insert("WINE_FULLSCREEN_INTEGER_SCALING", "1"); break;
+        env.insert("WINE_FULLSCREEN_INTEGER_SCALING", "1");
+        break;
     case NeroConstant::ScalingFSRperformance:
         env.insert("WINE_FULLSCREEN_FSR", "1");
         env.insert("WINE_FULLSCREEN_FSR_STRENGTH", "0");
