@@ -123,7 +123,9 @@ int NeroRunner::StartShortcut(const QString &hash)
 
         QStringList arguments;
         arguments.append("umu-run");
+
         arguments.append(settings->value("Shortcuts--"+hash+"/Path").toString());
+
         if(!settings->value("Shortcuts--"+hash+"/Args").toString().isEmpty())
             arguments.append(settings->value("Shortcuts--"+hash+"/Args").toStringList());
 
@@ -411,6 +413,7 @@ int NeroRunner::StartOnetime(const QString &path, const QStringList args)
     QStringList arguments;
     arguments.append("umu-run");
     arguments.append(path);
+
     if(!args.isEmpty())
         arguments.append(args);
 
