@@ -22,7 +22,6 @@
 
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QDebug>
 
 NeroFS::NeroFS() {}
 

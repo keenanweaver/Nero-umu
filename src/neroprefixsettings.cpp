@@ -26,7 +26,7 @@
 
 #include <QAction>
 #include <QProcess>
-#include <QDebug>
+#include <QUrl>
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QuaZip-Qt5-1.4/quazip/quazip.h>

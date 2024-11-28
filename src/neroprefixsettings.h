@@ -29,7 +29,6 @@
 #include <QPushButton>
 #include <QStandardItemModel>
 #include <QDesktopServices>
-#include <QUrl>
 
 namespace Ui {
 class NeroPrefixSettingsWindow;

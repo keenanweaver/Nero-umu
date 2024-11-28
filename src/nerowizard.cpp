@@ -25,7 +25,6 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QAction>
-//#include <QDebug>
 
 NeroTricksWindow *tricks;
 

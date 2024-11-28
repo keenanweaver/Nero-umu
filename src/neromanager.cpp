@@ -33,7 +33,6 @@
 #include <QFileDialog>
 #include <QProcess>
 #include <QTimer>
-#include <QDebug>
 
 NeroManagerWindow::NeroManagerWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -499,7 +498,7 @@ void NeroManagerWindow::on_backButton_clicked()
             }
         } else SetHeader();
     } else {
-        qDebug() << "TODO: implement favorites";
+        // TODO: implement favorites
     }
 }
 
