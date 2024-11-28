@@ -24,6 +24,7 @@
 #include <QApplication>
 #include <QProcess>
 #include <QDir>
+#include <QDebug>
 
 int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunning)
 {
@@ -59,14 +60,17 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
 
         // unfortunately, env insert does NOT allow settings bools properly as-is,
         // so all booleans have to be converted to an int string.
-        //if(!settings->value(QString("Shortcuts--%1/CustomEnvVars").arg(hash)).toString().isEmpty())
-        //    env.insert("")
+
+
+        //if(!settings->value("Shortcuts--"+hash+"/CustomEnvVars").toString().isEmpty()) {
+        //   qDebug() << settings->value("Shortcuts--"+hash+"/CustomEnvVars").toStringList();
+        //}
         if(!settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().isEmpty()) {
             if(settings->value("Shortcuts--"+hash+"/IgnoreGlobalDLLs").toBool() || settings->value("PrefixSettings/DLLoverrides").toStringList().isEmpty())
-                // TODO: properly override (remove) global DLLs that match in shortcut DLLs.
                 env.insert("WINEDLLOVERRIDES", settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';'));
-            else env.insert("WINEDLLOVERRIDES", settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';')
-                                                + settings->value("PrefixSettings/DLLoverrides").toStringList().join(';'));
+            // if overrides are duplicated, last overrides take priority over first overrides
+            else env.insert("WINEDLLOVERRIDES", settings->value("PrefixSettings/DLLoverrides").toStringList().join(';')+';'
+                                                + settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';'));
         } else if(!settings->value("PrefixSettings/DLLoverrides").toStringList().isEmpty())
             env.insert("WINEDLLOVERRIDES", settings->value("PrefixSettings/DLLoverrides").toStringList().join(';'));
 
@@ -350,6 +354,8 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
         log.open(QIODevice::WriteOnly);
         log.resize(0);
 
+        qDebug() << env.toStringList();
+
         runner.start(command, arguments);
         runner.waitForStarted(-1);
 
@@ -388,9 +394,6 @@ int NeroRunner::StartOnetime(const QString &path, const QStringList args, const 
     if(prefixAlreadyRunning)
         env.insert("PROTON_VERB", "run");
     else env.insert("PROTON_VERB", "waitforexitandrun");
-
-    //if(!settings->value("PrefixSettings/CustomEnvVars").toStringList().isEmpty())
-    //    env.insert("WINEDLLOVERRIDES", settings->value("PrefixSettings/CustomEnvVars").toStringList().join(";"));
 
     if(settings->value("PrefixSettings/RuntimeUpdateOnLaunch").toBool())
         env.insert("UMU_RUNTIME_UPDATE", "1");
