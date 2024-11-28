@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>241</width>
-    <height>98</height>
+    <height>74</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,14 +16,7 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1,0">
-   <item>
-    <widget class="QCheckBox" name="runnerNotifs">
-     <property name="text">
-      <string>Enable Runner Notifications</string>
-     </property>
-    </widget>
-   </item>
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0">
    <item>
     <widget class="QCheckBox" name="shortcutHide">
      <property name="text">
