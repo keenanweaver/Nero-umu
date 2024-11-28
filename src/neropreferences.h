@@ -34,7 +34,7 @@ class NeroManagerPreferences : public QDialog
 public:
     explicit NeroManagerPreferences(QWidget *parent = nullptr);
     ~NeroManagerPreferences();
-    void BindSettings(QSettings *cfg) { managerCfg = cfg; }
+    void BindSettings(QSettings *);
 
 private slots:
     void on_buttonBox_accepted() { accepted = true; }

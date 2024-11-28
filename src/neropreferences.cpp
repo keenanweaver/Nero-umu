@@ -25,8 +25,6 @@ NeroManagerPreferences::NeroManagerPreferences(QWidget *parent)
     , ui(new Ui::NeroManagerPreferences)
 {
     ui->setupUi(this);
-    //ui->runnerNotifs->setChecked(managerCfg->value("UseNotifier").toBool());
-    ui->shortcutHide->setChecked(managerCfg->value("ShortcutHidesManager").toBool());
 }
 
 NeroManagerPreferences::~NeroManagerPreferences()
@@ -36,4 +34,11 @@ NeroManagerPreferences::~NeroManagerPreferences()
         managerCfg->setValue("ShortcutHidesManager", ui->shortcutHide->isChecked());
     }
     delete ui;
+}
+
+void NeroManagerPreferences::BindSettings(QSettings *cfg)
+{
+    managerCfg = cfg;
+    //ui->runnerNotifs->setChecked(managerCfg->value("UseNotifier").toBool());
+    ui->shortcutHide->setChecked(managerCfg->value("ShortcutHidesManager").toBool());
 }
