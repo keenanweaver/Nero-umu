@@ -28,6 +28,8 @@
 #include <QComboBox>
 #include <QPushButton>
 #include <QStandardItemModel>
+#include <QDesktopServices>
+#include <QUrl>
 
 namespace Ui {
 class NeroPrefixSettingsWindow;
@@ -82,6 +84,8 @@ private slots:
     void on_prefixRegeditBtn_clicked();
 
     void on_prefixWinecfgBtn_clicked();
+
+    void on_openToShortcutPath_clicked();
 
 private:
     Ui::NeroPrefixSettingsWindow *ui;

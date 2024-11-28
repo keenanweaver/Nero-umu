@@ -777,3 +777,8 @@ void NeroPrefixSettingsWindow::deleteShortcut_clicked()
         this->done(-1);
     }
 }
+
+void NeroPrefixSettingsWindow::on_openToShortcutPath_clicked()
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile(ui->shortcutPath->text().left(ui->shortcutPath->text().lastIndexOf('/'))));
+}
