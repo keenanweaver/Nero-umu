@@ -61,12 +61,13 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
         // so all booleans have to be converted to an int string.
         //if(!settings->value(QString("Shortcuts--%1/CustomEnvVars").arg(hash)).toString().isEmpty())
         //    env.insert("")
-        if(!settings->value("Shortcuts--"+hash+"/DLLoverrides").toString().isEmpty()) {
-            if(settings->value("Shortcuts--"+hash+"/IgnoreGlobalDLLs").toBool() || settings->value("PrefixSettings/DLLoverrides").toString().isEmpty())
+        if(!settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().isEmpty()) {
+            if(settings->value("Shortcuts--"+hash+"/IgnoreGlobalDLLs").toBool() || settings->value("PrefixSettings/DLLoverrides").toStringList().isEmpty())
+                // TODO: properly override (remove) global DLLs that match in shortcut DLLs.
                 env.insert("WINEDLLOVERRIDES", settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';'));
             else env.insert("WINEDLLOVERRIDES", settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';')
                                                 + settings->value("PrefixSettings/DLLoverrides").toStringList().join(';'));
-        } else if(!settings->value("PrefixSettings/DLLoverrides").toString().isEmpty())
+        } else if(!settings->value("PrefixSettings/DLLoverrides").toStringList().isEmpty())
             env.insert("WINEDLLOVERRIDES", settings->value("PrefixSettings/DLLoverrides").toStringList().join(';'));
 
         if(settings->value("Shortcuts--"+hash+"/ForceWineD3D").toString().isEmpty())
@@ -393,7 +394,7 @@ int NeroRunner::StartOnetime(const QString &path, const QStringList args, const 
 
     if(settings->value("PrefixSettings/RuntimeUpdateOnLaunch").toBool())
         env.insert("UMU_RUNTIME_UPDATE", "1");
-    if(!settings->value("PrefixSettings/DLLoverrides").toString().isEmpty())
+    if(!settings->value("PrefixSettings/DLLoverrides").toStringList().isEmpty())
         env.insert("WINEDLLOVERRIDES", settings->value("PrefixSettings/DLLoverrides").toStringList().join(';'));
     if(settings->value("PrefixSettings/ForceWineD3D").toBool())
         env.insert("PROTON_USE_WINED3D", "1");
