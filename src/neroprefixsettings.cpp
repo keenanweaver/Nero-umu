@@ -248,8 +248,14 @@ void NeroPrefixSettingsWindow::LoadSettings()
 
         ui->toggleShortcutPrefixOverride->setChecked(settings.value("IgnoreGlobalDLLs").toBool());
 
+        // if value is filled, scoot comboboxes down one index
+        for(const auto child : this->findChildren<QComboBox*>())
+            if(child != ui->prefixRunner && child != ui->winVerBox)
+                if(child->currentIndex() > 0)
+                    child->setCurrentIndex(child->currentIndex()+1);
+
         if(settings.value("WindowsVersion").toString().isEmpty())
-            ui->winVerBox->setCurrentIndex(-1);
+            ui->winVerBox->setCurrentIndex(-2);
         else ui->winVerBox->setCurrentText(winVersionListBackwards.at(settings.value("WindowsVersion").toInt()));
 
         // if current scaler is set as disabled due to incompatible runner, set to Normal.
@@ -257,6 +263,25 @@ void NeroPrefixSettingsWindow::LoadSettings()
         auto *item = model->item(ui->setScalingBox->currentIndex());
         if(!item->isEnabled()) ui->setScalingBox->setCurrentIndex(0);
     }
+
+    // set visibility of scaling box contents based on loaded value (since signals are still stopped by now)
+    if(ui->setScalingBox->currentText() == "AMD FSR 1 - Custom Resolution") ui->fsrSection->setVisible(true);
+    else ui->fsrSection->setVisible(false);
+
+    if(ui->setScalingBox->currentText().startsWith("Gamescope")) {
+        ui->gamescopeSection->setVisible(true);
+        if(ui->setScalingBox->currentText().endsWith("Fullscreen")) {
+            ui->gamescopeWindowLabelX->setVisible(false);
+            ui->gamescopeWindowLabel->setVisible(false);
+            ui->gamescopeWindowHeight->setVisible(false);
+            ui->gamescopeWindowWidth->setVisible(false);
+        } else {
+            ui->gamescopeWindowLabelX->setVisible(true);
+            ui->gamescopeWindowLabel->setVisible(true);
+            ui->gamescopeWindowHeight->setVisible(true);
+            ui->gamescopeWindowWidth->setVisible(true);
+        }
+    } else ui->gamescopeSection->setVisible(false);
 
     for(const auto child : this->findChildren<QCheckBox*>())
         child->setFont(QFont());
