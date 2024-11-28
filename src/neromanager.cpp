@@ -82,6 +82,9 @@ NeroManagerWindow::NeroManagerWindow(QWidget *parent)
 
     /* vv post-UI popup */
 
+    if(managerCfg->value("WinSize").isValid())
+        this->resize(managerCfg->value("WinSize").toSize());
+
     sysTray = new QSystemTrayIcon(this->windowIcon(), this);
     for(auto &action : sysTrayActions)
         sysTrayMenu.addAction(&action);
@@ -108,6 +111,8 @@ NeroManagerWindow::NeroManagerWindow(QWidget *parent)
 
 NeroManagerWindow::~NeroManagerWindow()
 {
+    managerCfg->setValue("WinSize", this->size());
+    managerCfg->sync();
     delete ui;
 }
 
