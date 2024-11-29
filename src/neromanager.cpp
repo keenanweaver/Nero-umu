@@ -181,14 +181,14 @@ void NeroManagerWindow::RenderPrefixes()
 
             prefixDeleteButton.at(i)->setFlat(true);
             prefixDeleteButton.at(i)->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-            prefixDeleteButton.at(i)->setToolTip(QString("Delete %1").arg(NeroFS::GetPrefixes().at(i)));
+            prefixDeleteButton.at(i)->setToolTip("Delete " + NeroFS::GetPrefixes().at(i));
             prefixDeleteButton.at(i)->setProperty("slot", i);
 
             ui->prefixesList->addWidget(prefixMainButton.at(i), i, 0);
             ui->prefixesList->addWidget(prefixDeleteButton.at(i), i, 1);
 
-            connect(prefixMainButton.at(i),   SIGNAL(clicked()), this, SLOT(prefixMainButtons_clicked()));
-            connect(prefixDeleteButton.at(i), SIGNAL(clicked()), this, SLOT(prefixDeleteButtons_clicked()));
+            connect(prefixMainButton.at(i),   &QPushButton::clicked, this, &NeroManagerWindow::prefixMainButtons_clicked);
+            connect(prefixDeleteButton.at(i), &QPushButton::clicked, this, &NeroManagerWindow::prefixDeleteButtons_clicked);
         }
     }
 }
@@ -210,7 +210,7 @@ void NeroManagerWindow::RenderPrefixList()
         for(int i = 0; i < sortedShortcuts.count(); i++) {
             if(QFile::exists(QString("%1/%2/.icoCache/%3").arg(NeroFS::GetPrefixesPath().path(),
                                                                NeroFS::GetCurrentPrefix(),
-                                                                QString("%1-%2.png").arg(sortedShortcuts.at(i), hashMap[sortedShortcuts.at(i)])))) {
+                                                               QString("%1-%2.png").arg(sortedShortcuts.at(i), hashMap[sortedShortcuts.at(i)])))) {
                 prefixShortcutIco << new QIcon(QPixmap(QString("%1/%2/.icoCache/%3").arg(NeroFS::GetPrefixesPath().path(),
                                                                                          NeroFS::GetCurrentPrefix(),
                                                                                          QString("%1-%2.png").arg(sortedShortcuts.at(i), hashMap[sortedShortcuts.at(i)]))));
@@ -245,8 +245,8 @@ void NeroManagerWindow::RenderPrefixList()
             ui->prefixContentsGrid->addWidget(prefixShortcutPlayButton.at(i), i, 2, Qt::AlignLeft);
             ui->prefixContentsGrid->addWidget(prefixShortcutEditButton.at(i), i, 3, Qt::AlignLeft);
 
-            connect(prefixShortcutPlayButton.at(i), SIGNAL(clicked()), this, SLOT(prefixShortcutPlayButtons_clicked()));
-            connect(prefixShortcutEditButton.at(i), SIGNAL(clicked()), this, SLOT(prefixShortcutEditButtons_clicked()));
+            connect(prefixShortcutPlayButton.at(i), &QPushButton::clicked, this, &NeroManagerWindow::prefixShortcutPlayButtons_clicked);
+            connect(prefixShortcutEditButton.at(i), &QPushButton::clicked, this, &NeroManagerWindow::prefixShortcutEditButtons_clicked);
         }
 
         ui->prefixContentsGrid->setColumnStretch(1, 1);
@@ -256,12 +256,17 @@ void NeroManagerWindow::RenderPrefixList()
 void NeroManagerWindow::CreatePrefix(const QString newPrefix, const QString runner, QStringList tricksToInstall)
 {
     QProcess umu;
-    QMessageBox waitBox(QMessageBox::NoIcon, "Generating Prefix", "Please wait...", QMessageBox::NoButton, this, Qt::Dialog | Qt::FramelessWindowHint | Qt::MSWindowsFixedSizeDialogHint);
+    QMessageBox waitBox(QMessageBox::NoIcon,
+                        "Generating Prefix",
+                        "Please wait...",
+                        QMessageBox::NoButton,
+                        this,
+                        Qt::Dialog | Qt::FramelessWindowHint | Qt::MSWindowsFixedSizeDialogHint);
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 
-    env.insert("WINEPREFIX", QString("%1/%2").arg(NeroFS::GetPrefixesPath().path(), newPrefix));
+    env.insert("WINEPREFIX", NeroFS::GetPrefixesPath().path() + '/' + newPrefix);
     env.insert("GAMEID", "0");
-    env.insert("PROTONPATH", QString("%1/%2").arg(NeroFS::GetProtonsPath().path(), runner));
+    env.insert("PROTONPATH", NeroFS::GetProtonsPath().path() + '/' + runner);
     env.insert("UMU_RUNTIME_UPDATE", "0");
     umu.setProcessEnvironment(env);
     umu.setProcessChannelMode(QProcess::MergedChannels);
@@ -288,11 +293,13 @@ void NeroManagerWindow::CreatePrefix(const QString newPrefix, const QString runn
             stdout = umu.readLine();
             printf(stdout);
             if(stdout.contains("Proton: Upgrading")) {
-                waitBox.setText(QString("Creating prefix %1 using %2...").arg(newPrefix, runner));
+                waitBox.setText("Creating prefix " + newPrefix + " using " + runner + "...");
             } else if(stdout.contains("Downloading latest steamrt sniper")) {
                 waitBox.setText("umu: Updating runtime to latest version...");
             } else if(stdout.contains("Proton: Running winetricks verbs in prefix:")) {
-                waitBox.setText(QString("Running installations for Winetricks verbs:\n\n%1\n\nThis stage may take a while...").arg(tricksToInstall.join('\n')));
+                waitBox.setText("Running installations for Winetricks verbs:\n\n" +
+                                tricksToInstall.join('\n') +
+                                "\n\nThis stage may take a while...");
             }
         }
     }
@@ -315,14 +322,14 @@ void NeroManagerWindow::CreatePrefix(const QString newPrefix, const QString runn
 
         prefixDeleteButton.at(pos)->setFlat(true);
         prefixDeleteButton.at(pos)->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-        prefixDeleteButton.at(pos)->setToolTip(QString("Delete %1").arg(newPrefix));
+        prefixDeleteButton.at(pos)->setToolTip("Delete " + newPrefix);
         prefixDeleteButton.at(pos)->setProperty("slot", pos);
 
         ui->prefixesList->addWidget(prefixMainButton.at(pos), pos, 0);
         ui->prefixesList->addWidget(prefixDeleteButton.at(pos), pos, 1);
 
-        connect(prefixMainButton.at(pos),   SIGNAL(clicked()), this, SLOT(prefixMainButtons_clicked()));
-        connect(prefixDeleteButton.at(pos), SIGNAL(clicked()), this, SLOT(prefixDeleteButtons_clicked()));
+        connect(prefixMainButton.at(pos),   &QPushButton::clicked, this, &NeroManagerWindow::prefixMainButtons_clicked);
+        connect(prefixDeleteButton.at(pos), &QPushButton::clicked, this, &NeroManagerWindow::prefixDeleteButtons_clicked);
 
         QApplication::alert(this);
     }
@@ -580,8 +587,8 @@ void NeroManagerWindow::prefixShortcutPlayButtons_clicked()
 
         umuController.last()->setProperty("slot", threadsCount-1);
         prefixShortcutPlayButton.at(slot)->setProperty("thread", threadsCount-1);
-        connect(umuController.last(), &NeroThreadController::passUmuResults, this, &NeroManagerWindow::handleUmuResults);
-        connect(&umuController.last()->umuWorker->Runner, &NeroRunner::StatusUpdate, this, &NeroManagerWindow::handleUmuSignal);
+        connect(umuController.last(),                       &NeroThreadController::passUmuResults,  this, &NeroManagerWindow::handleUmuResults);
+        connect(&umuController.last()->umuWorker->Runner,   &NeroRunner::StatusUpdate,              this, &NeroManagerWindow::handleUmuSignal);
         emit umuController.last()->operate();
     }
 }
@@ -622,7 +629,7 @@ void NeroManagerWindow::on_oneTimeRunBtn_clicked()
             runnerWindow->setModal(true);
             runnerWindow->SetupWindow(true, oneTimeApp.mid(oneTimeApp.lastIndexOf('/')+1), &icon);
             runnerWindow->show();
-            QDir tempDir(QString("%1/nero-manager").arg(QDir::tempPath()));
+            QDir tempDir(QDir::tempPath() + "/nero-manager");
             tempDir.removeRecursively();
         }
 
@@ -632,8 +639,8 @@ void NeroManagerWindow::on_oneTimeRunBtn_clicked()
         else umuController << new NeroThreadController(-1, oneTimeApp, ui->oneTimeRunArgs->text().split(' '));
 
         umuController.last()->setProperty("slot", threadsCount-1);
-        connect(umuController.last(), &NeroThreadController::passUmuResults, this, &NeroManagerWindow::handleUmuResults);
-        connect(&umuController.last()->umuWorker->Runner, &NeroRunner::StatusUpdate, this, &NeroManagerWindow::handleUmuSignal);
+        connect(umuController.last(),                       &NeroThreadController::passUmuResults,  this, &NeroManagerWindow::handleUmuResults);
+        connect(&umuController.last()->umuWorker->Runner,   &NeroRunner::StatusUpdate,              this, &NeroManagerWindow::handleUmuSignal);
         emit umuController.last()->operate();
     }
 }
@@ -667,8 +674,8 @@ void NeroManagerWindow::on_prefixSettingsBtn_clicked()
 void NeroManagerWindow::on_prefixTricksBtn_clicked()
 {
     // use winetricks.log as a basis.
-    QFile winetricksLog(QString("%1/%2/winetricks.log").arg(NeroFS::GetPrefixesPath().path(),
-                                                            NeroFS::GetCurrentPrefix()));
+    QFile winetricksLog(NeroFS::GetPrefixesPath().path() + '/' +
+                        NeroFS::GetCurrentPrefix() + "/winetricks.log");
     QStringList verbsInstalled;
 
     if(winetricksLog.exists()) {
@@ -676,9 +683,7 @@ void NeroManagerWindow::on_prefixTricksBtn_clicked()
             while(!winetricksLog.atEnd()) { verbsInstalled.append(winetricksLog.readLine().trimmed()); }
             verbsInstalled.removeDuplicates();
         }
-    } else {
-        printf("Prefix has no winetricks file, skipping...\n");
-    }
+    } else printf("Prefix has no winetricks file, skipping...\n");
 
     NeroTricksWindow tricks(this);
 
@@ -694,7 +699,7 @@ void NeroManagerWindow::on_prefixTricksBtn_clicked()
             verbsToInstall.removeDuplicates();
             if(QMessageBox::question(this,
                                       "Verbs Confirmation",
-                                      QString("Are you sure you wish to install these verbs?\n\n%1").arg(verbsToInstall.join('\n')))
+                                      "Are you sure you wish to install these verbs?\n\n" + verbsToInstall.join('\n'))
                 == QMessageBox::Yes) {
 
                 confirmed = true;
@@ -725,11 +730,16 @@ void NeroManagerWindow::prefixSettings_result()
                 QMap<QString, QString> settings = NeroFS::GetCurrentShortcutsMap();
                 NeroFS::SetCurrentPrefixCfg("Shortcuts", settings.value(prefixShortcutLabel.at(slot)->text()), prefixSettings->appName);
                 // move existing ico (if any) to new name
-                QFile ico(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.icoCache/"+
-                          prefixShortcutLabel.at(slot)->text()+'-'+settings.value(prefixShortcutLabel.at(slot)->text())+".png");
+                QFile ico(NeroFS::GetPrefixesPath().path() + '/' +
+                          NeroFS::GetCurrentPrefix()+ "/.icoCache/" +
+                          prefixShortcutLabel.at(slot)->text() + '-' +
+                          settings.value(prefixShortcutLabel.at(slot)->text()) + ".png");
                 if(ico.exists())
-                    ico.rename(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.icoCache/"+
-                               prefixSettings->appName+'-'+settings.value(prefixShortcutLabel.at(slot)->text())+".png");
+                    ico.rename(NeroFS::GetPrefixesPath().path() + '/' +
+                               NeroFS::GetCurrentPrefix() + "/.icoCache/" +
+                               prefixSettings->appName + '-' +
+                               settings.value(prefixShortcutLabel.at(slot)->text()) + ".png");
+
                 prefixShortcutLabel.at(slot)->setText(prefixSettings->appName);
             }
         // delete shortcut signal
@@ -790,13 +800,14 @@ void NeroManagerWindow::on_actionAbout_Nero_triggered()
     #ifdef NERO_GITHASH
     vInfo.append(QString("-%1").arg(NERO_GITHASH));
     #endif // NERO_GITHASH
-    vInfo.append(QString("\nRunning on Qt %1.%2.%3").arg(QT_VERSION_MAJOR).arg(QT_VERSION_MINOR).arg(QT_VERSION_PATCH));
+    vInfo.append("\nRunning on Qt" +
+                 QString::number(QT_VERSION_MAJOR) + '.' +
+                 QString::number(QT_VERSION_MINOR) + '.' +
+                 QString::number(QT_VERSION_PATCH));
     QMessageBox::about(this,
                        "About Nero Manager",
-                       QString(
-                       "Nero Manager %1"
-                       "\n\nA simple Proton manager.").arg(vInfo)
-                       );
+                       "Nero Manager" + vInfo +
+                       "\n\nA simple Proton manager.");
 }
 
 
