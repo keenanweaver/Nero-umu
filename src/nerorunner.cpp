@@ -581,7 +581,7 @@ void NeroRunner::WaitLoop(QProcess &runner, QFile &log)
                     emit StatusUpdate(NeroRunner::RunnerStarting);
                 else if(stdout.contains("steamrt is up to date"))
                     emit StatusUpdate(NeroRunner::RunnerUpdated);
-                else if(stdout.startsWith("Proton: Executable"))
+                else if(stdout.startsWith("Proton: Executable") || stdout.contains("SteamAPI_Init"))
                     emit StatusUpdate(NeroRunner::RunnerProtonStarted);
             }
         } else {
