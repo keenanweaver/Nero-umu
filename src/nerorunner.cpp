@@ -58,7 +58,7 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
         else env.insert("PROTON_VERB", "waitforexitandrun");
 
         QDir cachePath(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
-        if(cachePath.exists("/.shaderCache")) cachePath.mkdir("/.shaderCache");
+        if(cachePath.exists(".shaderCache")) cachePath.mkdir(".shaderCache");
         env.insert("DXVK_STATE_CACHE_PATH", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.shaderCache");
         env.insert("VKD3D_SHADER_CACHE_PATH", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.shaderCache");
 
@@ -400,7 +400,7 @@ int NeroRunner::StartOnetime(const QString &path, const QStringList args, const 
     else env.insert("PROTON_VERB", "waitforexitandrun");
 
     QDir cachePath(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
-    if(cachePath.exists("/.shaderCache")) cachePath.mkdir("/.shaderCache");
+    if(cachePath.exists(".shaderCache")) cachePath.mkdir(".shaderCache");
     env.insert("DXVK_STATE_CACHE_PATH", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.shaderCache");
     env.insert("VKD3D_SHADER_CACHE_PATH", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.shaderCache");
 
