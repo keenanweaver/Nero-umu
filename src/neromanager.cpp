@@ -66,7 +66,16 @@ NeroManagerWindow::NeroManagerWindow(QWidget *parent)
 
     // load initial data
     if(!NeroFS::InitPaths()) { exit(1); }
-    NeroFS::GetAvailableProtons();
+    if(NeroFS::GetAvailableProtons().isEmpty()) {
+        QMessageBox::critical(this,
+                              "No Runners Available!",
+                              "No usable Proton versions could be found, so umu has no runners to use!\n"
+                              "Please install at least one Proton version at:\n\n" +
+                              NeroFS::GetProtonsPath().path() +
+                              "\n\nYou can install new runners either through Steam, or a Proton Manager such as ProtonUp-Qt or ProtonPlus."
+                              "\n\nNero Will now exit, umu.");
+        exit(1);
+    }
     managerCfg = new QSettings(NeroFS::GetManagerCfg());
     managerCfg->beginGroup("NeroSettings");
 
