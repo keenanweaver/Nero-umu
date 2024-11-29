@@ -291,7 +291,7 @@ void NeroManagerWindow::CreatePrefix(const QString newPrefix, const QString runn
         umu.waitForReadyRead(1000);
         if(umu.canReadLine()) {
             stdout = umu.readLine();
-            printf(stdout);
+            printf("%s", stdout.constData());
             if(stdout.contains("Proton: Upgrading")) {
                 waitBox.setText("Creating prefix " + newPrefix + " using " + runner + "...");
             } else if(stdout.contains("Downloading latest steamrt sniper")) {
@@ -368,7 +368,7 @@ void NeroManagerWindow::AddTricks(QStringList verbs, const QString prefix)
         umu.waitForReadyRead(100);
         if(umu.canReadLine()) {
             stdout = umu.readLine();
-            printf(stdout);
+            printf("%s", stdout.constData());
             if(stdout.contains("Proton: Upgrading")) {
                 waitBox.setText(QString("Updating %1 with new Proton %2...").arg(prefix, settingsMap["CurrentRunner"].toString()));
             } else if(stdout.contains("Downloading latest steamrt sniper")) {

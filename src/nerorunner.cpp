@@ -38,7 +38,7 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
 
             while(runner.state() != QProcess::NotRunning) {
                 runner.waitForReadyRead(-1);
-                printf(runner.readAll());
+                printf("%s", runner.readAll().constData());
             }
         }
 
@@ -370,7 +370,7 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
 
             while(runner.state() != QProcess::NotRunning) {
                 runner.waitForReadyRead(-1);
-                printf(runner.readAll());
+                printf("%s", runner.readAll().constData());
             }
         }
 

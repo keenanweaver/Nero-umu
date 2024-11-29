@@ -618,7 +618,7 @@ void NeroPrefixSettingsWindow::StartUmu(const QString command, QStringList args)
         while(umu.state() != QProcess::NotRunning) {
             QApplication::processEvents();
             umu.waitForReadyRead(1000);
-            printf(umu.readAll());
+            printf("%s", umu.readAll().constData());
         }
 
         if(umu.exitStatus() == 0) {
