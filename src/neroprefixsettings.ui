@@ -772,7 +772,7 @@
             <item>
              <widget class="QSpinBox" name="limitFPSbox">
               <property name="whatsThis">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set the maximum FPS limit. This setting applies to &lt;span style=&quot; font-style:italic;&quot;&gt;all apps&lt;/span&gt; using &lt;span style=&quot; font-weight:700;&quot;&gt;DXVK&lt;/span&gt; (DirectX 8-11) or VKD3D (DirectX 12).&lt;/p&gt;&lt;p&gt;A value of &lt;span style=&quot; font-style:italic;&quot;&gt;0&lt;/span&gt; disables frame limiting.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set the maximum FPS limit for this shortcut. This setting applies to &lt;span style=&quot; font-style:italic;&quot;&gt;all apps&lt;/span&gt; using &lt;span style=&quot; font-weight:700;&quot;&gt;DXVK&lt;/span&gt; (DirectX 8-11) or &lt;span style=&quot; font-weight:700;&quot;&gt;VKD3D&lt;/span&gt; (DirectX 12).&lt;/p&gt;&lt;p&gt;A value of &lt;span style=&quot; font-style:italic;&quot;&gt;0&lt;/span&gt; disables frame limiting.&lt;/p&gt;&lt;p&gt;If unsure, leave this at &lt;span style=&quot; font-style:italic;&quot;&gt;0&lt;/span&gt; unless the application is misbehaving at higher framerates.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="accessibleName">
                <string>Limit FPS</string>
@@ -783,7 +783,7 @@
               <property name="maximum">
                <number>999</number>
               </property>
-              <property name="ifFor" stdset="0">
+              <property name="isFor" stdset="0">
                <string>LimitFPS</string>
               </property>
              </widget>

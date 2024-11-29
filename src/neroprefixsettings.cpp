@@ -143,7 +143,7 @@ NeroPrefixSettingsWindow::NeroPrefixSettingsWindow(QWidget *parent, const QStrin
     }
     for(const auto child : this->findChildren<QSpinBox*>()) {
         if(!child->property("whatsThis").isNull()) child->installEventFilter(this);
-        // QSpinBox's "value changed" isn't new syntax friendly?
+        // QSpinboxes' "valueChanged" signal isn't new syntax friendly?
         if(!child->property("isFor").isNull()) connect(child, SIGNAL(valueChanged(int)), this, SLOT(OptionSet()));
     }
     for(const auto child : this->findChildren<QComboBox*>()) {
@@ -750,28 +750,28 @@ void NeroPrefixSettingsWindow::on_buttonBox_clicked(QAbstractButton *button)
             for(const auto child : this->findChildren<QCheckBox*>())
                 if(child->font() == boldFont) {
                     if(child->checkState() == Qt::PartiallyChecked)
-                        NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), child->property("isFor").toString(), "");
-                    else NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), child->property("isFor").toString(), child->isChecked());
+                        NeroFS::SetCurrentPrefixCfg("Shortcuts--"+currentShortcutHash, child->property("isFor").toString(), "");
+                    else NeroFS::SetCurrentPrefixCfg("Shortcuts--"+currentShortcutHash, child->property("isFor").toString(), child->isChecked());
                 }
 
             for(const auto child : this->findChildren<QLineEdit*>())
                 if(child->font() == boldFont)
-                    NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), child->property("isFor").toString(), child->text().trimmed());
+                    NeroFS::SetCurrentPrefixCfg("Shortcuts--"+currentShortcutHash, child->property("isFor").toString(), child->text().trimmed());
 
             for(const auto child : this->findChildren<QSpinBox*>())
                 if(child->font() == boldFont)
-                    NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), child->property("isFor").toString(), child->value());
+                    NeroFS::SetCurrentPrefixCfg("Shortcuts--"+currentShortcutHash, child->property("isFor").toString(), child->value());
 
             for(const auto child : this->findChildren<QComboBox*>())
                 if(child->font() == boldFont) {
                     if(child->currentIndex() < 1)
-                        NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), child->property("isFor").toString(), "");
-                    else NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), child->property("isFor").toString(), child->currentIndex()-1);
+                        NeroFS::SetCurrentPrefixCfg("Shortcuts--"+currentShortcutHash, child->property("isFor").toString(), "");
+                    else NeroFS::SetCurrentPrefixCfg("Shortcuts--"+currentShortcutHash, child->property("isFor").toString(), child->currentIndex()-1);
                 }
 
             if(ui->winVerBox->font() == boldFont) {
                 int winVerSelected = winVersionListBackwards.indexOf(ui->winVerBox->itemText(ui->winVerBox->currentIndex()));
-                NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), "WindowsVersion", winVerSelected);
+                NeroFS::SetCurrentPrefixCfg("Shortcuts--"+currentShortcutHash, "WindowsVersion", winVerSelected);
 
                 QDir prefixPath(QString("%1/%2").arg(NeroFS::GetPrefixesPath().path(), NeroFS::GetCurrentPrefix()));
                 if(prefixPath.exists("user.reg")) {
