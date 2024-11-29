@@ -163,11 +163,14 @@ void NeroTricksWindow::SetPreinstalledVerbs(const QStringList installed)
 {
     int slot;
     for(const auto &verb : installed) {
+        // in case verb isn't in the list
         slot = winetricksAvailVerbs.indexOf(verb);
-        verbSelector.at(slot)->setCheckState(Qt::Checked);
-        verbIsSelected[verb] = false;
-        verbSelector.at(slot)->setEnabled(false);
-        verbDesc.at(slot)->setEnabled(false);
+        if(slot >= 0) {
+            verbSelector.at(slot)->setCheckState(Qt::Checked);
+            verbIsSelected[verb] = false;
+            verbSelector.at(slot)->setEnabled(false);
+            verbDesc.at(slot)->setEnabled(false);
+        }
     }
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 }
