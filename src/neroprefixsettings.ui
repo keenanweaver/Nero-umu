@@ -292,19 +292,6 @@
           <set>Qt::AlignCenter</set>
          </property>
          <layout class="QGridLayout" name="gridLayout_7" columnstretch="1,0,2,1">
-          <item row="0" column="0">
-           <spacer name="horizontalSpacer_5">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item row="0" column="1">
            <widget class="QLabel" name="label_2">
             <property name="text">
@@ -325,20 +312,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="3">
-           <spacer name="horizontalSpacer_6">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="1" column="1" colspan="2">
+          <item row="1" column="1" colspan="2" alignment="Qt::AlignCenter">
            <widget class="QCheckBox" name="togglePrefixRuntimeUpdates">
             <property name="whatsThis">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When checked, every time an application is launched in this prefix, &lt;span style=&quot; font-style:italic;&quot;&gt;umu&lt;/span&gt; will always check the internet if there's a new version of the Steam Runtime available, and automatically install it if an update is found. This ensures compatibility, at a cost to a minor hit in startup time, especially if you happen to be running in an environment without internet at the time.&lt;/p&gt;&lt;p&gt;If unsure, leave this enabled unless you're planning to run applications offline.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -353,6 +327,32 @@
              <string>RuntimeUpdateOnLaunch</string>
             </property>
            </widget>
+          </item>
+          <item row="0" column="0" rowspan="2">
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="3" rowspan="2">
+           <spacer name="horizontalSpacer_6">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
