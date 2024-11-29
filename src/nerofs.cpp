@@ -299,6 +299,8 @@ void NeroFS::AddNewPrefix(const QString newPrefix, const QString runner)
     prefixCfg->setValue("RuntimeUpdateOnLaunch", true);
     prefixCfg->setValue("DiscordRPCinstalled", false);
     prefixCfg->endGroup();
+    // since we aren't actually selecting this prefix, just clear the value.
+    currentPrefix.clear();
 }
 
 void NeroFS::AddNewShortcut(const QString newShortcutHash, const QString newShortcutName, const QString newAppPath) {

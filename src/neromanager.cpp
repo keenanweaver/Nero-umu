@@ -647,20 +647,19 @@ void NeroManagerWindow::on_oneTimeRunBtn_clicked()
 
 void NeroManagerWindow::CleanupShortcuts()
 {
-    if(!NeroFS::GetCurrentPrefixShortcuts().isEmpty()) {
-        for(unsigned int i = 0; i < prefixShortcutLabel.count(); i++) {
-            delete prefixShortcutIco[i];
-            delete prefixShortcutIcon[i];
-            delete prefixShortcutLabel[i];
-            delete prefixShortcutPlayButton[i];
-            delete prefixShortcutEditButton[i];
-        }
-        prefixShortcutIco.clear();
-        prefixShortcutIcon.clear();
-        prefixShortcutLabel.clear();
-        prefixShortcutPlayButton.clear();
-        prefixShortcutEditButton.clear();
+    for(unsigned int i = 0; i < prefixShortcutLabel.count(); i++) {
+        delete prefixShortcutIco[i];
+        delete prefixShortcutIcon[i];
+        delete prefixShortcutLabel[i];
+        delete prefixShortcutPlayButton[i];
+        delete prefixShortcutEditButton[i];
     }
+
+    prefixShortcutIco.clear();
+    prefixShortcutIcon.clear();
+    prefixShortcutLabel.clear();
+    prefixShortcutPlayButton.clear();
+    prefixShortcutEditButton.clear();
 }
 
 void NeroManagerWindow::on_prefixSettingsBtn_clicked()
