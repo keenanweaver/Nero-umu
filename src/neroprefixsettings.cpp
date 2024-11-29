@@ -58,7 +58,7 @@ NeroPrefixSettingsWindow::NeroPrefixSettingsWindow(QWidget *parent, const QStrin
         ui->toggleShortcutPrefixOverride->setVisible(false);
         ui->windowsVerSection->setVisible(false);
         ui->runnerGroup->setVisible(false);
-        ui->limitFPSbox->setVisible(false);
+        ui->fpsBox->setVisible(false);
 
         if(settings.value("DiscordRPCinstalled").toBool()) {
             ui->prefixInstallDiscordRPC->setEnabled(false);

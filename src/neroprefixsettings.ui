@@ -742,7 +742,7 @@
            </widget>
           </item>
           <item row="0" column="0" colspan="2">
-           <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,1,0">
+           <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,0">
             <item>
              <widget class="QCheckBox" name="toggleNVAPI">
               <property name="whatsThis">
@@ -760,32 +760,56 @@
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_8">
-              <property name="text">
-               <string>Limit FPS</string>
+             <widget class="QGroupBox" name="fpsBox">
+              <property name="title">
+               <string/>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              <property name="flat">
+               <bool>true</bool>
               </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="limitFPSbox">
-              <property name="whatsThis">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set the maximum FPS limit for this shortcut. This setting applies to &lt;span style=&quot; font-style:italic;&quot;&gt;all apps&lt;/span&gt; using &lt;span style=&quot; font-weight:700;&quot;&gt;DXVK&lt;/span&gt; (DirectX 8-11) or &lt;span style=&quot; font-weight:700;&quot;&gt;VKD3D&lt;/span&gt; (DirectX 12).&lt;/p&gt;&lt;p&gt;A value of &lt;span style=&quot; font-style:italic;&quot;&gt;0&lt;/span&gt; disables frame limiting.&lt;/p&gt;&lt;p&gt;If unsure, leave this at &lt;span style=&quot; font-style:italic;&quot;&gt;0&lt;/span&gt; unless the application is misbehaving at higher framerates.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="accessibleName">
-               <string>Limit FPS</string>
-              </property>
-              <property name="buttonSymbols">
-               <enum>QAbstractSpinBox::PlusMinus</enum>
-              </property>
-              <property name="maximum">
-               <number>999</number>
-              </property>
-              <property name="isFor" stdset="0">
-               <string>LimitFPS</string>
-              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,0">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_8">
+                 <property name="text">
+                  <string>Limit FPS</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="limitFPSbox">
+                 <property name="whatsThis">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set the maximum FPS limit for this shortcut. This setting applies to &lt;span style=&quot; font-style:italic;&quot;&gt;all apps&lt;/span&gt; using &lt;span style=&quot; font-weight:700;&quot;&gt;DXVK&lt;/span&gt; (DirectX 8-11) or &lt;span style=&quot; font-weight:700;&quot;&gt;VKD3D&lt;/span&gt; (DirectX 12).&lt;/p&gt;&lt;p&gt;A value of &lt;span style=&quot; font-style:italic;&quot;&gt;0&lt;/span&gt; disables frame limiting.&lt;/p&gt;&lt;p&gt;If unsure, leave this at &lt;span style=&quot; font-style:italic;&quot;&gt;0&lt;/span&gt; unless the application is misbehaving at higher framerates.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Limit FPS</string>
+                 </property>
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::PlusMinus</enum>
+                 </property>
+                 <property name="maximum">
+                  <number>999</number>
+                 </property>
+                 <property name="isFor" stdset="0">
+                  <string>LimitFPS</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
            </layout>
@@ -910,7 +934,7 @@
                <x>0</x>
                <y>0</y>
                <width>618</width>
-               <height>350</height>
+               <height>359</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1692,7 +1716,7 @@ color: yellow
            <x>0</x>
            <y>0</y>
            <width>636</width>
-           <height>225</height>
+           <height>216</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
