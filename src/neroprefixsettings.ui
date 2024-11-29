@@ -29,7 +29,67 @@
       <attribute name="title">
        <string>General</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,1" columnstretch="1,0">
+      <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0" columnstretch="1,0">
+       <item row="2" column="1">
+        <widget class="QGroupBox" name="servicesGroup">
+         <property name="title">
+          <string>System Services</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QCheckBox" name="toggleGamemode">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, Proton will be run with Feral Interactive's &lt;a href=&quot;https://github.com/FeralInteractive/gamemode?tab=readme-ov-file#gamemode&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;Gamemode&lt;/span&gt;&lt;/a&gt; daemon, which can provide useful optimizations for games.&lt;/p&gt;&lt;p&gt;If unsure, enable if your system has &lt;span style=&quot; font-style:italic;&quot;&gt;gamemode&lt;/span&gt; installed. Disable if a game has issues starting with &lt;span style=&quot; font-style:italic;&quot;&gt;gamemode&lt;/span&gt; enabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Enable Feral Gamemode</string>
+            </property>
+            <property name="text">
+             <string>Enable Feral Gamemode</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>Gamemode</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="toggleMangohud">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, Proton will run with the &lt;a href=&quot;https://github.com/flightlessmango/MangoHud?tab=readme-ov-file#mangohud&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;Mangohud&lt;/span&gt;&lt;/a&gt; overlay enabled, which can provide useful monitoring of your system and any 3D application's performance and/or rendering metrics. Mangohud can either be used on its own, or as part of a configuration utility, such as &lt;a href=&quot;https://github.com/benjamimgois/goverlay?tab=readme-ov-file#goverlay&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;GOverlay.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;If unsure, enable if you want to monitor a game's performance.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Enable Mangohud Overlay</string>
+            </property>
+            <property name="text">
+             <string>Enable Mangohud Overlay</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>Mangohud</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="toggleVKcap">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, this will allow any apps using Vulkan (including DX8-11 titles w/ DXVK, or DX12 titles w/ VKD3D) to be captured in OBS Studio using the &lt;a href=&quot;https://github.com/nowrep/obs-vkcapture&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;Game Capture source.&lt;/span&gt;&lt;/a&gt; This is usually provided in a user package such as &lt;span style=&quot; font-style:italic;&quot;&gt;obs-vkcapture-git&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;lib32-obs-vkcapture-git.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Enable OBS Studio Vulkan Capture</string>
+            </property>
+            <property name="text">
+             <string>Enable OBS Vulkan Capture</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>VKcapture</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item row="0" column="0" colspan="2">
         <widget class="QGroupBox" name="shortcutSettings">
          <property name="title">
@@ -223,6 +283,80 @@
          </layout>
         </widget>
        </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QGroupBox" name="prefixSettings">
+         <property name="title">
+          <string>Runner Settings</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_7" columnstretch="1,0,2,1">
+          <item row="0" column="0">
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Proton Runner</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QComboBox" name="prefixRunner">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the version of Proton that's used to run executables in this prefix. This field is populated by the folders that Nero searches on boot which contains Proton runners, preferring Steam's compatibilitytools.d folder if available.&lt;/p&gt;&lt;p&gt;If unsure, the newest version of Proton-GE is usually the best one to use for games for its multimedia fixes, and is the only version with built-in FSR hacks.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Current Prefix's Proton Runner</string>
+            </property>
+            <property name="placeholderText">
+             <string>[No Current Runner Set]</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <spacer name="horizontalSpacer_6">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="1" colspan="2">
+           <widget class="QCheckBox" name="togglePrefixRuntimeUpdates">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When checked, every time an application is launched in this prefix, &lt;span style=&quot; font-style:italic;&quot;&gt;umu&lt;/span&gt; will always check the internet if there's a new version of the Steam Runtime available, and automatically install it if an update is found. This ensures compatibility, at a cost to a minor hit in startup time, especially if you happen to be running in an environment without internet at the time.&lt;/p&gt;&lt;p&gt;If unsure, leave this enabled unless you're planning to run applications offline.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Check for Runtime Updates on Prefix Startup</string>
+            </property>
+            <property name="text">
+             <string>Check for Runtime Updates on Launch</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>RuntimeUpdateOnLaunch</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item row="2" column="0">
         <widget class="QGroupBox" name="performanceGroup">
          <property name="title">
@@ -231,15 +365,8 @@
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
-         <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,0,1">
-          <item row="1" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Scaling Mode:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
+         <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,0,0,0">
+          <item row="2" column="1">
            <widget class="QComboBox" name="setScalingBox">
             <property name="whatsThis">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the method of scaling the image of the application. Some versions of Proton supports various different types of image scaling for fullscreen applications only; otherwise, &lt;a href=&quot;https://github.com/ValveSoftware/gamescope?tab=readme-ov-file#gamescope-the-micro-compositor-formerly-known-as-steamcompmgr&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;Gamescope&lt;/span&gt;&lt;/a&gt; (if installed) can be used for more scaling options, as well as forcing games into an effective borderless windowed mode, regardless of display.&lt;/p&gt;&lt;p&gt;It should be noted that all Proton runners uses a rendering hack to scale fullscreen applications to your display resolution, regardless of the resolution setting used in-game.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Only Proton-GE has support for &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;AMD FSR 1&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; scaling modes.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;If unsure, select &lt;span style=&quot; font-style:italic;&quot;&gt;Normal.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -312,100 +439,14 @@
             </item>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QGroupBox" name="fsrSection">
-            <layout class="QGridLayout" name="gridLayout_10">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_12">
-               <property name="text">
-                <string>Custom Resolution:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="fsrCustomW">
-               <property name="whatsThis">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If using the FSR Custom Mode, this sets the screen resolution that is reported to the application. This can be used for more precise rendering resolutions, or for use with games that expects a non-standard resolution, and will crash if it's not detected - examples of the latter include several Sega arcade game dumps, which often demands resolutions of either &lt;span style=&quot; font-style:italic;&quot;&gt;1360x768&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;1024x600.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="accessibleName">
-                <string>FSR Custom Resolution (Width)</string>
-               </property>
-               <property name="maxLength">
-                <number>8</number>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="placeholderText">
-                <string>Width (px)</string>
-               </property>
-               <property name="isFor" stdset="0">
-                <string>FSRcustomResW</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QLabel" name="label_3">
-               <property name="text">
-                <string>x</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="3">
-              <widget class="QLineEdit" name="fsrCustomH">
-               <property name="whatsThis">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If using the FSR Custom Mode, this sets the screen resolution that is reported to the application. This can be used for more precise rendering resolutions, or for use with games that expects a non-standard resolution, and will crash if it's not detected - examples of the latter include several Sega arcade game dumps, which often demands resolutions of either &lt;span style=&quot; font-style:italic;&quot;&gt;1360x768&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;1024x600.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="accessibleName">
-                <string>FSR Custom Resolution (Height)</string>
-               </property>
-               <property name="maxLength">
-                <number>8</number>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="placeholderText">
-                <string>Height (px)</string>
-               </property>
-               <property name="isFor" stdset="0">
-                <string>FSRcustomResH</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="4" column="0" colspan="2">
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>0</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QCheckBox" name="toggleNVAPI">
-            <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This enables support for &lt;a href=&quot;https://github.com/jp7677/dxvk-nvapi?tab=readme-ov-file#dxvk-nvapi&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;DXVK-NVAPI&lt;/span&gt;&lt;/a&gt; for NVIDIA graphics cards, which correctly reports the GPU model and (usually) allows apps to access certain vendor exclusive features, such as DLSS, Ray Tracing, or hardware-accelerated CUDA in some games. &lt;span style=&quot; font-weight:700;&quot;&gt;Full DLSS or CUDA functionality requires the &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;physx&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; verb to be installed, as well as enabling the &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;nvcuda&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; native DLL override.&lt;/span&gt; When disabled, any NVIDIA cards will be reported as an AMD GPU.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;This setting can ONLY be used with NVIDIA GPUs using the NVIDIA Proprietary Driver (either &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Binary&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; or &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Open Kernel Module&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; distributions).&lt;/span&gt;&lt;/p&gt;&lt;p&gt;If unsure, you should enable this only if the application has explicit support for DLSS or RTX features.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="accessibleName">
-             <string>Enable NVAPI Support</string>
-            </property>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label">
             <property name="text">
-             <string>Enable NVAPI Support</string>
-            </property>
-            <property name="isFor" stdset="0">
-             <string>EnableNVAPI</string>
+             <string>Scaling Mode:</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
+          <item row="4" column="1">
            <widget class="QGroupBox" name="gamescopeSection">
             <layout class="QGridLayout" name="gridLayout_9" columnstretch="1,0,0,0">
              <item row="0" column="0">
@@ -623,139 +664,131 @@
             </layout>
            </widget>
           </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QGroupBox" name="servicesGroup">
-         <property name="title">
-          <string>System Services</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <widget class="QCheckBox" name="toggleGamemode">
-            <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, Proton will be run with Feral Interactive's &lt;a href=&quot;https://github.com/FeralInteractive/gamemode?tab=readme-ov-file#gamemode&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;Gamemode&lt;/span&gt;&lt;/a&gt; daemon, which can provide useful optimizations for games.&lt;/p&gt;&lt;p&gt;If unsure, enable if your system has &lt;span style=&quot; font-style:italic;&quot;&gt;gamemode&lt;/span&gt; installed. Disable if a game has issues starting with &lt;span style=&quot; font-style:italic;&quot;&gt;gamemode&lt;/span&gt; enabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="accessibleName">
-             <string>Enable Feral Gamemode</string>
-            </property>
-            <property name="text">
-             <string>Enable Feral Gamemode</string>
-            </property>
-            <property name="isFor" stdset="0">
-             <string>Gamemode</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="toggleMangohud">
-            <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, Proton will run with the &lt;a href=&quot;https://github.com/flightlessmango/MangoHud?tab=readme-ov-file#mangohud&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;Mangohud&lt;/span&gt;&lt;/a&gt; overlay enabled, which can provide useful monitoring of your system and any 3D application's performance and/or rendering metrics. Mangohud can either be used on its own, or as part of a configuration utility, such as &lt;a href=&quot;https://github.com/benjamimgois/goverlay?tab=readme-ov-file#goverlay&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;GOverlay.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;If unsure, enable if you want to monitor a game's performance.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="accessibleName">
-             <string>Enable Mangohud Overlay</string>
-            </property>
-            <property name="text">
-             <string>Enable Mangohud Overlay</string>
-            </property>
-            <property name="isFor" stdset="0">
-             <string>Mangohud</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="toggleVKcap">
-            <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, this will allow any apps using Vulkan (including DX8-11 titles w/ DXVK, or DX12 titles w/ VKD3D) to be captured in OBS Studio using the &lt;a href=&quot;https://github.com/nowrep/obs-vkcapture&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;Game Capture source.&lt;/span&gt;&lt;/a&gt; This is usually provided in a user package such as &lt;span style=&quot; font-style:italic;&quot;&gt;obs-vkcapture-git&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;lib32-obs-vkcapture-git.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="accessibleName">
-             <string>Enable OBS Studio Vulkan Capture</string>
-            </property>
-            <property name="text">
-             <string>Enable OBS Vulkan Capture</string>
-            </property>
-            <property name="isFor" stdset="0">
-             <string>VKcapture</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QGroupBox" name="prefixSettings">
-         <property name="title">
-          <string>Runner Settings</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_7" columnstretch="1,0,2,1">
-          <item row="0" column="0">
-           <spacer name="horizontalSpacer_5">
+          <item row="5" column="0" colspan="2">
+           <spacer name="verticalSpacer">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>40</width>
-              <height>20</height>
+              <width>20</width>
+              <height>0</height>
              </size>
             </property>
            </spacer>
           </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>Proton Runner</string>
-            </property>
+          <item row="3" column="1">
+           <widget class="QGroupBox" name="fsrSection">
+            <layout class="QGridLayout" name="gridLayout_10">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_12">
+               <property name="text">
+                <string>Custom Resolution:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="fsrCustomW">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If using the FSR Custom Mode, this sets the screen resolution that is reported to the application. This can be used for more precise rendering resolutions, or for use with games that expects a non-standard resolution, and will crash if it's not detected - examples of the latter include several Sega arcade game dumps, which often demands resolutions of either &lt;span style=&quot; font-style:italic;&quot;&gt;1360x768&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;1024x600.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>FSR Custom Resolution (Width)</string>
+               </property>
+               <property name="maxLength">
+                <number>8</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="placeholderText">
+                <string>Width (px)</string>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>FSRcustomResW</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>x</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLineEdit" name="fsrCustomH">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If using the FSR Custom Mode, this sets the screen resolution that is reported to the application. This can be used for more precise rendering resolutions, or for use with games that expects a non-standard resolution, and will crash if it's not detected - examples of the latter include several Sega arcade game dumps, which often demands resolutions of either &lt;span style=&quot; font-style:italic;&quot;&gt;1360x768&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;1024x600.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>FSR Custom Resolution (Height)</string>
+               </property>
+               <property name="maxLength">
+                <number>8</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="placeholderText">
+                <string>Height (px)</string>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>FSRcustomResH</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
-          <item row="0" column="2">
-           <widget class="QComboBox" name="prefixRunner">
-            <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the version of Proton that's used to run executables in this prefix. This field is populated by the folders that Nero searches on boot which contains Proton runners, preferring Steam's compatibilitytools.d folder if available.&lt;/p&gt;&lt;p&gt;If unsure, the newest version of Proton-GE is usually the best one to use for games for its multimedia fixes, and is the only version with built-in FSR hacks.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="accessibleName">
-             <string>Current Prefix's Proton Runner</string>
-            </property>
-            <property name="placeholderText">
-             <string>[No Current Runner Set]</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <spacer name="horizontalSpacer_6">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="1" column="1" colspan="2">
-           <widget class="QCheckBox" name="togglePrefixRuntimeUpdates">
-            <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When checked, every time an application is launched in this prefix, &lt;span style=&quot; font-style:italic;&quot;&gt;umu&lt;/span&gt; will always check the internet if there's a new version of the Steam Runtime available, and automatically install it if an update is found. This ensures compatibility, at a cost to a minor hit in startup time, especially if you happen to be running in an environment without internet at the time.&lt;/p&gt;&lt;p&gt;If unsure, leave this enabled unless you're planning to run applications offline.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="accessibleName">
-             <string>Check for Runtime Updates on Prefix Startup</string>
-            </property>
-            <property name="text">
-             <string>Check for Runtime Updates on Launch</string>
-            </property>
-            <property name="isFor" stdset="0">
-             <string>RuntimeUpdateOnLaunch</string>
-            </property>
-           </widget>
+          <item row="0" column="0" colspan="2">
+           <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,1,0">
+            <item>
+             <widget class="QCheckBox" name="toggleNVAPI">
+              <property name="whatsThis">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This enables support for &lt;a href=&quot;https://github.com/jp7677/dxvk-nvapi?tab=readme-ov-file#dxvk-nvapi&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;DXVK-NVAPI&lt;/span&gt;&lt;/a&gt; for NVIDIA graphics cards, which correctly reports the GPU model and (usually) allows apps to access certain vendor exclusive features, such as DLSS, Ray Tracing, or hardware-accelerated CUDA in some games. &lt;span style=&quot; font-weight:700;&quot;&gt;Full DLSS or CUDA functionality requires the &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;physx&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; verb to be installed, as well as enabling the &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;nvcuda&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; native DLL override.&lt;/span&gt; When disabled, any NVIDIA cards will be reported as an AMD GPU.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;This setting can ONLY be used with NVIDIA GPUs using the NVIDIA Proprietary Driver (either &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Binary&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; or &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Open Kernel Module&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; distributions).&lt;/span&gt;&lt;/p&gt;&lt;p&gt;If unsure, you should enable this only if the application has explicit support for DLSS or RTX features.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="accessibleName">
+               <string>Enable NVAPI Support</string>
+              </property>
+              <property name="text">
+               <string>Enable NVAPI Support</string>
+              </property>
+              <property name="isFor" stdset="0">
+               <string>EnableNVAPI</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Limit FPS</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="limitFPSbox">
+              <property name="whatsThis">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set the maximum FPS limit. This setting applies to &lt;span style=&quot; font-style:italic;&quot;&gt;all apps&lt;/span&gt; using &lt;span style=&quot; font-weight:700;&quot;&gt;DXVK&lt;/span&gt; (DirectX 8-11) or VKD3D (DirectX 12).&lt;/p&gt;&lt;p&gt;A value of &lt;span style=&quot; font-style:italic;&quot;&gt;0&lt;/span&gt; disables frame limiting.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="accessibleName">
+               <string>Limit FPS</string>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::PlusMinus</enum>
+              </property>
+              <property name="maximum">
+               <number>999</number>
+              </property>
+              <property name="ifFor" stdset="0">
+               <string>LimitFPS</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>
@@ -877,7 +910,7 @@
                <x>0</x>
                <y>0</y>
                <width>618</width>
-               <height>347</height>
+               <height>350</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1659,7 +1692,7 @@ color: yellow
            <x>0</x>
            <y>0</y>
            <width>636</width>
-           <height>228</height>
+           <height>225</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">

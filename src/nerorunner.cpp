@@ -24,7 +24,6 @@
 #include <QApplication>
 #include <QProcess>
 #include <QDir>
-#include <QDebug>
 
 int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunning)
 {
@@ -58,9 +57,13 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
             env.insert("PROTON_VERB", "run");
         else env.insert("PROTON_VERB", "waitforexitandrun");
 
+        QDir cachePath(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
+        if(cachePath.exists("/.shaderCache")) cachePath.mkdir("/.shaderCache");
+        env.insert("DXVK_STATE_CACHE_PATH", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.shaderCache");
+        env.insert("VKD3D_SHADER_CACHE_PATH", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.shaderCache");
+
         // unfortunately, env insert does NOT allow settings bools properly as-is,
         // so all booleans have to be converted to an int string.
-
 
         //if(!settings->value("Shortcuts--"+hash+"/CustomEnvVars").toString().isEmpty()) {
         //   qDebug() << settings->value("Shortcuts--"+hash+"/CustomEnvVars").toStringList();
@@ -75,8 +78,8 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
             env.insert("WINEDLLOVERRIDES", settings->value("PrefixSettings/DLLoverrides").toStringList().join(';'));
 
         if(settings->value("Shortcuts--"+hash+"/ForceWineD3D").toString().isEmpty())
-            env.insert("PROTON_USE_WINED3D", QString(settings->value("Shortcuts--"+hash+"/ForceWineD3D").toInt()));
-        else env.insert("PROTON_USE_WINED3D", QString(settings->value("PrefixSettings/ForceWineD3D").toInt()));
+            env.insert("PROTON_USE_WINED3D", QString::number(settings->value("Shortcuts--"+hash+"/ForceWineD3D").toInt()));
+        else env.insert("PROTON_USE_WINED3D", QString::number(settings->value("PrefixSettings/ForceWineD3D").toInt()));
 
         if(settings->value("Shortcuts--"+hash+"/NoD8VK").toString().isEmpty()) {
             if(!settings->value("Shortcuts--"+hash+"/NoD8VK").toBool()) env.insert("PROTON_DXVK_D3D8", "1");
@@ -96,6 +99,9 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
             if(settings->value("Shortcuts--"+hash+"VKcapture").toBool()) env.insert("OBS_VKCAPTURE", "1");
         } else if(settings->value("PrefixSettings/VKcapture").toBool())
             env.insert("OBS_VKCAPTURE", "1");
+
+        if(settings->value("Shortcuts--"+hash+"/LimitFPS").toInt())
+            env.insert("DXVK_FRAME_RATE", QString::number(settings->value("Shortcuts--"+hash+"/LimitFPS").toInt()));
 
         if(!settings->value("Shortcuts--"+hash+"/FileSyncMode").toString().isEmpty()) {
             switch(settings->value("Shortcuts--"+hash+"/FileSyncMode").toInt()) {
@@ -266,8 +272,8 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
                 break;
             case NeroConstant::ScalingFSRcustom:
                 env.insert("WINE_FULLSCREEN_FSR", "1");
-                env.insert("WINE_FULLSCREEN_FSR_CUSTOM_MODE", QString("%1x%2").arg(settings->value("PrefixSettings/FSRcustomResW").toString(),
-                                                                                   settings->value("PrefixSettings/FSRcustomResH").toString()));
+                env.insert("WINE_FULLSCREEN_FSR_CUSTOM_MODE", settings->value("PrefixSettings/FSRcustomResW").toString()+'x'+
+                                                              settings->value("PrefixSettings/FSRcustomResH").toString());
                 break;
             case NeroConstant::ScalingGamescopeFullscreen:
                 arguments.prepend("-f");
@@ -354,8 +360,6 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
         log.open(QIODevice::WriteOnly);
         log.resize(0);
 
-        qDebug() << env.toStringList();
-
         runner.start(command, arguments);
         runner.waitForStarted(-1);
 
@@ -394,6 +398,11 @@ int NeroRunner::StartOnetime(const QString &path, const QStringList args, const 
     if(prefixAlreadyRunning)
         env.insert("PROTON_VERB", "run");
     else env.insert("PROTON_VERB", "waitforexitandrun");
+
+    QDir cachePath(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
+    if(cachePath.exists("/.shaderCache")) cachePath.mkdir("/.shaderCache");
+    env.insert("DXVK_STATE_CACHE_PATH", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.shaderCache");
+    env.insert("VKD3D_SHADER_CACHE_PATH", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.shaderCache");
 
     if(settings->value("PrefixSettings/RuntimeUpdateOnLaunch").toBool())
         env.insert("UMU_RUNTIME_UPDATE", "1");

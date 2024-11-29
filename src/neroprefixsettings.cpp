@@ -26,6 +26,7 @@
 
 #include <QAction>
 #include <QProcess>
+#include <QSpinBox>
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QuaZip-Qt5-1.4/quazip/quazip.h>
@@ -57,6 +58,7 @@ NeroPrefixSettingsWindow::NeroPrefixSettingsWindow(QWidget *parent, const QStrin
         ui->toggleShortcutPrefixOverride->setVisible(false);
         ui->windowsVerSection->setVisible(false);
         ui->runnerGroup->setVisible(false);
+        ui->limitFPSbox->setVisible(false);
 
         if(settings.value("DiscordRPCinstalled").toBool()) {
             ui->prefixInstallDiscordRPC->setEnabled(false);
@@ -138,6 +140,11 @@ NeroPrefixSettingsWindow::NeroPrefixSettingsWindow(QWidget *parent, const QStrin
     for(const auto child : this->findChildren<QLineEdit*>()) {
         if(!child->property("whatsThis").isNull()) child->installEventFilter(this);
         if(!child->property("isFor").isNull()) connect(child, &QLineEdit::textEdited, this, &NeroPrefixSettingsWindow::OptionSet);
+    }
+    for(const auto child : this->findChildren<QSpinBox*>()) {
+        if(!child->property("whatsThis").isNull()) child->installEventFilter(this);
+        // QSpinBox's "value changed" isn't new syntax friendly?
+        if(!child->property("isFor").isNull()) connect(child, SIGNAL(valueChanged(int)), this, SLOT(OptionSet()));
     }
     for(const auto child : this->findChildren<QComboBox*>()) {
         if(!child->property("whatsThis").isNull()) child->installEventFilter(this);
@@ -247,6 +254,8 @@ void NeroPrefixSettingsWindow::LoadSettings()
         this->setWindowIcon(QPixmap(QString("%1/%2-%3.png").arg(ico.path(),
                                                                 settings["Name"].toString(),
                                                                 currentShortcutHash)));
+
+        ui->limitFPSbox->setValue(settings.value("LimitFPS").toInt());
 
         ui->toggleShortcutPrefixOverride->setChecked(settings.value("IgnoreGlobalDLLs").toBool());
 
@@ -666,6 +675,11 @@ void NeroPrefixSettingsWindow::OptionSet()
         else if(checkBox->isChecked() != settings.value(checkBox->property("isFor").toString()).toBool())
             checkBox->setFont(boldFont);
         else checkBox->setFont(QFont());
+    } else if(sender()->inherits("QSpinBox")) {
+        QSpinBox* spinBox = qobject_cast<QSpinBox*>(sender());
+        if(spinBox->value() != settings.value(spinBox->property("isFor").toString()).toInt())
+            spinBox->setFont(boldFont);
+        else spinBox->setFont(QFont());
     } else if(sender()->inherits("QLineEdit")) {
         QLineEdit* lineEdit = qobject_cast<QLineEdit*>(sender());
         if(lineEdit->text() != settings.value(lineEdit->property("isFor").toString()).toString())
@@ -743,6 +757,10 @@ void NeroPrefixSettingsWindow::on_buttonBox_clicked(QAbstractButton *button)
             for(const auto child : this->findChildren<QLineEdit*>())
                 if(child->font() == boldFont)
                     NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), child->property("isFor").toString(), child->text().trimmed());
+
+            for(const auto child : this->findChildren<QSpinBox*>())
+                if(child->font() == boldFont)
+                    NeroFS::SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(currentShortcutHash), child->property("isFor").toString(), child->value());
 
             for(const auto child : this->findChildren<QComboBox*>())
                 if(child->font() == boldFont) {

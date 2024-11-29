@@ -312,6 +312,7 @@ void NeroFS::AddNewShortcut(const QString newShortcutHash, const QString newShor
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "Mangohud", "");
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "EnableNVAPI", "");
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "ScalingMode", "");
+    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "LimitFPS", 0);
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "FSRcustomResW", "");
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "FSRcustomResH", "");
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "GamescopeOutResW", "");
