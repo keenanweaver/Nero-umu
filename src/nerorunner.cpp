@@ -435,8 +435,6 @@ int NeroRunner::StartOnetime(const QString &path, const QStringList args, const 
         break;
     }
 
-    // TODO: parse custom env vars into an env.insert
-
     QStringList arguments;
     arguments.append("umu-run");
     arguments.append(path);
