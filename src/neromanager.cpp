@@ -529,6 +529,16 @@ void NeroManagerWindow::prefixMainButtons_clicked()
         NeroFS::SetCurrentPrefix(prefixMainButton.at(slot)->text());
 
         RenderPrefixList();
+
+        if(!NeroFS::GetAvailableProtons().contains(NeroFS::GetCurrentRunner())) {
+            NeroFS::SetCurrentPrefixCfg("PrefixSettings", "CurrentRunner", NeroFS::GetAvailableProtons().constFirst());
+            NeroFS::SetCurrentPrefix(prefixMainButton.at(slot)->text());
+            QMessageBox::warning(this,
+                                 "Current Runner not found!",
+                                 "The runner that was assigned to this prefix could not be found in the list of available Proton runners.\n"
+                                 "As a result, the Proton runner for this prefix has been reset.\n"
+                                 "Please re-confirm the Proton version being used in Prefix Settings.");
+        }
     }
 
     SetHeader(NeroFS::GetCurrentPrefix(), NeroFS::GetCurrentPrefixShortcuts().count());
