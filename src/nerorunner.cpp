@@ -120,7 +120,7 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
         if(!settings->value("Shortcuts--"+hash+"/DebugOutput").toString().isEmpty()) {
             switch(settings->value("Shortcuts--"+hash+"/DebugOutput").toInt()) {
             case NeroConstant::DebugFull:
-                env.insert("WINEDEBUG", "+loaddll,debugstr,mscoree");
+                env.insert("WINEDEBUG", "+loaddll,debugstr,mscoree,seh");
                 break;
             case NeroConstant::DebugLoadDLL:
                 env.insert("WINEDEBUG", "+loaddll");
@@ -128,7 +128,7 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
             }
         } else switch(settings->value("PrefixSettings/DebugOutput").toInt()) {
             case NeroConstant::DebugFull:
-                env.insert("WINEDEBUG", "+loaddll,debugstr,mscoree");
+                env.insert("WINEDEBUG", "+loaddll,debugstr,mscoree,seh");
                 break;
             case NeroConstant::DebugLoadDLL:
                 env.insert("WINEDEBUG", "+loaddll");
@@ -428,7 +428,7 @@ int NeroRunner::StartOnetime(const QString &path, const QStringList args, const 
 
     switch(settings->value("PrefixSettings/DebugOutput").toInt()) {
     case NeroConstant::DebugFull:
-        env.insert("WINEDEBUG", "+loaddll,debugstr,mscoree");
+        env.insert("WINEDEBUG", "+loaddll,debugstr,mscoree,seh");
         break;
     case NeroConstant::DebugLoadDLL:
         env.insert("WINEDEBUG", "+loaddll");
