@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
                 arguments.removeAt(arguments.indexOf("--prefix"));
                 NeroRunner runner;
                 QString executable = arguments.takeFirst();
-                return runner.StartOnetime(executable, arguments);
+                return runner.StartOnetime(executable, false, arguments);
             } else {
                 printf("Nero cannot run without a home directory set! Aborting...\n");
                 return 1;

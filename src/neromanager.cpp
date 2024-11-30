@@ -601,8 +601,8 @@ void NeroManagerWindow::prefixShortcutPlayButtons_clicked()
         }
 
         if(currentlyRunning.count() > 1)
-            umuController << new NeroThreadController(slot, settings.value(prefixShortcutLabel.at(slot)->text()), {""}, true);
-        else umuController << new NeroThreadController(slot, settings.value(prefixShortcutLabel.at(slot)->text()), {""});
+            umuController << new NeroThreadController(slot, settings.value(prefixShortcutLabel.at(slot)->text()), true);
+        else umuController << new NeroThreadController(slot, settings.value(prefixShortcutLabel.at(slot)->text()));
 
         umuController.last()->setProperty("slot", threadsCount-1);
         prefixShortcutPlayButton.at(slot)->setProperty("thread", threadsCount-1);
@@ -653,9 +653,15 @@ void NeroManagerWindow::on_oneTimeRunBtn_clicked()
         }
 
         // TODO: flawed args split if the argument contains a path :/
-        if(currentlyRunning.count() > 1)
-            umuController << new NeroThreadController(-1, oneTimeApp, ui->oneTimeRunArgs->text().split(' '), true);
-        else umuController << new NeroThreadController(-1, oneTimeApp, ui->oneTimeRunArgs->text().split(' '));
+        if(ui->oneTimeRunArgs->text().isEmpty()) {
+            if(currentlyRunning.count() > 1)
+                umuController << new NeroThreadController(-1, oneTimeApp, true);
+            else umuController << new NeroThreadController(-1, oneTimeApp, false);
+        } else {
+            if(currentlyRunning.count() > 1)
+                umuController << new NeroThreadController(-1, oneTimeApp, true, ui->oneTimeRunArgs->text().split(' '));
+            else umuController << new NeroThreadController(-1, oneTimeApp, false, ui->oneTimeRunArgs->text().split(' '));
+        }
 
         umuController.last()->setProperty("slot", threadsCount-1);
         connect(umuController.last(),                       &NeroThreadController::passUmuResults,  this, &NeroManagerWindow::handleUmuResults);
@@ -871,7 +877,7 @@ void NeroThreadWorker::umuRunnerProcess()
         result = Runner.StartShortcut(currentParameters, alreadyRunning);
     } else {
         // for one time, parameters = path, oneTimeArgs = contents of oneTimeArguments
-        result = Runner.StartOnetime(currentParameters, oneTimeArgs, alreadyRunning);
+        result = Runner.StartOnetime(currentParameters, alreadyRunning, oneTimeArgs);
     }
 
     emit umuExited(currentSlot, result);

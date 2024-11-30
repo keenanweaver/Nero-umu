@@ -32,7 +32,7 @@ public:
     NeroRunner() {};
 
     int StartShortcut(const QString &, const bool & = false);
-    int StartOnetime(const QString &, const QStringList, const bool & = false);
+    int StartOnetime(const QString &, const bool & = false, const QStringList & = {});
     void WaitLoop(QProcess &, QFile &);
     void StopProcess();
 

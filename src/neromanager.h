@@ -48,7 +48,7 @@ class NeroThreadWorker : public QObject
     Q_OBJECT
 
 public:
-    NeroThreadWorker(const int &slot, const QString &params, const QStringList &extArgs = {}, const bool &prefixAlreadyRunning = false) {
+    NeroThreadWorker(const int &slot, const QString &params, const bool &prefixAlreadyRunning = false, const QStringList &extArgs = {}) {
         currentSlot = slot, currentParameters = params, oneTimeArgs = extArgs, alreadyRunning = prefixAlreadyRunning;
     }
     ~NeroThreadWorker() {};
@@ -69,8 +69,8 @@ class NeroThreadController : public QObject
     Q_OBJECT
     QThread umuThread;
 public:
-    NeroThreadController(const int &slot, const QString &params, const QStringList &extArgs = {}, const bool &prefixAlreadyRunning = false) {
-        umuWorker = new NeroThreadWorker(slot, params, extArgs, prefixAlreadyRunning);
+    NeroThreadController(const int &slot, const QString &params, const bool &prefixAlreadyRunning = false, const QStringList &extArgs = {}) {
+        umuWorker = new NeroThreadWorker(slot, params, prefixAlreadyRunning, extArgs);
         umuWorker->moveToThread(&umuThread);
         connect(&umuThread, &QThread::finished, umuWorker, &QObject::deleteLater);
         connect(this, &NeroThreadController::operate, umuWorker, &NeroThreadWorker::umuRunnerProcess);

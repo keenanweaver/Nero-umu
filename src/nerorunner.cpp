@@ -24,6 +24,7 @@
 #include <QApplication>
 #include <QProcess>
 #include <QDir>
+#include <QDebug>
 
 int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunning)
 {
@@ -138,7 +139,19 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
         QStringList arguments;
         arguments.append("umu-run");
 
-        arguments.append(settings->value("Shortcuts--"+hash+"/Path").toString());
+        // set path to be relative to an existing drive, as some apps seems to rely on this behavior:
+        QString app = settings->value("Shortcuts--"+hash+"/Path").toString();
+        QDir dosdevicesPath(NeroFS::GetPrefixesPath().path() + '/' + NeroFS::GetCurrentPrefix() + "/dosdevices");
+        QFileInfoList dosdevices(dosdevicesPath.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs, QDir::Name));
+        for(auto const device : dosdevices) {
+            if(app.contains(device.symLinkTarget())) {
+                app.remove(device.symLinkTarget());
+                app.prepend(device.baseName().toUpper());
+                break;
+            }
+        }
+
+        arguments.append(app);
 
         if(!settings->value("Shortcuts--"+hash+"/Args").toString().isEmpty())
             arguments.append(settings->value("Shortcuts--"+hash+"/Args").toStringList());
@@ -380,7 +393,7 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
     }
 }
 
-int NeroRunner::StartOnetime(const QString &path, const QStringList args, const bool &prefixAlreadyRunning)
+int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunning, const QStringList &args)
 {
     QSettings *settings = NeroFS::GetCurrentPrefixCfg();
 
@@ -437,7 +450,19 @@ int NeroRunner::StartOnetime(const QString &path, const QStringList args, const 
 
     QStringList arguments;
     arguments.append("umu-run");
-    arguments.append(path);
+
+    QString app = path;
+    QDir dosdevicesPath(NeroFS::GetPrefixesPath().path() + '/' + NeroFS::GetCurrentPrefix() + "/dosdevices");
+    QFileInfoList dosdevices(dosdevicesPath.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs, QDir::Name));
+    for(auto const device : dosdevices) {
+        if(app.contains(device.symLinkTarget())) {
+            app.remove(device.symLinkTarget());
+            app.prepend(device.baseName().toUpper());
+            break;
+        }
+    }
+
+    arguments.append(app);
 
     if(!args.isEmpty())
         arguments.append(args);
