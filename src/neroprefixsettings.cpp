@@ -219,6 +219,7 @@ void NeroPrefixSettingsWindow::LoadSettings()
         // for prefix general settings, checkboxes are normal two-state
 
         // general tab->prefix global settings group
+        // if prefix runner doesn't exist, just set to whatever's the first entry.
         if(NeroFS::GetAvailableProtons().contains(settings.value("CurrentRunner").toString()))
             ui->prefixRunner->setCurrentText(settings.value("CurrentRunner").toString());
         else ui->prefixRunner->setCurrentIndex(0),
