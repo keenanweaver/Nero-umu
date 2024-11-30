@@ -128,6 +128,7 @@ NeroPrefixSettingsWindow::NeroPrefixSettingsWindow(QWidget *parent, const QStrin
 
     dllList = new QCompleter(commonDLLsList);
     ui->dllAdder->setCompleter(dllList);
+    connect(ui->dllAdder, &QLineEdit::returnPressed, this, &NeroPrefixSettingsWindow::on_dllAddBtn_clicked);
 
     // should be a way to method-ify this?
     for(const auto child : this->findChildren<QPushButton*>()) {
@@ -163,6 +164,16 @@ bool NeroPrefixSettingsWindow::eventFilter(QObject* object, QEvent* event)
             }
 
     return QWidget::eventFilter(object, event);
+}
+
+void NeroPrefixSettingsWindow::showEvent(QShowEvent* event)
+{
+    QDialog::showEvent(event);
+
+    // disable these defaults so the user can use Return key to commit new dll overrides.
+    ui->buttonBox->button(QDialogButtonBox::Save)->setDefault(false);
+    ui->buttonBox->button(QDialogButtonBox::Cancel)->setDefault(false);
+    ui->buttonBox->button(QDialogButtonBox::Reset)->setDefault(false);
 }
 
 NeroPrefixSettingsWindow::~NeroPrefixSettingsWindow()

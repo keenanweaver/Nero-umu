@@ -44,6 +44,8 @@ public:
 
     bool eventFilter(QObject* object, QEvent* event) override;
 
+    void showEvent(QShowEvent* event) override;
+
     QString newAppIcon;
     QString appName;
 
