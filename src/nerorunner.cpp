@@ -57,6 +57,9 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
             env.insert("PROTON_VERB", "run");
         else env.insert("PROTON_VERB", "waitforexitandrun");
 
+        if(!env.contains("SDL_GAMECONTROLLER_USE_BUTTON_LABELS"))
+            env.insert("SDL_GAMECONTROLLER_USE_BUTTON_LABELS", QString::number(0));
+
         QDir cachePath(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
         if(cachePath.exists(".shaderCache")) cachePath.mkdir(".shaderCache");
         env.insert("DXVK_STATE_CACHE_PATH", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.shaderCache");
@@ -410,6 +413,9 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
     if(prefixAlreadyRunning)
         env.insert("PROTON_VERB", "run");
     else env.insert("PROTON_VERB", "waitforexitandrun");
+
+    if(!env.contains("SDL_GAMECONTROLLER_USE_BUTTON_LABELS"))
+        env.insert("SDL_GAMECONTROLLER_USE_BUTTON_LABELS", QString::number(0));
 
     QDir cachePath(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
     if(cachePath.exists(".shaderCache")) cachePath.mkdir(".shaderCache");
