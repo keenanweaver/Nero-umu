@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>666</width>
-    <height>800</height>
+    <height>813</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -449,162 +449,10 @@
           <item row="4" column="1">
            <widget class="QGroupBox" name="gamescopeSection">
             <layout class="QGridLayout" name="gridLayout_9" columnstretch="1,0,0,0">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_6">
-               <property name="text">
-                <string>Scaler Type:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_7">
-               <property name="text">
-                <string>Upscaling Filter:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1" colspan="3">
-              <widget class="QComboBox" name="gamescopeSetUpscalingBox">
-               <property name="whatsThis">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When using Gamescope, this sets the filter it will apply to the image output.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;AMD FSR&lt;/span&gt; will work for all GPUs, while &lt;span style=&quot; font-style:italic;&quot;&gt;NVIDIA Image Scaling &lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;requires an NVIDIA GPU running the NVIDIA Proprietary Driver (either &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Binary&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; or &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Open Kernel Module&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; distributions).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="accessibleName">
-                <string>Gamescope Upscaling Filter</string>
-               </property>
-               <property name="isFor" stdset="0">
-                <string>GamescopeFilter</string>
-               </property>
-               <item>
-                <property name="text">
-                 <string>Bilinear Filter</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Nearest Neighbor</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>AMD FSR 1</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>NVIDIA Image Scaling</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Pixel</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="gamescopeWindowLabel">
-               <property name="text">
-                <string>Window Resolution:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QLineEdit" name="gamescopeWindowWidth">
-               <property name="whatsThis">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the size of the Gamescope output window. If &lt;span style=&quot; font-style:italic;&quot;&gt;Width&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;Height&lt;/span&gt; are unset, Gamescope will default to the resolution requested by the running application.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="accessibleName">
-                <string>Gamescope Window Resolution (Width) [*Optional]</string>
-               </property>
-               <property name="maxLength">
-                <number>8</number>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="placeholderText">
-                <string>Width (px)</string>
-               </property>
-               <property name="clearButtonEnabled">
-                <bool>true</bool>
-               </property>
-               <property name="isFor" stdset="0">
-                <string>GamescopeWinResW</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="2">
-              <widget class="QLabel" name="gamescopeWindowLabelX">
-               <property name="text">
-                <string>x</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="3">
-              <widget class="QLineEdit" name="gamescopeWindowHeight">
-               <property name="whatsThis">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the size of the Gamescope output window. If &lt;span style=&quot; font-style:italic;&quot;&gt;Width&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;Height&lt;/span&gt; are unset, Gamescope will default to the resolution requested by the running application.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="accessibleName">
-                <string>Gamescope Window Resolution (Height) [*Optional]</string>
-               </property>
-               <property name="maxLength">
-                <number>8</number>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="placeholderText">
-                <string>Height (px)</string>
-               </property>
-               <property name="clearButtonEnabled">
-                <bool>true</bool>
-               </property>
-               <property name="isFor" stdset="0">
-                <string>GamescopeWinResH</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="gamescopeAppLabel">
-               <property name="text">
-                <string>App Resolution:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QLineEdit" name="gamescopeAppWidth">
-               <property name="whatsThis">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the effective resolution that Gamescope reports to the game - in other words, a forced &lt;span style=&quot; font-style:italic;&quot;&gt;render resolution.&lt;/span&gt; If either &lt;span style=&quot; font-style:italic;&quot;&gt;Width&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;Height&lt;/span&gt; are empty, Gamescope will report the same resolution as &lt;span style=&quot; font-style:italic;&quot;&gt;Window Resolution&lt;/span&gt; (or the resolution of the desktop if set to &lt;span style=&quot; font-style:italic;&quot;&gt;Fullscreen&lt;/span&gt;)&lt;span style=&quot; font-style:italic;&quot;&gt;;&lt;/span&gt; else, both &lt;span style=&quot; font-style:italic;&quot;&gt;Window&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;App&lt;/span&gt; resolution will default to the size requested by the running application.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="accessibleName">
-                <string>Gamescope App Resolution (Width)</string>
-               </property>
-               <property name="maxLength">
-                <number>8</number>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="placeholderText">
-                <string>Width (px)</string>
-               </property>
-               <property name="isFor" stdset="0">
-                <string>GamescopeOutResW</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="2">
-              <widget class="QLabel" name="label_9">
-               <property name="text">
-                <string>x</string>
-               </property>
-              </widget>
-             </item>
              <item row="3" column="3">
               <widget class="QLineEdit" name="gamescopeAppHeight">
                <property name="whatsThis">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the effective resolution that Gamescope reports to the game - in other words, a forced &lt;span style=&quot; font-style:italic;&quot;&gt;render resolution.&lt;/span&gt; If either &lt;span style=&quot; font-style:italic;&quot;&gt;Width&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;Height&lt;/span&gt; are empty, Gamescope will report the same resolution as &lt;span style=&quot; font-style:italic;&quot;&gt;Window Resolution&lt;/span&gt; (or the resolution of the desktop if set to &lt;span style=&quot; font-style:italic;&quot;&gt;Fullscreen&lt;/span&gt;)&lt;span style=&quot; font-style:italic;&quot;&gt;;&lt;/span&gt; else, both &lt;span style=&quot; font-style:italic;&quot;&gt;Window&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;App&lt;/span&gt; resolution will default to the size requested by the running application.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the effective resolution that Gamescope reports to the game - in other words, a forced &lt;span style=&quot; font-style:italic;&quot;&gt;render resolution.&lt;/span&gt; If either &lt;span style=&quot; font-style:italic;&quot;&gt;Width&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;Height&lt;/span&gt; are empty, Gamescope will report the same resolution as &lt;span style=&quot; font-style:italic;&quot;&gt;Window Resolution&lt;/span&gt; (except for Fullscreen, see next line); else, both &lt;span style=&quot; font-style:italic;&quot;&gt;Window&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;App&lt;/span&gt; resolution will default to a fixed size of 1280x720.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="accessibleName">
                 <string>Gamescope App Resolution (Height)</string>
@@ -659,6 +507,158 @@
                  <string>Stretch to Fill</string>
                 </property>
                </item>
+              </widget>
+             </item>
+             <item row="1" column="1" colspan="3">
+              <widget class="QComboBox" name="gamescopeSetUpscalingBox">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When using Gamescope, this sets the filter it will apply to the image output.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;AMD FSR&lt;/span&gt; will work for all GPUs, while &lt;span style=&quot; font-style:italic;&quot;&gt;NVIDIA Image Scaling &lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;requires an NVIDIA GPU running the NVIDIA Proprietary Driver (either &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Binary&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; or &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Open Kernel Module&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt; distributions).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Gamescope Upscaling Filter</string>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>GamescopeFilter</string>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Bilinear Filter</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Nearest Neighbor</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>AMD FSR 1</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>NVIDIA Image Scaling</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Pixel</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QLabel" name="label_9">
+               <property name="text">
+                <string>x</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Upscaling Filter:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>Scaler Type:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="gamescopeAppLabel">
+               <property name="text">
+                <string>App Resolution:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLineEdit" name="gamescopeAppWidth">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the effective resolution that Gamescope reports to the game - in other words, a forced &lt;span style=&quot; font-style:italic;&quot;&gt;render resolution.&lt;/span&gt; If either &lt;span style=&quot; font-style:italic;&quot;&gt;Width&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;Height&lt;/span&gt; are empty, Gamescope will report the same resolution as &lt;span style=&quot; font-style:italic;&quot;&gt;Window Resolution&lt;/span&gt; (except for Fullscreen, see next line); else, both &lt;span style=&quot; font-style:italic;&quot;&gt;Window&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;App&lt;/span&gt; resolution will default to a fixed size of 1280x720.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Gamescope App Resolution (Width)</string>
+               </property>
+               <property name="maxLength">
+                <number>8</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="placeholderText">
+                <string>Width (px)</string>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>GamescopeOutResW</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="gamescopeWindowLabel">
+               <property name="text">
+                <string>Window Resolution:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QLineEdit" name="gamescopeWindowWidth">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the size of the Gamescope output window. If &lt;span style=&quot; font-style:italic;&quot;&gt;Width&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;Height&lt;/span&gt; are unset, Gamescope will default to a fixed resolution of &lt;span style=&quot; font-style:italic;&quot;&gt;1280x720.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Gamescope Window Resolution (Width) [*Optional]</string>
+               </property>
+               <property name="maxLength">
+                <number>8</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="placeholderText">
+                <string>Width (px)</string>
+               </property>
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>GamescopeWinResW</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="3">
+              <widget class="QLineEdit" name="gamescopeWindowHeight">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the size of the Gamescope output window. If &lt;span style=&quot; font-style:italic;&quot;&gt;Width&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;Height&lt;/span&gt; are unset, Gamescope will default to a fixed resolution of &lt;span style=&quot; font-style:italic;&quot;&gt;1280x720.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="accessibleName">
+                <string>Gamescope Window Resolution (Height) [*Optional]</string>
+               </property>
+               <property name="maxLength">
+                <number>8</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="placeholderText">
+                <string>Height (px)</string>
+               </property>
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+               <property name="isFor" stdset="0">
+                <string>GamescopeWinResH</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="2">
+              <widget class="QLabel" name="gamescopeWindowLabelX">
+               <property name="text">
+                <string>x</string>
+               </property>
               </widget>
              </item>
             </layout>
@@ -933,8 +933,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>618</width>
-               <height>359</height>
+               <width>600</width>
+               <height>454</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1715,8 +1715,8 @@ color: yellow
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>636</width>
-           <height>216</height>
+           <width>624</width>
+           <height>68</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">

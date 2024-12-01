@@ -24,7 +24,6 @@
 #include <QApplication>
 #include <QProcess>
 #include <QDir>
-#include <QDebug>
 
 int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunning)
 {
