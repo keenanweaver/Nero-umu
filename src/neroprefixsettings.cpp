@@ -363,9 +363,11 @@ void NeroPrefixSettingsWindow::on_shortcutName_textEdited(const QString &arg1)
 void NeroPrefixSettingsWindow::on_shortcutPathBtn_clicked()
 {
     QString newApp = QFileDialog::getOpenFileName(this,
-                                                  "Select a Pre-run Script",
+                                                  "Select a Windows Executable",
                                                   qEnvironmentVariable("HOME"),
-                                                  "Unix Bash Script (.sh)");
+    "Compatible Windows Executables (*.bat *.exe *.msi);;Windows Batch Script Files (*.bat);;Windows Portable Executable (*.exe);;Windows Installer Package (*.msi)",
+                                                  nullptr,
+                                                  QFileDialog::DontResolveSymlinks);
     if(!newApp.isEmpty()) {
         ui->shortcutPath->setText(newApp);
         if(newApp != settings.value("Path").toString())
