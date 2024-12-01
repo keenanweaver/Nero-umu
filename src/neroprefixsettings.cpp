@@ -662,7 +662,11 @@ void NeroPrefixSettingsWindow::OptionSet()
             if(comboBox->currentIndex() > 0)
                 comboBox->setFont(boldFont);
             else comboBox->setFont(QFont());
-        else if(comboBox->currentIndex() != settings.value(comboBox->property("isFor").toString()).toInt())
+        else if(!currentShortcutHash.isEmpty()) {
+            if(comboBox->currentIndex()-1 != settings.value(comboBox->property("isFor").toString()).toInt())
+                comboBox->setFont(boldFont);
+            else comboBox->setFont(QFont());
+        } else if(comboBox->currentIndex() != settings.value(comboBox->property("isFor").toString()).toInt())
             comboBox->setFont(boldFont);
         else comboBox->setFont(QFont());
         // extra check for Windows box, since the index doesn't quite match the way it's listed in the UI.
