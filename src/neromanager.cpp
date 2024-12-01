@@ -320,6 +320,27 @@ void NeroManagerWindow::CreatePrefix(const QString newPrefix, const QString runn
             StopBlinkTimer();
         }
 
+        // Add DisableHidraw 1 to make DualSenses work
+        QDir prefixPath(NeroFS::GetPrefixesPath().path() + '/' + newPrefix);
+        if(prefixPath.exists("system.reg")) {
+            QFile regFile(prefixPath.path() + "/system.reg");
+            if(regFile.open(QFile::ReadWrite)) {
+                QString newReg;
+                QString line;
+
+                while(!regFile.atEnd()) {
+                    line = regFile.readLine();
+                    newReg.append(line);
+                    if(line.startsWith("[System\\\\CurrentControlSet\\\\Services\\\\winebus]"))
+                        newReg.append("\"DisableHidraw\"=dword:00000001\n");
+                }
+
+                regFile.resize(0);
+                regFile.write(newReg.toUtf8());
+                regFile.close();
+            }
+        }
+
         unsigned int pos = prefixMainButton.count();
 
         prefixMainButton << new QPushButton(newPrefix);
