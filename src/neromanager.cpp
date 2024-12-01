@@ -320,7 +320,7 @@ void NeroManagerWindow::CreatePrefix(const QString newPrefix, const QString runn
             StopBlinkTimer();
         }
 
-        // Add DisableHidraw 1 to make DualSenses work
+        // Add fixes to system.reg
         QDir prefixPath(NeroFS::GetPrefixesPath().path() + '/' + newPrefix);
         if(prefixPath.exists("system.reg")) {
             QFile regFile(prefixPath.path() + "/system.reg");
@@ -331,8 +331,16 @@ void NeroManagerWindow::CreatePrefix(const QString newPrefix, const QString runn
                 while(!regFile.atEnd()) {
                     line = regFile.readLine();
                     newReg.append(line);
+                    // DualSense fix
                     if(line.startsWith("[System\\\\CurrentControlSet\\\\Services\\\\winebus]"))
                         newReg.append("\"DisableHidraw\"=dword:00000001\n");
+                    // connect COM ports for lightguns (in case someone still wants to use MAMEHOOKER) ;)
+                    else if(line.startsWith("[Software\\\\Wine\\\\Ports]"))
+                        newReg.append(  "\"COM1\"=\"/dev/ttyACM0\"\n"
+                                        "\"COM2\"=\"/dev/ttyACM1\"\n"
+                                        "\"COM3\"=\"/dev/ttyACM2\"\n"
+                                        "\"COM4\"=\"/dev/ttyACM3\"\n"
+                                        "\"COM5\"=\"/dev/ttyS0\"\n");
                 }
 
                 regFile.resize(0);
