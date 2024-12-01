@@ -450,50 +450,50 @@ void NeroManagerWindow::on_addButton_clicked()
                 NeroFS::AddNewShortcut(hashName, shortcutAdd.shortcutName, shortcutAdd.appPath);
 
                 // because the Shortcuts getter always returns a resorted list, just add to the bottom for user convenience.
-                unsigned int pos = ui->prefixContentsGrid->rowCount();
+                unsigned int pos = prefixShortcutLabel.count();
 
                 if(shortcutAdd.appIcon.isEmpty()) {
                     prefixShortcutIco << new QIcon(QIcon::fromTheme("application-x-executable"));
                 } else {
-                    QFile::copy(shortcutAdd.appIcon, QString("%1/%2/.icoCache/%3").arg(NeroFS::GetPrefixesPath().path(),
+                    QFile::copy(shortcutAdd.appIcon, QString("%1/%2/.icoCache/%3").arg( NeroFS::GetPrefixesPath().path(),
                                                                                         NeroFS::GetCurrentPrefix(),
-                                                                                        QString("%1-%2.png").arg(shortcutAdd.shortcutName, hashName)));
-                    prefixShortcutIco << new QIcon(QPixmap(QString("%1/%2/.icoCache/%3").arg(NeroFS::GetPrefixesPath().path(),
-                                                                                        NeroFS::GetCurrentPrefix(),
-                                                                                        QString("%1-%2.png").arg(shortcutAdd.shortcutName, hashName))));
+                                                                                        shortcutAdd.shortcutName + '-' + hashName + ".png"));
+                    prefixShortcutIco << new QIcon(QPixmap(QString("%1/%2/.icoCache/%3").arg(   NeroFS::GetPrefixesPath().path(),
+                                                                                                NeroFS::GetCurrentPrefix(),
+                                                                                                shortcutAdd.shortcutName + '-' + hashName + ".png")));
                 }
 
                 prefixShortcutIcon << new QLabel();
                 // real talk: Silent Hill The Arcade can suck it. 16x16 in 2007, seriously???
-                if(prefixShortcutIco.at(pos)->actualSize(QSize(24,24)).height() < 24)
-                    prefixShortcutIcon.at(pos)->setPixmap(prefixShortcutIco.at(pos)->pixmap(prefixShortcutIco.at(pos)->actualSize(QSize(24,24))).scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation));
-                else prefixShortcutIcon.at(pos)->setPixmap(prefixShortcutIco.at(pos)->pixmap(24,24));
-                prefixShortcutIcon.at(pos)->setAlignment(Qt::AlignCenter);
+                if(prefixShortcutIco.last()->actualSize(QSize(24,24)).height() < 24)
+                    prefixShortcutIcon.last()->setPixmap(prefixShortcutIco.last()->pixmap(prefixShortcutIco.last()->actualSize(QSize(24,24))).scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+                else prefixShortcutIcon.last()->setPixmap(prefixShortcutIco.last()->pixmap(24,24));
+                prefixShortcutIcon.last()->setAlignment(Qt::AlignCenter);
 
                 prefixShortcutLabel << new QLabel(shortcutAdd.shortcutName);
-                prefixShortcutLabel.at(pos)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+                prefixShortcutLabel.last()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
                 // media-playback-start should change to media-playback-stop when playing
                 prefixShortcutPlayButton << new QPushButton(QIcon::fromTheme("media-playback-start"), "");
-                prefixShortcutPlayButton.at(pos)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-                prefixShortcutPlayButton.at(pos)->setIconSize(QSize(16, 16));
-                prefixShortcutPlayButton.at(pos)->setToolTip("Start "+shortcutAdd.shortcutName);
-                prefixShortcutPlayButton.at(pos)->setProperty("slot", pos);
+                prefixShortcutPlayButton.last()->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+                prefixShortcutPlayButton.last()->setIconSize(QSize(16, 16));
+                prefixShortcutPlayButton.last()->setToolTip("Start " + shortcutAdd.shortcutName);
+                prefixShortcutPlayButton.last()->setProperty("slot", pos);
 
                 prefixShortcutEditButton << new QPushButton(QIcon::fromTheme("document-properties"), "");
-                prefixShortcutEditButton.at(pos)->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-                prefixShortcutEditButton.at(pos)->setIconSize(QSize(16, 16));
-                prefixShortcutEditButton.at(pos)->setToolTip("Edit properties of " + shortcutAdd.shortcutName);
-                prefixShortcutEditButton.at(pos)->setFlat(true);
-                prefixShortcutEditButton.at(pos)->setProperty("slot", pos);
+                prefixShortcutEditButton.last()->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+                prefixShortcutEditButton.last()->setIconSize(QSize(16, 16));
+                prefixShortcutEditButton.last()->setToolTip("Edit properties of " + shortcutAdd.shortcutName);
+                prefixShortcutEditButton.last()->setFlat(true);
+                prefixShortcutEditButton.last()->setProperty("slot", pos);
 
-                ui->prefixContentsGrid->addWidget(prefixShortcutIcon.at(pos), pos, 0);
-                ui->prefixContentsGrid->addWidget(prefixShortcutLabel.at(pos), pos, 1);
-                ui->prefixContentsGrid->addWidget(prefixShortcutPlayButton.at(pos), pos, 2, Qt::AlignLeft);
-                ui->prefixContentsGrid->addWidget(prefixShortcutEditButton.at(pos), pos, 3, Qt::AlignLeft);
+                ui->prefixContentsGrid->addWidget(prefixShortcutIcon.last(),        pos, 0);
+                ui->prefixContentsGrid->addWidget(prefixShortcutLabel.last(),       pos, 1);
+                ui->prefixContentsGrid->addWidget(prefixShortcutPlayButton.last(),  pos, 2, Qt::AlignLeft);
+                ui->prefixContentsGrid->addWidget(prefixShortcutEditButton.last(),  pos, 3, Qt::AlignLeft);
 
-                connect(prefixShortcutPlayButton.at(pos), SIGNAL(clicked()), this, SLOT(prefixShortcutPlayButtons_clicked()));
-                connect(prefixShortcutEditButton.at(pos), SIGNAL(clicked()), this, SLOT(prefixShortcutEditButtons_clicked()));
+                connect(prefixShortcutPlayButton.last(), SIGNAL(clicked()), this, SLOT(prefixShortcutPlayButtons_clicked()));
+                connect(prefixShortcutEditButton.last(), SIGNAL(clicked()), this, SLOT(prefixShortcutEditButtons_clicked()));
 
                 if(pos == 0) { ui->prefixContentsGrid->setColumnStretch(1, 1); }
 
