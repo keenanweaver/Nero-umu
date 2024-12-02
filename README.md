@@ -24,6 +24,11 @@ None of these are intended to be sleights against the developers, as they eviden
 
 Presenting: *something.*
 
+### "Why would I use your launcher over those others?"
+Well, most apparent, Nero is meant to be the Proton-running stand-in for original *Bottles,* for people who are somewhat comfortable managing prefixes, but also made to be inviting for newbies who aren't quite knowledgeable about how Wine works. So if Bottles is your jam, there's a good chance you'll be able to jump right into Nero!
+
+However, if you're looking for *deep* integration with other storefronts (i.e. GOG, EA, Uplay, etc.), you may be better served by either *Heroic* or *Lutris*. That said, actually setting up a prefix just for EA's app (or Origin) or Uplay *is actually very easy;* just running their installers is usually good enough for most people!
+
 ### "So what's the deal with the name?"
 The backend tool that Nero relies on, *umu,* is *allegedly* based around a cooking utility from Polynesian culture - however, before realizing this, [I could only think of one thing.](https://mstdn.games/@ThatOneSeong/112135472169805512)
 
@@ -48,3 +53,12 @@ cmake ..
 make
 ```
 The executable `nero-umu` will be created.
+
+## TODOs (to do):
+ - Add built-in downloader without external curl use (#12)
+ - Add favorites system
+ - Add shortcuts list sorting system (currently only does ascending alphabetical)
+ - Import shortcuts for newly installed applications to prefix Shortcuts list?
+ - Add integration with SteamGridDB for downloading capsule art for potential favorites menu
+ - Integrate umu's extensive protonfixes support (perhaps using OWC's fixes database?)
+   - This might necessitate adding a distinction between "normal" prefixes, and one-title prefixes as protonfixes are geared towards the one-prefix-per-game thing.
