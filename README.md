@@ -37,7 +37,7 @@ The backend tool that Nero relies on, *umu,* is *allegedly* based around a cooki
 
 ## Building
 Requirements for building Nero from source:
- - `Qt5`/ `Qt6` - the Base and Network libraries are required. Tested mainly on Qt 5, but should also be compatible with Qt 6
+ - `Qt5`/ `Qt6` - the Base and Network libraries are required. Tested mainly on Qt 5, but should also be compatible up through Qt 6.8 LTS.
  - `QuaZip` - Needed for extracting zip archives (mainly the Discord RPC bridge utility).
 
 Additionally, Nero uses the following external components, either implicitly or optionally:
