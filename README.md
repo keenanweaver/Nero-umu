@@ -1,6 +1,8 @@
 # Nero Manager
 A fast and efficient Proton prefix runner and manager, using [umu](https://github.com/Open-Wine-Components/umu-launcher) as its backend for Steam-like compatibility with non-Steam applications.
 
+![prettypic](nero-manager-pretty-pic.png)
+
 ## Highlights:
  - **It's fast:** Built with C++ and Qt, Nero Manager can load large lists of shortcuts (including icons) in less than half a second, while the native toolkit uses half the memory of other managers based on web browser engines.
  - **It's simple by default:** Create a prefix, add a shortcut, and done. Popups and settings are kept to a minimum to make adding new items as quick as possible.
