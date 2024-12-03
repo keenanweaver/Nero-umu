@@ -54,6 +54,9 @@ NeroPrefixWizard::NeroPrefixWizard(QWidget *parent)
     connect(winetricksPresets.at(1), &QAction::triggered, this, &NeroPrefixWizard::SetDXtricks);
     connect(winetricksPresets.at(2), &QAction::triggered, this, &NeroPrefixWizard::SetVCRunTricks);
     connect(winetricksPresets.at(3), &QAction::triggered, this, &NeroPrefixWizard::SetXactTricks);
+
+    if(this->palette().window().color().value() > this->palette().text().color().value())
+        ui->symlinkDisclaimer->setStyleSheet("color: doubledarkgray");
 }
 
 NeroPrefixWizard::~NeroPrefixWizard()
