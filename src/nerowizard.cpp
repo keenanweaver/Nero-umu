@@ -95,7 +95,7 @@ void NeroPrefixWizard::on_prefixNameInput_textChanged(const QString &arg1)
 
 void NeroPrefixWizard::on_winetricksBox_clicked()
 {
-    if(tricks == nullptr) { tricks = new NeroTricksWindow(this); }
+    if(tricks == nullptr) { tricks = new NeroTricksWindow(this, ui->protonRunnerBox->currentText()); }
     bool confirmed = false;
     QStringList prevVerbs = verbsToInstall;
 
