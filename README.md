@@ -74,7 +74,7 @@ Originally, I (Seong) had no intentions of making another launcher, as I was per
 
 None of these are intended to be sleights against the developers, as they evidently do very good work *for the people these apps work for* - they just don't work for me and my use case, as someone who has limited disk space and often relies on one prefix for many applications and using Wine DLL overrides often. I'm also in the extra-unfortunate position of [being a YouTube video creator that talks about gaming on Linux](https://www.youtube.com/channel/UCKq6oQq_CnvzW4vhu-XpQ0g/), and the primary maintainer of [an open source Lightgun system](https://github.com/TeamOpenFIRE/OpenFIRE-Firmware) where a lot of the functionality and testing relies around *having an up-to-date Wine prefix* to launch and play Windows-based titles (because *fuck trying to use Windows*), so I would need to do *something.*
 
-Presenting: *something.*
+So here I am presenting to you: ***something.***
 
 ### "Why would I use your launcher over those others?"
 Well, most apparent, Nero is meant to be the Proton-running stand-in for original *Bottles,* for people who are somewhat comfortable managing prefixes, but also made to be inviting for newbies who aren't quite knowledgeable about how Wine works. So if Bottles is your jam, there's a good chance you'll be able to jump right into Nero!
@@ -82,7 +82,7 @@ Well, most apparent, Nero is meant to be the Proton-running stand-in for origina
 However, if you're looking for *deep* integration with other storefronts (i.e. GOG, EA, Uplay, etc.), you may be better served by either *Heroic* or *Lutris*. That said, actually setting up a prefix just for EA's app (or Origin) or Uplay *is actually very easy;* just running their installers is usually good enough for most people!
 
 ### "So what's the deal with the name?"
-The backend tool that Nero relies on, *umu,* is *allegedly* based around a cooking utility from Polynesian culture - however, before realizing this, [I could only think of one thing.](https://mstdn.games/@ThatOneSeong/112135472169805512)
+The backend tool that Nero relies on, *umu,* is *allegedly* based around a cooking utility from Polynesian culture - however, when I initially heard the name, [I could only think of one thing.](https://mstdn.games/@ThatOneSeong/112135472169805512)
 
 *Nero* (full name *Nero Claudius*) is the 5th Roman Emperor, known for his contributions to diplomacy, trade, and culture. Some recounts claim that his reign was tyrannical and is viewed in a negative light by these interpretations; meanwhile, certain others made Nero into a genderbent reflection of their historical selves during the *Moon Cell Holy Grail War,* and often uses *umu* as a catchphrase. Go figure.
 ###### No relation to Nero, a primary protagonist of *Devil May Cry 4/5*, featuring Dante from the *Devil May Cry* series.
