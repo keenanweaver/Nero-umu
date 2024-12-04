@@ -29,6 +29,8 @@ Nero's been confirmed to build and work on the following:
  - Arch Linux (btw), w/ Qt 5.15.16
  - Linux Mint 22, Qt 6.4
 
+For Arch users, Nero can be installed from the AUR @ `[nero-umu](https://aur.archlinux.org/packages/nero-umu)` with your favorite helper app. For others, see building steps below (don't worry, it's not that hard!).
+
 ## Building
 Requirements for building Nero from source:
  - `Qt5` or `Qt6` - the Base and Network libraries are required. Tested mainly on Qt 5, but should also be compatible up through Qt 6.8 LTS.
