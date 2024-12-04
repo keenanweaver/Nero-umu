@@ -1,3 +1,6 @@
+###### If you enjoy or if my work's helped you in any way,
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z5NNXWL)
+
 # Nero Manager
 A fast and efficient Proton prefix runner and manager, using [umu](https://github.com/Open-Wine-Components/umu-launcher) as its backend for Steam-like compatibility with non-Steam applications.
 
@@ -94,4 +97,3 @@ The backend tool that Nero relies on, *umu,* is *allegedly* based around a cooki
  - My supporters on Ko-fi, for their financial and emotional support over the past couple of years.
  - The friends that helped keep me sane along the way.
  - Emm, for being there when I needed them.
-###### And extra special non-thanks to the individuals that threatened frivolous lawsuits. Your slander gave me the inspiration to keep going. :)
