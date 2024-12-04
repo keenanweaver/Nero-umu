@@ -276,6 +276,7 @@ void NeroManagerWindow::CreatePrefix(const QString newPrefix, const QString runn
                         QMessageBox::NoButton,
                         this,
                         Qt::Dialog | Qt::FramelessWindowHint | Qt::MSWindowsFixedSizeDialogHint);
+    waitBox.setStandardButtons(QMessageBox::NoButton);
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 
     env.insert("WINEPREFIX", NeroFS::GetPrefixesPath().path() + '/' + newPrefix);
@@ -395,7 +396,13 @@ void NeroManagerWindow::CheckWinetricks()
 void NeroManagerWindow::AddTricks(QStringList verbs, const QString prefix)
 {
     QProcess umu;
-    QMessageBox waitBox(QMessageBox::NoIcon, "Generating Prefix", "Please wait...", QMessageBox::NoButton, this, Qt::Dialog | Qt::FramelessWindowHint | Qt::MSWindowsFixedSizeDialogHint);
+    QMessageBox waitBox(QMessageBox::NoIcon,
+                        "Generating Prefix",
+                        "Please wait...",
+                        QMessageBox::NoButton,
+                        this,
+                        Qt::Dialog | Qt::FramelessWindowHint | Qt::MSWindowsFixedSizeDialogHint);
+    waitBox.setStandardButtons(QMessageBox::NoButton);
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 
     QMap<QString, QVariant> settingsMap = NeroFS::GetCurrentPrefixSettings();
