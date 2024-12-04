@@ -25,9 +25,13 @@ Because Nero itself does NOT manage runners--only prefixes--you need at least *o
  - `~/.local/share/Nero-UMU/compatibilitytools.d` (Nero's own runners dir, in case Steam isn't installed)
 It's highly recommend to use utilities such as *[ProtonUp-Qt](https://github.com/DavidoTek/ProtonUp-Qt)* or *[ProtonPlus](https://github.com/Vysp3r/ProtonPlus)* to install new Steam runners.
 
+Nero's been confirmed to build and work on the following:
+ - Arch Linux (btw), w/ Qt 5.15.16
+ - Linux Mint 22, Qt 6.4
+
 ## Building
 Requirements for building Nero from source:
- - `Qt5`/ `Qt6` - the Base and Network libraries are required. Tested mainly on Qt 5, but should also be compatible up through Qt 6.8 LTS.
+ - `Qt5` or `Qt6` - the Base and Network libraries are required. Tested mainly on Qt 5, but should also be compatible up through Qt 6.8 LTS.
  - `QuaZip` - Needed for extracting zip archives (mainly the Discord RPC bridge utility). For Qt6, QuaZip additionally requires the Qt5Compat layer.
 
 #### Arch
