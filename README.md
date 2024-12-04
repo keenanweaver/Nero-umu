@@ -91,6 +91,7 @@ The backend tool that Nero relies on, *umu,* is *allegedly* based around a cooki
 
 ## TODOs (to do):
  - Add built-in downloader without external curl use (#12)
+ - Add `dxvk.conf` configuration dialog in shortcut settings.
  - Add favorites system
  - Add shortcuts list sorting system (currently only does ascending alphabetical)
  - Import shortcuts for newly installed applications to prefix Shortcuts list?
