@@ -407,13 +407,12 @@ void NeroManagerWindow::AddTricks(QStringList verbs, const QString &prefix)
 
     QMap<QString, QVariant> settingsMap = NeroFS::GetCurrentPrefixSettings();
 
-    env.insert("WINEPREFIX", QString("%1/%2").arg(NeroFS::GetPrefixesPath().path(), prefix));
+    env.insert("WINEPREFIX", NeroFS::GetPrefixesPath().path() + '/' + prefix);
     env.insert("GAMEID", "0");
-    env.insert("PROTONPATH", QString("%1/%2").arg(NeroFS::GetProtonsPath().path(), settingsMap["CurrentRunner"].toString()));
+    env.insert("PROTONPATH", NeroFS::GetProtonsPath().path() + '/' + settingsMap["CurrentRunner"].toString());
     env.insert("UMU_RUNTIME_UPDATE", "0");
     umu.setProcessEnvironment(env);
     umu.setProcessChannelMode(QProcess::MergedChannels);
-
 
     verbs.prepend("winetricks");
     umu.start(NeroFS::GetUmU(), verbs);
