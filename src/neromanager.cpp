@@ -33,7 +33,6 @@
 #include <QFileDialog>
 #include <QProcess>
 #include <QTimer>
-#include <QWindow>
 
 NeroManagerWindow::NeroManagerWindow(QWidget *parent)
     : QMainWindow(parent)
