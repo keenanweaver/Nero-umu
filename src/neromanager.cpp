@@ -267,7 +267,7 @@ void NeroManagerWindow::RenderPrefixList()
     }
 }
 
-void NeroManagerWindow::CreatePrefix(const QString newPrefix, const QString runner, QStringList tricksToInstall)
+void NeroManagerWindow::CreatePrefix(const QString &newPrefix, const QString &runner, QStringList tricksToInstall)
 {
     QProcess umu;
     QMessageBox waitBox(QMessageBox::NoIcon,
@@ -393,7 +393,7 @@ void NeroManagerWindow::CheckWinetricks()
     }
 }
 
-void NeroManagerWindow::AddTricks(QStringList verbs, const QString prefix)
+void NeroManagerWindow::AddTricks(QStringList verbs, const QString &prefix)
 {
     QProcess umu;
     QMessageBox waitBox(QMessageBox::NoIcon,
