@@ -281,7 +281,7 @@ void NeroManagerWindow::CreatePrefix(const QString &newPrefix, const QString &ru
     env.insert("WINEPREFIX", NeroFS::GetPrefixesPath().path() + '/' + newPrefix);
     env.insert("GAMEID", "0");
     env.insert("PROTONPATH", NeroFS::GetProtonsPath().path() + '/' + runner);
-    env.insert("UMU_RUNTIME_UPDATE", "0");
+    //env.insert("UMU_RUNTIME_UPDATE", "0");
     umu.setProcessEnvironment(env);
     umu.setProcessChannelMode(QProcess::MergedChannels);
 
@@ -409,7 +409,7 @@ void NeroManagerWindow::AddTricks(QStringList verbs, const QString &prefix)
     env.insert("WINEPREFIX", NeroFS::GetPrefixesPath().path() + '/' + prefix);
     env.insert("GAMEID", "0");
     env.insert("PROTONPATH", NeroFS::GetProtonsPath().path() + '/' + settingsMap["CurrentRunner"].toString());
-    env.insert("UMU_RUNTIME_UPDATE", "0");
+    //env.insert("UMU_RUNTIME_UPDATE", "0");
     umu.setProcessEnvironment(env);
     umu.setProcessChannelMode(QProcess::MergedChannels);
 
