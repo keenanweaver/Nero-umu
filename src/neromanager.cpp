@@ -878,6 +878,7 @@ void NeroManagerWindow::actionExit_activated()
 
 void NeroManagerWindow::on_actionAbout_Nero_triggered()
 {
+    // TODO: better about screen pls
     QString vInfo;
     #ifdef NERO_VERSION
     vInfo.append(QString("v%1").arg(NERO_VERSION));
