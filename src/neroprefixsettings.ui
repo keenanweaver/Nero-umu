@@ -1378,6 +1378,9 @@
             <property name="accessibleName">
              <string>Set File Synchronization Method</string>
             </property>
+            <property name="isFor" stdset="0">
+             <string>FileSyncMode</string>
+            </property>
             <item>
              <property name="text">
               <string>Use Fsync</string>
