@@ -881,12 +881,12 @@ void NeroManagerWindow::on_actionAbout_Nero_triggered()
     // TODO: better about screen pls
     QString vInfo;
     #ifdef NERO_VERSION
-    vInfo.append(QString("v%1").arg(NERO_VERSION));
+    vInfo.append(" v" + QString(NERO_VERSION));
     #endif // NERO_VERSION
     #ifdef NERO_GITHASH
-    vInfo.append(QString("-%1").arg(NERO_GITHASH));
+    vInfo.append("-" + QString(NERO_GITHASH));
     #endif // NERO_GITHASH
-    vInfo.append("\nRunning on Qt" +
+    vInfo.append("\nRunning on Qt " +
                  QString::number(QT_VERSION_MAJOR) + '.' +
                  QString::number(QT_VERSION_MINOR) + '.' +
                  QString::number(QT_VERSION_PATCH));

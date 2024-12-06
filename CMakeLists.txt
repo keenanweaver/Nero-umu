@@ -13,6 +13,17 @@ if(NOT NERO_QT_VERSIONS)
     set(NERO_QT_VERSIONS Qt6)
 endif()
 
+option(NERO_VERSION "Sets Nero version number" OFF)
+option(NERO_GITHASH "Sets Nero git hash" OFF)
+
+if(NERO_VERSION)
+    add_compile_definitions(NERO_VERSION="${NERO_VERSION}")
+endif()
+
+if(NERO_GITHASH)
+    add_compile_definitions(NERO_GITHASH="${NERO_GITHASH}")
+endif()
+
 find_package(QT NAMES ${NERO_QT_VERSIONS} COMPONENTS Widgets LinguistTools REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets LinguistTools REQUIRED)
 
