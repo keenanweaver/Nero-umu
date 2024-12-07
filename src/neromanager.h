@@ -165,6 +165,7 @@ private:
     QList<NeroThreadController*> umuController;
     QList<int> currentlyRunning;
     int threadsCount = 0;
+    QStringList oneOffsRunning;
 
     // Prefixes list assets
     QList<QPushButton*> prefixMainButton;

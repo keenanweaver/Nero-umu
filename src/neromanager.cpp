@@ -724,6 +724,8 @@ void NeroManagerWindow::on_oneTimeRunBtn_clicked()
         }
 
         umuController.last()->setProperty("slot", threadsCount-1);
+        umuController.last()->setProperty("running", oneTimeApp.mid(oneTimeApp.lastIndexOf('/')+1));
+        oneOffsRunning.append(oneTimeApp.mid(oneTimeApp.lastIndexOf('/')+1));
         connect(umuController.last(),                       &NeroThreadController::passUmuResults,  this, &NeroManagerWindow::handleUmuResults);
         connect(&umuController.last()->umuWorker->Runner,   &NeroRunner::StatusUpdate,              this, &NeroManagerWindow::handleUmuSignal);
         emit umuController.last()->operate();
@@ -955,7 +957,7 @@ void NeroManagerWindow::handleUmuResults(const int &buttonSlot, const int &resul
 
         if(managerCfg->value("ShortcutHidesManager").toBool())
             if(this->isHidden()) this->show();
-    }
+    } else oneOffsRunning.removeOne(sender()->property("running").toString());
 
     delete umuController[threadSlot];
     umuController[threadSlot] = nullptr;
@@ -969,9 +971,11 @@ void NeroManagerWindow::handleUmuResults(const int &buttonSlot, const int &resul
         ui->backButton->setToolTip("Go back to prefixes list.");
         sysTray->setIcon(QIcon(":/ico/systrayPhi"));
         sysTray->setToolTip("Nero Manager");
-    } else {
-        sysTray->setToolTip("Nero Manager (" + NeroFS::GetCurrentPrefix() + " is running " + QString::number(currentlyRunning.count()) + " apps)");
-    }
+    } else if(currentlyRunning.count() == 1) {
+        if(currentlyRunning.first() != -1)
+            sysTray->setToolTip("Nero Manager (" + NeroFS::GetCurrentPrefix() + " is running " + prefixShortcutLabel.at(currentlyRunning.first())->text() + ')');
+        else sysTray->setToolTip("Nero Manager (" + NeroFS::GetCurrentPrefix() + " is running " + oneOffsRunning.first() + ')');
+    } else sysTray->setToolTip("Nero Manager (" + NeroFS::GetCurrentPrefix() + " is running " + QString::number(currentlyRunning.count()) + " apps)");
 }
 
 void NeroManagerWindow::handleUmuSignal(const int &signalType)
