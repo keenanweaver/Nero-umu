@@ -38,8 +38,6 @@ NeroManagerWindow::NeroManagerWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::NeroManagerWindow)
 {
-    QCoreApplication::setApplicationName("Nero-UMU");
-
     /* OLD ICON CODE
     // rand + undefined int, bit shifted to only give the three least significant bytes (0-7)
     // THIS can be set before window setup...
@@ -54,8 +52,6 @@ NeroManagerWindow::NeroManagerWindow(QWidget *parent)
     case 7: this->setWindowIcon(QIcon(":/ico/narikiri/kongman")); break;
     }
     */
-
-    this->setWindowIcon(QIcon(":/ico/systrayPhi"));
 
     #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     // required for good hidpi icon quality because Qt < 6 didn't set this automatically.
@@ -634,6 +630,9 @@ void NeroManagerWindow::prefixShortcutPlayButtons_clicked()
 
         umuController.at(prefixShortcutPlayButton.at(slot)->property("thread").toInt())->Stop();
     } else {
+        ui->prefixSettingsBtn->setEnabled(false);
+        ui->prefixTricksBtn->setEnabled(false);
+
         prefixShortcutPlayButton.at(slot)->setIcon(QIcon::fromTheme("media-playback-stop"));
         prefixShortcutPlayButton.at(slot)->setToolTip("Stop " + prefixShortcutLabel.at(slot)->text());
         ui->backButton->setIcon(QIcon::fromTheme("media-playback-stop"));
@@ -677,6 +676,9 @@ void NeroManagerWindow::prefixShortcutEditButtons_clicked()
     prefixSettings = new NeroPrefixSettingsWindow(this, settings.value(prefixShortcutLabel.at(slot)->text()));
     prefixSettings->setProperty("slot", slot);
     connect(prefixSettings, &NeroPrefixSettingsWindow::finished, this, &NeroManagerWindow::prefixSettings_result);
+    if(currentlyRunning.count())
+        if(prefixSettings->deleteShortcut != nullptr)
+            prefixSettings->deleteShortcut->setEnabled(false);
     prefixSettings->show();
 }
 
@@ -690,6 +692,9 @@ void NeroManagerWindow::on_oneTimeRunBtn_clicked()
                                                       QFileDialog::DontResolveSymlinks));
 
     if(!oneTimeApp.isEmpty()) {
+        ui->prefixSettingsBtn->setEnabled(false);
+        ui->prefixTricksBtn->setEnabled(false);
+
         ui->backButton->setIcon(QIcon::fromTheme("media-playback-stop"));
         ui->backButton->setToolTip("Shut down all running programs in this prefix.");
         sysTray->setIcon(QIcon(":/ico/systrayPhiPlaying"));
@@ -848,6 +853,7 @@ void NeroManagerWindow::prefixSettings_result()
         }
     }
     delete prefixSettings;
+    prefixSettings = nullptr;
 }
 
 void NeroManagerWindow::on_managerSettings_clicked()
@@ -878,16 +884,16 @@ void NeroManagerWindow::actionExit_activated()
     close();
 }
 
-void NeroManagerWindow::on_actionAbout_Nero_triggered()
+void NeroManagerWindow::on_aboutBtn_clicked()
 {
     // TODO: better about screen pls
     QString vInfo;
-    #ifdef NERO_VERSION
+#ifdef NERO_VERSION
     vInfo.append(" v" + QString(NERO_VERSION));
-    #endif // NERO_VERSION
-    #ifdef NERO_GITHASH
+#endif // NERO_VERSION
+#ifdef NERO_GITHASH
     vInfo.append("-" + QString(NERO_GITHASH));
-    #endif // NERO_GITHASH
+#endif // NERO_GITHASH
     vInfo.append("\nRunning on Qt " +
                  QString::number(QT_VERSION_MAJOR) + '.' +
                  QString::number(QT_VERSION_MINOR) + '.' +
@@ -895,9 +901,8 @@ void NeroManagerWindow::on_actionAbout_Nero_triggered()
     QMessageBox::about(this,
                        "About Nero Manager",
                        "Nero Manager" + vInfo +
-                       "\n\nA simple Proton manager.");
+                           "\n\nA simple Proton manager.");
 }
-
 
 void NeroManagerWindow::blinkTimer_timeout()
 {
@@ -971,6 +976,8 @@ void NeroManagerWindow::handleUmuResults(const int &buttonSlot, const int &resul
         ui->backButton->setToolTip("Go back to prefixes list.");
         sysTray->setIcon(QIcon(":/ico/systrayPhi"));
         sysTray->setToolTip("Nero Manager");
+        ui->prefixSettingsBtn->setEnabled(true);
+        ui->prefixTricksBtn->setEnabled(true);
     } else if(currentlyRunning.count() == 1) {
         if(currentlyRunning.first() != -1)
             sysTray->setToolTip("Nero Manager (" + NeroFS::GetCurrentPrefix() + " is running " + prefixShortcutLabel.at(currentlyRunning.first())->text() + ')');
