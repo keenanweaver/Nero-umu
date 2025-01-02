@@ -225,6 +225,7 @@ void NeroPrefixSettingsWindow::LoadSettings()
     }
 
     // advanced tab
+    ui->debugBox->setCurrentIndex(settings.value("DebugOutput").toInt());
     ui->fileSyncBox->setCurrentIndex(settings.value("FileSyncMode").toInt());
     if(!settings.value("LimitGLextensions").isValid())   ui->toggleLimitGL->setChecked(settings.value("LimitGLextensions").toBool());
     if(!settings.value("NoD8VK").isValid())              ui->toggleNoD8VK->setChecked(settings.value("NoD8VK").toBool());
@@ -242,8 +243,7 @@ void NeroPrefixSettingsWindow::LoadSettings()
         ui->togglePrefixRuntimeUpdates->setChecked(settings.value("RuntimeUpdateOnLaunch").toBool());
 
         // advanced tab
-        ui->prefixEnvVars->setText(settings.value("CustomEnvVars").toString());
-        ui->debugBox->setCurrentIndex(settings.value("DebugOutput").toInt());
+        //ui->prefixEnvVars->setText(settings.value("CustomEnvVars").toString());
     } else {
         // for shortcut settings, any defined settings set the button to either 0 (Unchecked) or 2 (Checked)
         // else, undefined settings remain at 1 (Partially Checked)
@@ -291,7 +291,7 @@ void NeroPrefixSettingsWindow::LoadSettings()
         for(const auto child : this->findChildren<QComboBox*>())
             if(child != ui->prefixRunner &&
                child != ui->winVerBox)
-                if(child->currentIndex() > 0)
+                if(!settings.value(child->property("isFor").toString()).toString().isEmpty())
                     child->setCurrentIndex(child->currentIndex()+1);
 
         if(settings.value("WindowsVersion").toString().isEmpty())
