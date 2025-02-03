@@ -41,6 +41,8 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
                 runner.waitForReadyRead(-1);
                 printf("%s", runner.readAll().constData());
             }
+
+            printf("%s", runner.readAll().constData());
         }
 
         runner.setProcessChannelMode(QProcess::ForwardedOutputChannel);
@@ -394,6 +396,8 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
                 runner.waitForReadyRead(-1);
                 printf("%s", runner.readAll().constData());
             }
+
+            printf("%s", runner.readAll().constData());
         }
 
         return runner.exitCode();
