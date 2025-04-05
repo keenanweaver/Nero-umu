@@ -553,9 +553,9 @@ void NeroManagerWindow::on_backButton_clicked()
                 runnerWindow->SetupWindow(false, "all running apps in current prefix");
                 runnerWindow->show();
             }
-            for(int i = threadsCount; i > 0; i--) {
+            for(int i = threadsCount; i > 0; --i) {
                 // for the current prefix, we only need to run the prefix kill command once to end them all!
-                if(umuController[i-1] != nullptr) {
+                if(umuController.at(i-1) != nullptr) {
                     umuController.at(i-1)->Stop();
                     break;
                 }
@@ -568,19 +568,19 @@ void NeroManagerWindow::on_backButton_clicked()
 
 void NeroManagerWindow::prefixMainButtons_clicked()
 {
-    int slot = sender()->property("slot").toInt();
+    auto *obj = qobject_cast<QPushButton*>(sender());
 
-    if(NeroFS::GetCurrentPrefix() != NeroFS::GetPrefixes().at(slot)) {
+    if(NeroFS::GetCurrentPrefix() != obj->text()) {
         if(prefixShortcutLabel.count())
             CleanupShortcuts();
 
-        NeroFS::SetCurrentPrefix(NeroFS::GetPrefixes().at(slot));
+        NeroFS::SetCurrentPrefix(obj->text());
 
         RenderPrefixList();
 
         if(!NeroFS::GetAvailableProtons().contains(NeroFS::GetCurrentRunner())) {
             NeroFS::SetCurrentPrefixCfg("PrefixSettings", "CurrentRunner", NeroFS::GetAvailableProtons().constFirst());
-            NeroFS::SetCurrentPrefix(NeroFS::GetPrefixes().at(slot));
+            NeroFS::SetCurrentPrefix(obj->text());
             QMessageBox::warning(this,
                                  "Current Runner not found!",
                                  "The runner that was assigned to this prefix could not be found in the list of available Proton runners.\n"
@@ -600,20 +600,19 @@ void NeroManagerWindow::prefixDeleteButtons_clicked()
 
     if(QMessageBox::question(this,
                              "Removing Prefix",
-                             QString("Are you sure you wish to delete %1?\n\n"
-                                     "All data inside the prefix will be deleted.\n"
-                                     "This operation CAN NOT BE UNDONE.")
-                             .arg(NeroFS::GetPrefixes().at(slot))
+                             "Are you sure you wish to delete " + prefixMainButton.at(slot)->text() + "?\n\n"
+                             "All data inside the prefix will be deleted.\n"
+                             "This operation CAN NOT BE UNDONE."
                             ) == QMessageBox::Yes)
     {
-        if(NeroFS::DeletePrefix(NeroFS::GetPrefixes().at(slot))) {
-            if(NeroFS::GetCurrentPrefix() == NeroFS::GetPrefixes().at(slot))
+        if(NeroFS::DeletePrefix(prefixMainButton.at(slot)->text())) {
+            if(NeroFS::GetCurrentPrefix() == prefixMainButton.at(slot)->text())
                 CleanupShortcuts();
 
             delete prefixMainButton.at(slot);
             delete prefixDeleteButton.at(slot);
-            prefixMainButton[slot] = nullptr;
-            prefixDeleteButton[slot] = nullptr;
+            prefixMainButton.remove(slot);
+            prefixDeleteButton.remove(slot);
         }
     }
 }
@@ -993,6 +992,11 @@ void NeroManagerWindow::handleUmuResults(const int &buttonSlot, const int &resul
             sysTray->setToolTip("Nero Manager (" + NeroFS::GetCurrentPrefix() + " is running " + prefixShortcutLabel.at(currentlyRunning.first())->text() + ')');
         else sysTray->setToolTip("Nero Manager (" + NeroFS::GetCurrentPrefix() + " is running " + oneOffsRunning.first() + ')');
     } else sysTray->setToolTip("Nero Manager (" + NeroFS::GetCurrentPrefix() + " is running " + QString::number(currentlyRunning.count()) + " apps)");
+
+    if(runnerWindow != nullptr) {
+        delete runnerWindow;
+        runnerWindow = nullptr;
+    }
 }
 
 void NeroManagerWindow::handleUmuSignal(const int &signalType)
