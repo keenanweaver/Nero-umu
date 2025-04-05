@@ -534,9 +534,11 @@ void NeroManagerWindow::on_addButton_clicked()
         wizard.exec();
 
         if(wizard.result() == QDialog::Accepted) {
+            sysTray->setIcon(QIcon(":/ico/systrayPhiBusy"));
             CreatePrefix(wizard.prefixName, NeroFS::GetAvailableProtons().at(wizard.protonRunner), wizard.verbsToInstall);
 
-            if(wizard.userSymlinks) { NeroFS::CreateUserLinks(wizard.prefixName); }
+            if(wizard.userSymlinks) NeroFS::CreateUserLinks(wizard.prefixName);
+            sysTray->setIcon(QIcon(":/ico/systrayPhi"));
         } else {
             if(NeroFS::GetPrefixes().isEmpty()) { StartBlinkTimer(); }
         }
@@ -803,7 +805,10 @@ void NeroManagerWindow::on_prefixTricksBtn_clicked()
                 == QMessageBox::Yes) {
 
                 confirmed = true;
+
+                sysTray->setIcon(QIcon(":/ico/systrayPhiBusy"));
                 AddTricks(verbsToInstall, NeroFS::GetCurrentPrefix());
+                sysTray->setIcon(QIcon(":/ico/systrayPhi"));
             }
         } else {
             // user doesn't want to do verbs installation after all, so stop asking and revert to prev state.
