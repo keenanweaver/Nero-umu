@@ -450,7 +450,7 @@ void NeroManagerWindow::on_addButton_clicked()
     if(prefixIsSelected) {
         QString newApp(QFileDialog::getOpenFileName(this,
                                                     "Select a Windows Executable",
-                                                    qEnvironmentVariable("HOME"),
+                                                    NeroFS::GetPrefixesPath().absoluteFilePath(NeroFS::GetCurrentPrefix()+"/drive_c"),
         "Compatible Windows Files (*.bat *.exe *.msi);;Windows Batch Script Files (*.bat);;Windows Executable (*.exe);;Windows Installer Package (*.msi)",
                                                     nullptr,
                                                     QFileDialog::DontResolveSymlinks));
@@ -694,11 +694,11 @@ void NeroManagerWindow::prefixShortcutEditButtons_clicked()
 void NeroManagerWindow::on_oneTimeRunBtn_clicked()
 {
     QString oneTimeApp(QFileDialog::getOpenFileName(this,
-                                                      "Select an Executable to Start in Prefix",
-                                                      qEnvironmentVariable("HOME"),
+                                                    "Select an Executable to Start in Prefix",
+                                                    NeroFS::GetPrefixesPath().absoluteFilePath(NeroFS::GetCurrentPrefix()+"/drive_c"),
     "Compatible Windows Executables (*.bat *.exe *.msi);;Windows Batch Script Files (*.bat);;Windows Portable Executable (*.exe);;Windows Installer Package (*.msi)",
-                                                      nullptr,
-                                                      QFileDialog::DontResolveSymlinks));
+                                                    nullptr,
+                                                    QFileDialog::DontResolveSymlinks));
 
     if(!oneTimeApp.isEmpty()) {
         ui->prefixSettingsBtn->setEnabled(false);
