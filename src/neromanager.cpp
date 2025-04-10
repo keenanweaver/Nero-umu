@@ -717,12 +717,13 @@ void NeroManagerWindow::on_oneTimeRunBtn_clicked()
 {
     QString oneTimeApp(QFileDialog::getOpenFileName(this,
                                                     "Select an Executable to Start in Prefix",
-                                                    NeroFS::GetPrefixesPath().absoluteFilePath(NeroFS::GetCurrentPrefix()+"/drive_c"),
+                                                    oneTimeLastPath.isEmpty() ? NeroFS::GetPrefixesPath().absoluteFilePath(NeroFS::GetCurrentPrefix()+"/drive_c") : oneTimeLastPath,
     "Compatible Windows Executables (*.bat *.exe *.msi);;Windows Batch Script Files (*.bat);;Windows Portable Executable (*.exe);;Windows Installer Package (*.msi)",
                                                     nullptr,
                                                     QFileDialog::DontResolveSymlinks));
 
     if(!oneTimeApp.isEmpty()) {
+        oneTimeLastPath = oneTimeApp;
         ui->prefixSettingsBtn->setEnabled(false);
         ui->prefixTricksBtn->setEnabled(false);
 
