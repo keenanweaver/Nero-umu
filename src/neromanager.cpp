@@ -845,7 +845,8 @@ void NeroManagerWindow::prefixSettings_result()
         if(prefixSettings->result() == QDialog::Accepted) {
             // update app icon if changed
             if(!prefixSettings->newAppIcon.isEmpty()) {
-                prefixShortcutIco.at(slot)->addFile(prefixSettings->newAppIcon);
+                delete prefixShortcutIco.at(slot);
+                prefixShortcutIco[slot] = new QIcon(prefixSettings->newAppIcon);
                 if(prefixShortcutIco.at(slot)->actualSize(QSize(24,24)).height() < 24)
                     prefixShortcutIcon.at(slot)->setPixmap(prefixShortcutIco.at(slot)->pixmap(prefixShortcutIco.at(slot)->actualSize(QSize(24,24))).scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation));
                 else prefixShortcutIcon.at(slot)->setPixmap(prefixShortcutIco.at(slot)->pixmap(24,24));
