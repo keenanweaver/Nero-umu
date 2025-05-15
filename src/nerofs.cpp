@@ -326,14 +326,9 @@ void NeroFS::AddNewShortcut(const QString &newShortcutHash, const QString &newSh
     SetCurrentPrefixCfg("Shortcuts", newShortcutHash, newShortcutName);
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "Name", newShortcutName);
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "Path", newAppPath);
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "Args", {""});
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "LimitFPS", 0);
     //SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "GamescopeFilterStrength", 0);
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "DLLoverrides", {""});
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "IgnoreGlobalDLLs", false);
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "CustomEnvVars", {""});
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "PreRunScript", {""});
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "PostRunScript", {""});
 }
 
 QMap<QString, QVariant> NeroFS::GetShortcutSettings(const QString &shortcutHash)
