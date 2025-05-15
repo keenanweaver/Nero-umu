@@ -250,8 +250,11 @@ bool NeroFS::SetCurrentPrefixCfg(const QString &group, const QString &key, const
         prefixCfg->beginGroup(group);
 
         // Only delete blank values if this is a shortcut
-        if(group != "PrefixSettings" && value.toString().isEmpty())
-             prefixCfg->remove(key);
+        if(group != "PrefixSettings") {
+            if((value.typeId() != QMetaType::QStringList && value.toString().isEmpty()) || (value.typeId() == QMetaType::QStringList && value.toStringList().isEmpty()))
+                prefixCfg->remove(key);
+            else prefixCfg->setValue(key, value);
+        }
         else prefixCfg->setValue(key, value);
 
         // sync current runner to config
