@@ -217,9 +217,9 @@ void NeroPrefixSettingsWindow::LoadSettings()
         dllSetting.clear();
         dllDelete.clear();
         const QStringList dllsToAdd = settings.value("DLLoverrides").toStringList();
-        for(const QString &dll : dllsToAdd) {
-            const QString dllName = dllsToAdd.at(dllsToAdd.indexOf(dll)).left(dllsToAdd.at(dllsToAdd.indexOf(dll)).indexOf('='));
-            const QString dllType = dllsToAdd.at(dllsToAdd.indexOf(dll)).mid(dllsToAdd.at(dllsToAdd.indexOf(dll)).indexOf('=')+1);
+        for(const QString &dll : std::as_const(dllsToAdd)) {
+            const QString dllName = dll.left(dll.indexOf('='));
+            const QString dllType = dll.mid(dll.indexOf('=')+1);
             if(dllType == "n,b")           AddDLL(dllName, NeroConstant::DLLNativeThenBuiltin);
             else if(dllType == "builtin")  AddDLL(dllName, NeroConstant::DLLBuiltinOnly);
             else if(dllType == "b,n")      AddDLL(dllName, NeroConstant::DLLBuiltinThenNative);
@@ -236,6 +236,7 @@ void NeroPrefixSettingsWindow::LoadSettings()
     SetCheckboxState("ForceWineD3D",       ui->toggleWineD3D);
     SetCheckboxState("UseWayland",         ui->toggleWayland);
     SetCheckboxState("UseHDR",             ui->toggleWaylandHDR);
+    SetCheckboxState("AllowHidraw",        ui->toggleHidraw);
 
     if(currentShortcutHash.isEmpty()) {
         // for prefix general settings, checkboxes are normal two-state
@@ -296,7 +297,7 @@ void NeroPrefixSettingsWindow::LoadSettings()
         ui->toggleShortcutPrefixOverride->setChecked(settings.value("IgnoreGlobalDLLs").toBool());
 
         // if value is filled, scoot comboboxes down one index
-        for(const auto child : this->findChildren<QComboBox*>())
+        for(const auto &child : this->findChildren<QComboBox*>())
             if(child != ui->prefixRunner &&
                child != ui->winVerBox)
                 if(!settings.value(child->property("isFor").toString()).toString().isEmpty())
@@ -825,15 +826,15 @@ void NeroPrefixSettingsWindow::on_buttonBox_clicked(QAbstractButton *button)
             // prefix-wide settings
 
             // for the generic input fields, changed values will have boldFont
-            for(const auto child : this->findChildren<QCheckBox*>())
+            for(const auto &child : this->findChildren<QCheckBox*>())
                 if(child->font() == boldFont)
                     NeroFS::SetCurrentPrefixCfg("PrefixSettings", child->property("isFor").toString(), child->isChecked());
 
-            for(const auto child : this->findChildren<QLineEdit*>())
+            for(const auto &child : this->findChildren<QLineEdit*>())
                 if(child->font() == boldFont)
                     NeroFS::SetCurrentPrefixCfg("PrefixSettings", child->property("isFor").toString(), child->text().trimmed());
 
-            for(const auto child : this->findChildren<QComboBox*>())
+            for(const auto &child : this->findChildren<QComboBox*>())
                 if(child->font() == boldFont)
                     NeroFS::SetCurrentPrefixCfg("PrefixSettings", child->property("isFor").toString(), child->currentIndex());
 
@@ -853,22 +854,22 @@ void NeroPrefixSettingsWindow::on_buttonBox_clicked(QAbstractButton *button)
                                                                           QString("%1-%2.png").arg(settings.value("Name").toString(), currentShortcutHash)));
 
             // for the generic input fields, changed values will have boldFont
-            for(const auto child : this->findChildren<QCheckBox*>())
+            for(const auto &child : this->findChildren<QCheckBox*>())
                 if(child->font() == boldFont) {
                     if(child->checkState() == Qt::PartiallyChecked)
                         NeroFS::SetCurrentPrefixCfg("Shortcuts--"+currentShortcutHash, child->property("isFor").toString(), "");
                     else NeroFS::SetCurrentPrefixCfg("Shortcuts--"+currentShortcutHash, child->property("isFor").toString(), child->isChecked());
                 }
 
-            for(const auto child : this->findChildren<QLineEdit*>())
+            for(const auto &child : this->findChildren<QLineEdit*>())
                 if(child->font() == boldFont)
                     NeroFS::SetCurrentPrefixCfg("Shortcuts--"+currentShortcutHash, child->property("isFor").toString(), child->text().trimmed());
 
-            for(const auto child : this->findChildren<QSpinBox*>())
+            for(const auto &child : this->findChildren<QSpinBox*>())
                 if(child->font() == boldFont)
                     NeroFS::SetCurrentPrefixCfg("Shortcuts--"+currentShortcutHash, child->property("isFor").toString(), child->value());
 
-            for(const auto child : this->findChildren<QComboBox*>())
+            for(const auto &child : this->findChildren<QComboBox*>())
                 if(child->font() == boldFont) {
                     if(child->currentIndex() < 1)
                         NeroFS::SetCurrentPrefixCfg("Shortcuts--"+currentShortcutHash, child->property("isFor").toString(), "");

@@ -51,8 +51,8 @@ bool NeroFS::InitPaths() {
 
         // apparently "cancel" is just empty directory.
         QString dir = QFileDialog::getExistingDirectory(NULL,
-                                             "Select Nero Home Directory",
-                                              qEnvironmentVariable("HOME"));
+                                                        "Select Nero Home Directory",
+                                                        qEnvironmentVariable("HOME"));
         if(!dir.isEmpty()) managerCfg.setValue("Home", dir);
         else {
             QMessageBox::critical(NULL,
@@ -83,7 +83,7 @@ QStringList NeroFS::GetPrefixes()
 {
     if(prefixes.isEmpty()) {
         prefixes = prefixesPath.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
-        for(int i = prefixes.count()-1; i >= 0; i--) {
+        for(int i = prefixes.count()-1; i >= 0; --i) {
             // should we do ACTUAL ini verification? Or just checking to make sure it exists?
             if(!prefixesPath.exists(prefixes.at(i) + "/nero-settings.ini")) {
                 prefixes.removeAt(i);
@@ -177,7 +177,7 @@ QString NeroFS::GetIcoextract()
     // idk what the "good" path should be for Flatpak, so...
     if(QDir("/usr/bin").exists("icoextract")) {
         return "/usr/bin/icoextract";
-    } else { return ""; }
+    } else return "";
 }
 
 
@@ -187,7 +187,7 @@ QString NeroFS::GetIcoutils()
     // idk what the "good" path should be for Flatpak, so...
     if(QDir("/usr/bin").exists("icotool")) {
         return "/usr/bin/icotool";
-    } else { return ""; }
+    } else return "";
 }
 
 
@@ -197,7 +197,7 @@ QString NeroFS::GetUmU()
     // idk what the "good" path should be for Flatpak, so...
     if(QDir("/usr/bin").exists("umu-run")) {
         return "/usr/bin/umu-run";
-    } else { return ""; }
+    } else return "";
 }
 
 QString NeroFS::GetWinetricks(const QString &runner)
@@ -233,24 +233,30 @@ void NeroFS::SetCurrentPrefix(const QString &prefix)
 // TODO: yeah, this is kinda ugly ngl...
 QSettings* NeroFS::GetCurrentPrefixCfg()
 {
-    if(prefixCfg != nullptr) { delete prefixCfg; }
-    if(!currentPrefix.isEmpty()) {
-        prefixCfg = new QSettings(prefixesPath.path() + '/' + currentPrefix + "/nero-settings.ini", QSettings::IniFormat);
-        return prefixCfg;
-    } else {
-        // if we're running into this problem, then something's gone horribly wrong.
-        return nullptr;
+    if(prefixCfg != nullptr) {
+        delete prefixCfg;
+        prefixCfg = nullptr;
     }
+
+    if(!currentPrefix.isEmpty())
+        prefixCfg = new QSettings(prefixesPath.path() + '/' + currentPrefix + "/nero-settings.ini", QSettings::IniFormat);
+
+    return prefixCfg;
 }
 
 bool NeroFS::SetCurrentPrefixCfg(const QString &group, const QString &key, const QVariant &value)
 {
-    GetCurrentPrefixCfg();
-    if(prefixCfg != nullptr) {
+    if(GetCurrentPrefixCfg() != nullptr) {
         prefixCfg->beginGroup(group);
-        prefixCfg->setValue(key, value);
+
+        // Only delete blank values if this is a shortcut
+        if(group != "PrefixSettings" && value.toString().isEmpty())
+             prefixCfg->remove(key);
+        else prefixCfg->setValue(key, value);
+
         // sync current runner to config
         if(key == "CurrentRunner") currentRunner = value.toString();
+
         return true;
     } else {
         // no prefix is loaded, so no config to set.
@@ -266,9 +272,8 @@ QMap<QString, QVariant> NeroFS::GetCurrentPrefixSettings()
     const QStringList settings = prefixCfg->childKeys();
     QMap<QString, QVariant> settingsMap;
 
-    for(const auto &key : settings) {
+    for(const auto &key : std::as_const(settings))
         settingsMap[key] = prefixCfg->value(key);
-    }
 
     return settingsMap;
 }
@@ -304,6 +309,7 @@ void NeroFS::AddNewPrefix(const QString &newPrefix, const QString &runner)
     prefixCfg->setValue("ForceWineD3D", false);
     prefixCfg->setValue("UseWayland", false);
     prefixCfg->setValue("UseHDR", false);
+    prefixCfg->setValue("AllowHidraw", false);
     prefixCfg->setValue("CustomEnvVars", {""});
     prefixCfg->setValue("RuntimeUpdateOnLaunch", true);
     prefixCfg->setValue("DiscordRPCinstalled", false);
@@ -317,31 +323,10 @@ void NeroFS::AddNewShortcut(const QString &newShortcutHash, const QString &newSh
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "Name", newShortcutName);
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "Path", newAppPath);
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "Args", {""});
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "WindowsVersion", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "Gamemode", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "VKcapture", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "Mangohud", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "EnableNVAPI", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "ScalingMode", "");
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "LimitFPS", 0);
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "FSRcustomResW", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "FSRcustomResH", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "GamescopeOutResW", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "GamescopeOutResH", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "GamescopeResW", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "GamescopeResH", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "GamescopeScaler", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "GamescopeFilter", "");
     //SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "GamescopeFilterStrength", 0);
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "DLLoverrides", {""});
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "IgnoreGlobalDLLs", false);
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "LimitGLextensions", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "DebugOutput", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "FileSyncMode", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "NoD8VK", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "ForceWineD3D", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "UseWayland", "");
-    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "UseHDR", "");
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "CustomEnvVars", {""});
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "PreRunScript", {""});
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "PostRunScript", {""});
@@ -349,54 +334,65 @@ void NeroFS::AddNewShortcut(const QString &newShortcutHash, const QString &newSh
 
 QMap<QString, QVariant> NeroFS::GetShortcutSettings(const QString &shortcutHash)
 {
-    GetCurrentPrefixCfg();
-    if(!prefixCfg->group().isEmpty()) prefixCfg->endGroup();
-    prefixCfg->beginGroup("Shortcuts--" + shortcutHash);
-    const QStringList settingKeys = prefixCfg->childKeys();
-    QMap<QString, QVariant> settings;
-    for(const auto &key : settingKeys) {
-        settings[key] = prefixCfg->value(key);
+    if(GetCurrentPrefixCfg() != nullptr) {
+        if(!prefixCfg->group().isEmpty()) prefixCfg->endGroup();
+        prefixCfg->beginGroup("Shortcuts--" + shortcutHash);
+
+        const QStringList settingKeys = prefixCfg->childKeys();
+        QMap<QString, QVariant> settings;
+
+        for(const auto &key : std::as_const(settingKeys))
+            settings[key] = prefixCfg->value(key);
+
+        return settings;
+    } else {
+        printf("THIS SHOULDN'T HAVE HAPPENED: GetCurrentPrefixCfg returned null in GetShortcutSettings which EXPECTS a real pointer!\n");
+        return QMap<QString, QVariant>();
     }
-    return settings;
 }
 
 QStringList NeroFS::GetCurrentPrefixShortcuts()
 {
-    GetCurrentPrefixCfg();
-    if(!prefixCfg->group().isEmpty()) prefixCfg->endGroup();
-    prefixCfg->beginGroup("Shortcuts");
+    if(GetCurrentPrefixCfg() != nullptr) {
+        if(!prefixCfg->group().isEmpty()) prefixCfg->endGroup();
+        prefixCfg->beginGroup("Shortcuts");
 
-    QStringList hashes = prefixCfg->childKeys();
-    QStringList names;
+        QStringList hashes = prefixCfg->childKeys();
+        QStringList names;
 
-    for(int i = 0; i < hashes.count(); i++) {
-        names.append(prefixCfg->value(hashes.at(i)).toString());
+        for(const auto &hash : std::as_const(hashes))
+            names.append(prefixCfg->value(hash).toString());
+
+        return names;
+    } else {
+        printf("THIS SHOULDN'T HAVE HAPPENED: GetCurrentPrefixCfg returned null in GetCurrentPrefixShortcuts which EXPECTS a real pointer!\n");
+        return QStringList();
     }
-
-    return names;
 }
 
 QMap<QString, QString> NeroFS::GetCurrentShortcutsMap()
 {
-    GetCurrentPrefixCfg();
-    if(!prefixCfg->group().isEmpty()) prefixCfg->endGroup();
-    prefixCfg->beginGroup("Shortcuts");
+    if(GetCurrentPrefixCfg() != nullptr) {
+        if(!prefixCfg->group().isEmpty()) prefixCfg->endGroup();
+        prefixCfg->beginGroup("Shortcuts");
 
-    QStringList hashes = prefixCfg->childKeys();
-    QStringList names;
+        QStringList hashes = prefixCfg->childKeys();
+        QStringList names;
 
-    for(int i = 0; i < hashes.count(); i++) {
-        names.append(prefixCfg->value(hashes.at(i)).toString());
+        for(const auto &hash : std::as_const(hashes))
+            names.append(prefixCfg->value(hash).toString());
+
+        // QString Left = name, QString Right = hash
+        QMap<QString, QString> shortcutsMap;
+
+        for(int i = 0; i < hashes.count(); ++i)
+            shortcutsMap[names.at(i)] = hashes.at(i);
+
+        return shortcutsMap;
+    } else {
+        printf("THIS SHOULDN'T HAVE HAPPENED: GetCurrentPrefixCfg returned null in GetCurrentShortcutsMap which EXPECTS a real pointer!\n");
+        return QMap<QString, QString>();
     }
-
-    // QString Left = name, QString Right = hash
-    QMap<QString, QString> shortcutsMap;
-
-    for(int i = 0; i < hashes.count(); i++) {
-        shortcutsMap[names.at(i)] = hashes.at(i);
-    }
-
-    return shortcutsMap;
 }
 
 bool NeroFS::DeletePrefix(const QString &prefix)
@@ -409,15 +405,18 @@ bool NeroFS::DeletePrefix(const QString &prefix)
 
 void NeroFS::DeleteShortcut(const QString &shortcutHash)
 {
-    GetCurrentPrefixCfg();
-    if(!prefixCfg->group().isEmpty()) prefixCfg->endGroup();
-    prefixCfg->beginGroup("Shortcuts");
-    QString name = prefixCfg->value(shortcutHash).toString();
-    prefixCfg->remove(shortcutHash);
-    prefixCfg->endGroup();
-    prefixCfg->beginGroup("Shortcuts--" + shortcutHash);
-    prefixCfg->remove("");
-    prefixCfg->endGroup();
-    QFile icoFile(prefixesPath.path() + '/' + currentPrefix + "/.icoCache/" + name + '-' + shortcutHash + ".png");
-    if(icoFile.exists()) icoFile.remove();
+    if(GetCurrentPrefixCfg() != nullptr) {
+        if(!prefixCfg->group().isEmpty()) prefixCfg->endGroup();
+        prefixCfg->beginGroup("Shortcuts");
+        QString name = prefixCfg->value(shortcutHash).toString();
+        prefixCfg->remove(shortcutHash);
+        prefixCfg->endGroup();
+        prefixCfg->beginGroup("Shortcuts--" + shortcutHash);
+        prefixCfg->remove("");
+        prefixCfg->endGroup();
+        QFile icoFile(prefixesPath.path() + '/' + currentPrefix + "/.icoCache/" + name + '-' + shortcutHash + ".png");
+        if(icoFile.exists()) icoFile.remove();
+    } else {
+        printf("THIS SHOULDN'T HAVE HAPPENED: GetCurrentPrefixCfg returned null in DeleteShortcut which EXPECTS a real pointer!\n");
+    }
 }

@@ -149,6 +149,12 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
                 break;
         }
 
+        if(!settings->value("Shortcuts--"+hash+"/AllowHidraw").toString().isEmpty()) {
+            if(settings->value("Shortcuts--"+hash+"/AllowHidraw").toBool())
+                env.insert("PROTON_ENABLE_HIDRAW", "1");
+        } else if(settings->value("PrefixSettings/AllowHidraw").toBool())
+            env.insert("PROTON_ENABLE_HIDRAW", "1");
+
         if(env.contains("WAYLAND_DISPLAY")) {
             if(!settings->value("Shortcuts--"+hash+"/UseWayland").toString().isEmpty()) {
                 if(settings->value("Shortcuts--"+hash+"/UseWayland").toBool())

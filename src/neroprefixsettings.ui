@@ -1756,19 +1756,6 @@
             </property>
            </spacer>
           </item>
-          <item row="0" column="0">
-           <spacer name="horizontalSpacer_19">
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item row="0" column="2">
            <widget class="QCheckBox" name="toggleWaylandHDR">
             <property name="whatsThis">
@@ -1782,6 +1769,35 @@
             </property>
             <property name="isFor" stdset="0">
              <string>UseHDR</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <spacer name="horizontalSpacer_19">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="1" colspan="2" alignment="Qt::AlignmentFlag::AlignHCenter">
+           <widget class="QCheckBox" name="toggleHidraw">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This determines whether or not the runner is allowed to directly interact with connected HID devices or not.&lt;/p&gt;&lt;p&gt;Some applications need this to access things like controller firmware or to individually address some devices. However, this has the side effect of certain controllers, such as the &lt;span style=&quot; font-style:italic;&quot;&gt;Sony DualSense,&lt;/span&gt; overriding the SDL interface and will not be recognized as an Xinput-compatible device.&lt;/p&gt;&lt;p&gt;This should only be enabled for applications that &lt;span style=&quot; font-weight:700;&quot;&gt;do not&lt;/span&gt; function properly without this enabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Allow Proton to Access Raw HID Devices</string>
+            </property>
+            <property name="text">
+             <string>Allow HIDRAW Input Devices</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>AllowHidraw</string>
             </property>
            </widget>
           </item>
