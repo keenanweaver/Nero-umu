@@ -149,6 +149,22 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
                 break;
         }
 
+        if(env.contains("WAYLAND_DISPLAY")) {
+            if(!settings->value("Shortcuts--"+hash+"/UseWayland").toString().isEmpty()) {
+                if(settings->value("Shortcuts--"+hash+"/UseWayland").toBool())
+                    env.insert("PROTON_ENABLE_WAYLAND", "1");
+                    if(!settings->value("Shortcuts--"+hash+"/UseHDR").toString().isEmpty()) {
+                        if(settings->value("Shortcuts--"+hash+"/UseHDR").toBool())
+                            env.insert("PROTON_ENABLE_HDR", "1");
+                    } else if(settings->value("PrefixSettings/UseHDR").toBool())
+                        env.insert("PROTON_ENABLE_HDR", "1");
+            } else if(settings->value("PrefixSettings/UseWayland").toBool()) {
+                env.insert("PROTON_ENABLE_WAYLAND", "1");
+                if(settings->value("PrefixSettings/UseHDR").toBool())
+                    env.insert("PROTON_ENABLE_HDR", "1");
+            }
+        }
+
         QStringList arguments;
         arguments.append("umu-run");
 
@@ -502,6 +518,14 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
         break;
     }
 
+    if(env.contains("WAYLAND_DISPLAY")) {
+        if(settings->value("PrefixSettings/UseWayland").toBool()) {
+            env.insert("PROTON_ENABLE_WAYLAND", "1");
+            if(settings->value("PrefixSettings/UseHDR").toBool())
+                env.insert("PROTON_ENABLE_HDR", "1");
+        }
+    }
+
     QStringList arguments;
     arguments.append("umu-run");
 
@@ -510,7 +534,7 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
     QFileInfoList dosdevices(dosdevicesPath.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs, QDir::Name));
     // .dots/relative paths don't really need a path fixup.
     if(!app.startsWith("./") && !app.startsWith("~/") && !app.startsWith("C:/"))
-        for(auto const device : dosdevices) {
+        for(auto const &device : std::as_const(dosdevices)) {
             if(app.contains(device.symLinkTarget())) {
                 app.remove(device.symLinkTarget());
                 app.prepend(device.baseName().toUpper());
@@ -676,7 +700,7 @@ void NeroRunner::WaitLoop(QProcess &runner, QFile &log)
 
                 if(stdout.contains("umu-launcher"))
                     emit StatusUpdate(NeroRunner::RunnerStarting);
-                else if(stdout.contains("steamrt is up to date"))
+                else if(stdout.contains("steamrt3 is up to date"))
                     emit StatusUpdate(NeroRunner::RunnerUpdated);
                 else if(stdout.startsWith("Proton: Executable") || stdout.contains("SteamAPI_Init"))
                     emit StatusUpdate(NeroRunner::RunnerProtonStarted);

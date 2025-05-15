@@ -1195,136 +1195,7 @@
       <attribute name="title">
        <string>Advanced</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_5" rowstretch="0,0,1">
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="runnerGroup">
-         <property name="title">
-          <string>Shortcut Runner Settings</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_8" columnstretch="1,0,0">
-          <item row="0" column="2">
-           <widget class="QPushButton" name="preRunButton">
-            <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select a Pre-run Script to run for this Shortcut.&lt;/p&gt;&lt;p&gt;When set, this script will be run whenever this shortcut is started &lt;span style=&quot; font-style:italic;&quot;&gt;before&lt;/span&gt; the Proton runner process. This can be used for setting up other services before the application starts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="accessibleName">
-             <string>Pre-Run Script</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset theme="document-open"/>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>16</width>
-              <height>16</height>
-             </size>
-            </property>
-            <property name="flat">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLineEdit" name="preRunScriptPath">
-            <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Path to a designated Pre-run Script for this Shortcut.&lt;/p&gt;&lt;p&gt;When set, this script will be run whenever this shortcut is started &lt;span style=&quot; font-style:italic;&quot;&gt;before&lt;/span&gt; the Proton runner process. This can be used for setting up other services before the application starts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="accessibleName">
-             <string>Pre-Run Script</string>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">color: gray</string>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-            <property name="placeholderText">
-             <string>Path to a Pre-run Script</string>
-            </property>
-            <property name="isFor" stdset="0">
-             <string>PreRunScript</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLineEdit" name="postRunScriptPath">
-            <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Path to a designated Post-run Script for this Shortcut.&lt;/p&gt;&lt;p&gt;When set, this script will be run whenever this shortcut is started &lt;span style=&quot; font-style:italic;&quot;&gt;after&lt;/span&gt; the Proton runner process. This can be used for cleaning up or closing other process that may have been started for the application, but don't need to be run in perpetuity.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="accessibleName">
-             <string>Post-Run Script</string>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">color: gray</string>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-            <property name="placeholderText">
-             <string>Path to a Post-run Script</string>
-            </property>
-            <property name="isFor" stdset="0">
-             <string>PostRunScript</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QPushButton" name="postRunButton">
-            <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select a Post-run Script to run for this Shortcut.&lt;/p&gt;&lt;p&gt;When set, this script will be run whenever this shortcut is started &lt;span style=&quot; font-style:italic;&quot;&gt;after&lt;/span&gt; the Proton runner process. This can be used for cleaning up or closing other process that may have been started for the application, but don't need to be run in perpetuity.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="accessibleName">
-             <string>Post-Run Script</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset theme="document-open"/>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>16</width>
-              <height>16</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QPushButton" name="preRunClearBtn">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset theme="edit-clear"/>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QPushButton" name="postRunClearBtn">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset theme="edit-clear"/>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
+      <layout class="QGridLayout" name="gridLayout_5" rowstretch="0,0,1,0">
        <item row="2" column="0">
         <widget class="QGroupBox" name="legacyGroup">
          <property name="title">
@@ -1713,6 +1584,205 @@
               <string>Full Debug Output</string>
              </property>
             </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="runnerGroup">
+         <property name="title">
+          <string>Shortcut Runner Settings</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_8" columnstretch="1,0,0">
+          <item row="0" column="2">
+           <widget class="QPushButton" name="preRunButton">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select a Pre-run Script to run for this Shortcut.&lt;/p&gt;&lt;p&gt;When set, this script will be run whenever this shortcut is started &lt;span style=&quot; font-style:italic;&quot;&gt;before&lt;/span&gt; the Proton runner process. This can be used for setting up other services before the application starts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Pre-Run Script</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="document-open"/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="flat">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="preRunScriptPath">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Path to a designated Pre-run Script for this Shortcut.&lt;/p&gt;&lt;p&gt;When set, this script will be run whenever this shortcut is started &lt;span style=&quot; font-style:italic;&quot;&gt;before&lt;/span&gt; the Proton runner process. This can be used for setting up other services before the application starts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Pre-Run Script</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: gray</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="placeholderText">
+             <string>Path to a Pre-run Script</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>PreRunScript</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLineEdit" name="postRunScriptPath">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Path to a designated Post-run Script for this Shortcut.&lt;/p&gt;&lt;p&gt;When set, this script will be run whenever this shortcut is started &lt;span style=&quot; font-style:italic;&quot;&gt;after&lt;/span&gt; the Proton runner process. This can be used for cleaning up or closing other process that may have been started for the application, but don't need to be run in perpetuity.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Post-Run Script</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: gray</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="placeholderText">
+             <string>Path to a Post-run Script</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>PostRunScript</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QPushButton" name="postRunButton">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select a Post-run Script to run for this Shortcut.&lt;/p&gt;&lt;p&gt;When set, this script will be run whenever this shortcut is started &lt;span style=&quot; font-style:italic;&quot;&gt;after&lt;/span&gt; the Proton runner process. This can be used for cleaning up or closing other process that may have been started for the application, but don't need to be run in perpetuity.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Post-Run Script</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="document-open"/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="preRunClearBtn">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="edit-clear"/>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="postRunClearBtn">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="edit-clear"/>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QGroupBox" name="experimentalGroup">
+         <property name="title">
+          <string>Experimental</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_11">
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="toggleWayland">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set whether or not to force the native Wayland environment &lt;span style=&quot; font-style:italic;&quot;&gt;for supported Proton versions.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Runners based on &lt;span style=&quot; font-style:italic;&quot;&gt;Proton 10&lt;/span&gt; have added experimental &lt;span style=&quot; font-weight:700;&quot;&gt;native&lt;/span&gt; Wayland support, but will still default to the X11 backend running through XWayland. While enabling this will provide a more cohesive look &amp;amp; feel and potentially provide better performance on a native Wayland desktop, do note that &lt;span style=&quot; font-weight:700;&quot;&gt;there are known issues with mouse focus and native OpenGL/Vulkan applications, &lt;/span&gt;&lt;a href=&quot;https://github.com/GloriousEggroll/proton-ge-custom/releases&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;as noted by GE.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Enabling this will have no effect on X11 desktops.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Use Experimental Native Wayland Support</string>
+            </property>
+            <property name="text">
+             <string>Enable Native Wayland Support</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>UseWayland</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <spacer name="horizontalSpacer_20">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="0">
+           <spacer name="horizontalSpacer_19">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="2">
+           <widget class="QCheckBox" name="toggleWaylandHDR">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When Enabled, the experimental &lt;span style=&quot; font-style:italic;&quot;&gt;Native Wayland Backend&lt;/span&gt; will expose and enable use of your display's HDR capabilities.&lt;/p&gt;&lt;p&gt;Because HDR implicitly relies on Wayland to function (as there is no equivalent support in X11), this will only work with &lt;span style=&quot; font-style:italic;&quot;&gt;Native Wayland Support&lt;/span&gt; enabled and &lt;span style=&quot; font-weight:700;&quot;&gt;only in a Wayland session;&lt;/span&gt; this will not take effect on X11 desktops.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Use HDR With Experimental Wayland Backend</string>
+            </property>
+            <property name="text">
+             <string>Enable HDR</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>UseHDR</string>
+            </property>
            </widget>
           </item>
          </layout>

@@ -79,10 +79,10 @@ NeroPrefixSettingsWindow::NeroPrefixSettingsWindow(QWidget *parent, const QStrin
 
         // shortcut view uses tristate items,
         // where PartiallyChecked is unmodified from global/undefined in shortcut config.
-        for(const auto child : this->findChildren<QCheckBox*>())
+        for(const auto &child : this->findChildren<QCheckBox*>())
             child->setTristate(true), child->setCheckState(Qt::PartiallyChecked);
         ui->toggleShortcutPrefixOverride->setTristate(false);
-        for(const auto child : this->findChildren<QComboBox*>()) {
+        for(const auto &child : this->findChildren<QComboBox*>()) {
             if(child != ui->prefixRunner && child != ui->winVerBox) {
                 child->insertItem(0, "[Use Default Setting]");
                 child->setCurrentIndex(0);
@@ -91,10 +91,11 @@ NeroPrefixSettingsWindow::NeroPrefixSettingsWindow(QWidget *parent, const QStrin
 
         // Windows versions are listed from newest-first to oldest-last in the UI for convenience,
         // when the real order is from oldest to newest (in case Windows 12 somehow exists).
-        for(int i = ui->winVerBox->count(); i > 0; i--)
+        for(int i = ui->winVerBox->count(); i > 0; --i)
             winVersionListBackwards.append(ui->winVerBox->itemText(i-1));
     }
 
+    // FSR scalers are only implem'd in GE-Proton
     if(!ui->prefixRunner->currentText().startsWith("GE-Proton")) {
         SetComboBoxItemEnabled(ui->setScalingBox, NeroConstant::ScalingFSRperformance, false);
         SetComboBoxItemEnabled(ui->setScalingBox, NeroConstant::ScalingFSRbalanced, false);
@@ -103,8 +104,15 @@ NeroPrefixSettingsWindow::NeroPrefixSettingsWindow(QWidget *parent, const QStrin
         SetComboBoxItemEnabled(ui->setScalingBox, NeroConstant::ScalingFSRhigherquality, false);
         SetComboBoxItemEnabled(ui->setScalingBox, NeroConstant::ScalingFSRhighestquality, false);
         SetComboBoxItemEnabled(ui->setScalingBox, NeroConstant::ScalingFSRcustom, false);
+        // HACK: offset by one when this is a shortcut settings panel and not prefix settings
         if(ui->setScalingBox->findText("Integer Scaling") == 1) SetComboBoxItemEnabled(ui->setScalingBox, NeroConstant::ScalingIntegerScale, false);
         else SetComboBoxItemEnabled(ui->setScalingBox, NeroConstant::ScalingGamescopeWindowed, false);
+    }
+
+    // Wayland requires base version to be Proton 10+
+    if(!ui->prefixRunner->currentText().startsWith("GE-Proton10") && !ui->prefixRunner->currentText().startsWith("Proton 10")) {
+        ui->toggleWayland->setEnabled(false);
+        ui->toggleWaylandHDR->setEnabled(false);
     }
 
     resValidator = new QIntValidator(0, 32767);
@@ -226,6 +234,8 @@ void NeroPrefixSettingsWindow::LoadSettings()
     SetCheckboxState("LimitGLextensions",  ui->toggleLimitGL);
     SetCheckboxState("NoD8VK",             ui->toggleNoD8VK);
     SetCheckboxState("ForceWineD3D",       ui->toggleWineD3D);
+    SetCheckboxState("UseWayland",         ui->toggleWayland);
+    SetCheckboxState("UseHDR",             ui->toggleWaylandHDR);
 
     if(currentShortcutHash.isEmpty()) {
         // for prefix general settings, checkboxes are normal two-state
@@ -321,13 +331,13 @@ void NeroPrefixSettingsWindow::LoadSettings()
         }
     } else ui->gamescopeSection->setVisible(false);
 
-    for(const auto child : this->findChildren<QCheckBox*>())
+    for(const auto &child : this->findChildren<QCheckBox*>())
         child->setFont(QFont());
 
-    for(const auto child : this->findChildren<QLineEdit*>())
+    for(const auto &child : this->findChildren<QLineEdit*>())
         child->setFont(QFont());
 
-    for(const auto child : this->findChildren<QComboBox*>())
+    for(const auto &child : this->findChildren<QComboBox*>())
         child->setFont(QFont());
 
     NeroPrefixSettingsWindow::blockSignals(false);
@@ -339,7 +349,8 @@ void NeroPrefixSettingsWindow::SetCheckboxState(const QString &varName, QCheckBo
     if(!settings.value(varName).toString().isEmpty())
         if(settings.value(varName).toBool())  checkBox->setCheckState(Qt::Checked);
         else                                  checkBox->setCheckState(Qt::Unchecked);
-    else                                      checkBox->setCheckState(Qt::PartiallyChecked);
+    else if(checkBox->isTristate())           checkBox->setCheckState(Qt::PartiallyChecked);
+    else                                      checkBox->setCheckState(Qt::Unchecked);
 }
 
 
@@ -730,10 +741,12 @@ void NeroPrefixSettingsWindow::OptionSet()
 {
     if(sender()->inherits("QComboBox")) {
         QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
+        // Shortcut settings: handle "use default" (blank entry)
         if(settings.value(comboBox->property("isFor").toString()).toString().isEmpty())
             if(comboBox->currentIndex() > 0)
                 comboBox->setFont(boldFont);
             else comboBox->setFont(QFont());
+        // Global prefix settings: always set to an index
         else if(!currentShortcutHash.isEmpty()) {
             if(comboBox->currentIndex()-1 != settings.value(comboBox->property("isFor").toString()).toInt())
                 comboBox->setFont(boldFont);
@@ -748,8 +761,10 @@ void NeroPrefixSettingsWindow::OptionSet()
                 comboBox->setFont(boldFont);
             else if(comboBox->currentText() == winVersionListBackwards[settings.value("WindowsVersion").toInt()])
                 comboBox->setFont(QFont()); }
+
     } else if(sender()->inherits("QCheckBox")) {
         QCheckBox* checkBox = qobject_cast<QCheckBox*>(sender());
+        // Shortcut settings: handle "use default" half-checked state (blank entry)
         if(checkBox->isTristate())
             if(settings.value(checkBox->property("isFor").toString()).toString().isEmpty())
                 if(checkBox->checkState() != Qt::PartiallyChecked)
@@ -760,14 +775,17 @@ void NeroPrefixSettingsWindow::OptionSet()
             else if(checkBox->checkState() != Qt::Unchecked && !settings.value(checkBox->property("isFor").toString()).toBool())
                 checkBox->setFont(boldFont);
             else checkBox->setFont(QFont());
+        // Normal Global prefix style on/off toggles
         else if(checkBox->isChecked() != settings.value(checkBox->property("isFor").toString()).toBool())
             checkBox->setFont(boldFont);
         else checkBox->setFont(QFont());
+
     } else if(sender()->inherits("QSpinBox")) {
         QSpinBox* spinBox = qobject_cast<QSpinBox*>(sender());
         if(spinBox->value() != settings.value(spinBox->property("isFor").toString()).toInt())
             spinBox->setFont(boldFont);
         else spinBox->setFont(QFont());
+
     } else if(sender()->inherits("QLineEdit")) {
         QLineEdit* lineEdit = qobject_cast<QLineEdit*>(sender());
         if(lineEdit->text() != settings.value(lineEdit->property("isFor").toString()).toString())

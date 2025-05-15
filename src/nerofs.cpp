@@ -302,6 +302,8 @@ void NeroFS::AddNewPrefix(const QString &newPrefix, const QString &runner)
     prefixCfg->setValue("FileSyncMode", NeroConstant::Fsync);
     prefixCfg->setValue("NoD8VK", false);
     prefixCfg->setValue("ForceWineD3D", false);
+    prefixCfg->setValue("UseWayland", false);
+    prefixCfg->setValue("UseHDR", false);
     prefixCfg->setValue("CustomEnvVars", {""});
     prefixCfg->setValue("RuntimeUpdateOnLaunch", true);
     prefixCfg->setValue("DiscordRPCinstalled", false);
@@ -338,6 +340,8 @@ void NeroFS::AddNewShortcut(const QString &newShortcutHash, const QString &newSh
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "FileSyncMode", "");
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "NoD8VK", "");
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "ForceWineD3D", "");
+    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "UseWayland", "");
+    SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "UseHDR", "");
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "CustomEnvVars", {""});
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "PreRunScript", {""});
     SetCurrentPrefixCfg(QString("Shortcuts--%1").arg(newShortcutHash), "PostRunScript", {""});
