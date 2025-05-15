@@ -176,8 +176,11 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
 
         arguments.append(settings->value("Shortcuts--"+hash+"/Path").toString());
 
-        if(!settings->value("Shortcuts--"+hash+"/Args").toString().isEmpty())
+        // some arguments are parsed as stringlists and others as string, so check which first.
+        if(!settings->value("Shortcuts--"+hash+"/Args").toStringList().isEmpty())
             arguments.append(settings->value("Shortcuts--"+hash+"/Args").toStringList());
+        else if(!settings->value("Shortcuts--"+hash+"/Args").toString().isEmpty())
+            arguments.append(settings->value("Shortcuts--"+hash+"/Args").toString());
 
         if(!settings->value("Shortcuts--"+hash+"/Gamemode").toString().isEmpty()) {
             if(settings->value("Shortcuts--"+hash+"/Gamemode").toBool())
