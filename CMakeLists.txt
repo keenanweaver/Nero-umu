@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(Nero-UMU
-        VERSION 1.0.0
+        VERSION 1.0.1
         DESCRIPTION "An umu-launcher manager and launcher"
         LANGUAGES CXX)
 set(NERO_CODENAME "Felice")
