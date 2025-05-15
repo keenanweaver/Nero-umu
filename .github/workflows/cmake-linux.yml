@@ -15,6 +15,9 @@ jobs:
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-24.04
 
+    matrix:
+      qt_version: [5.15.2, 6.8.3]
+
     steps:
     - uses: actions/checkout@v4
       with:
@@ -24,10 +27,18 @@ jobs:
       id: get-short-sha
       run: echo "id=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-    - name: Install Qt6
+    - name: Install Qt(5)
+      if: ${{ matrix.qt_version == '5.15.2' }}
       uses: jdpurcell/install-qt-action@v5
       with:
-        version: '6.8.3'
+        version: '${{ matrix.qt_version }}'
+        archives: 'qtbase qtwayland qttools qttranslations qtsvg icu'
+
+    - name: Install Qt(6)
+      if: ${{ matrix.qt_version != '5.15.2' }}
+      uses: jdpurcell/install-qt-action@v5
+      with:
+        version: '${{ matrix.qt_version }}'
         modules: 'qt5compat'
         archives: 'qtbase qtwayland qttools qttranslations qtsvg icu'
 
@@ -68,7 +79,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         # Artifact name
-        name: Nero-Qt6 # optional, default is artifact
+        name: Nero-${{matrix.qt_version}} # optional, default is artifact
         # A file, directory or wildcard pattern that describes what to upload
         path: ${{ github.workspace }}/build/Nero-UMU-x86_64.AppImage
 
