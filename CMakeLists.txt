@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(Nero-UMU VERSION 0.9.10 LANGUAGES CXX)
+project(Nero-UMU
+        VERSION 1.0.0
+        DESCRIPTION "An umu-launcher manager and launcher"
+        LANGUAGES CXX)
+set(NERO_CODENAME "Felice")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -9,18 +13,23 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-option(NERO_VERSION "Sets Nero version number" OFF)
 option(NERO_GITHASH "Sets Nero git hash" OFF)
 # for statically linking QuaZip specifically
 set(BUILD_SHARED_LIBS OFF)
 
-if(NERO_VERSION)
-    add_compile_definitions(NERO_VERSION="${NERO_VERSION}")
-endif()
+add_compile_definitions(NERO_VERSION="${PROJECT_VERSION}")
 
 if(NERO_GITHASH)
     add_compile_definitions(NERO_GITHASH="${NERO_GITHASH}")
 endif()
+
+set(PATCHVER_TIERLIST_NAMES
+  "" " Simple" " Second" " Hard" " iOS Phantasia" " Mania" " Unknown" " KUREAAAAAAAA"
+)
+math(EXPR PATCHVER_TIERLIST_INDEX ${PROJECT_VERSION_PATCH})
+list(GET PATCHVER_TIERLIST_NAMES ${PATCHVER_TIERLIST_INDEX} PROJECT_PATCH_NAME)
+
+add_compile_definitions(NERO_CODENAME="${NERO_CODENAME}${PROJECT_PATCH_NAME}")
 
 if(NOT NERO_QT_VERSION)
     find_package(QT NAMES Qt6 Qt5 REQUIRED)
@@ -99,6 +108,6 @@ install(TARGETS nero-umu
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-if(QT_VERSION_MAJOR EQUAL 6)
+if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     qt_finalize_executable(nero-umu)
 endif()

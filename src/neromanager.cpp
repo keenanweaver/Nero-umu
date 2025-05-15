@@ -90,7 +90,7 @@ NeroManagerWindow::NeroManagerWindow(QWidget *parent)
     ui->setupUi(this);
 
     // ...but why does this need to be set AFTER the window setup?
-    this->setWindowTitle("Nero Manager");
+    this->setWindowTitle("Nero Manager \"" + QString(NERO_CODENAME) + '"');
 
     /* vv post-UI popup */
 
@@ -930,20 +930,14 @@ void NeroManagerWindow::actionExit_activated()
 void NeroManagerWindow::on_aboutBtn_clicked()
 {
     // TODO: better about screen pls
-    QString vInfo;
-#ifdef NERO_VERSION
-    vInfo.append(" v" + QString(NERO_VERSION));
-#endif // NERO_VERSION
-#ifdef NERO_GITHASH
-    vInfo.append("-" + QString(NERO_GITHASH));
-#endif // NERO_GITHASH
-    vInfo.append("\nRunning on Qt " +
-                 QString::number(QT_VERSION_MAJOR) + '.' +
-                 QString::number(QT_VERSION_MINOR) + '.' +
-                 QString::number(QT_VERSION_PATCH));
     QMessageBox::about(this,
                        "About Nero Manager",
-                       "Nero Manager" + vInfo +
+                       "Nero Manager v" + QString(NERO_VERSION)
+                       #ifdef NERO_GITHASH
+                       + '-' + QString(NERO_GITHASH)
+                       #endif // NERO_GITHASH
+                       + " \"" + NERO_CODENAME + '"' +
+                       "\nRunning on Qt " + QT_VERSION_STR +
                            "\n\nA simple Proton manager.");
 }
 
