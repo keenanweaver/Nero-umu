@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     if(argc > 1) {
         QStringList arguments;
 
-        for(uint8_t i = 1; i < argc; i++)
+        for(int i = 1; i < argc; ++i)
             arguments.append(argv[i]);
 
         // One-time runner (executable only) - prompt user for prefix
