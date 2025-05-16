@@ -155,7 +155,7 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
         } else if(settings->value("PrefixSettings/AllowHidraw").toBool())
             env.insert("PROTON_ENABLE_HIDRAW", "1");
 
-        if(env.contains("WAYLAND_DISPLAY")) {
+        if(env.contains("WAYLAND_DISPLAY") && !env.value("WAYLAND_DISPLAY").isEmpty()) {
             if(!settings->value("Shortcuts--"+hash+"/UseWayland").toString().isEmpty()) {
                 if(settings->value("Shortcuts--"+hash+"/UseWayland").toBool())
                     env.insert("PROTON_ENABLE_WAYLAND", "1");
@@ -527,7 +527,7 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
         break;
     }
 
-    if(env.contains("WAYLAND_DISPLAY")) {
+    if(env.contains("WAYLAND_DISPLAY") && !env.value("WAYLAND_DISPLAY").isEmpty()) {
         if(settings->value("PrefixSettings/UseWayland").toBool()) {
             env.insert("PROTON_ENABLE_WAYLAND", "1");
             if(settings->value("PrefixSettings/UseHDR").toBool())
