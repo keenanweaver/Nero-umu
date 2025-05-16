@@ -76,12 +76,15 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
         //}
         if(!settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().isEmpty()) {
             if(settings->value("Shortcuts--"+hash+"/IgnoreGlobalDLLs").toBool() || settings->value("PrefixSettings/DLLoverrides").toStringList().isEmpty())
-                env.insert("WINEDLLOVERRIDES", settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';'));
+                env.insert("WINEDLLOVERRIDES", settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';')+';'
+                                               + env.value("WINEDLLOVERRIDES"));
             // if overrides are duplicated, last overrides take priority over first overrides
             else env.insert("WINEDLLOVERRIDES", settings->value("PrefixSettings/DLLoverrides").toStringList().join(';')+';'
-                                                + settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';'));
+                                                + settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';')+';'
+                                                + env.value("WINEDLLOVERRIDES"));
         } else if(!settings->value("PrefixSettings/DLLoverrides").toStringList().isEmpty())
-            env.insert("WINEDLLOVERRIDES", settings->value("PrefixSettings/DLLoverrides").toStringList().join(';'));
+            env.insert("WINEDLLOVERRIDES", settings->value("PrefixSettings/DLLoverrides").toStringList().join(';')+';'
+                                           + env.value("WINEDLLOVERRIDES"));
 
         if(settings->value("Shortcuts--"+hash+"/ForceWineD3D").toString().isEmpty())
             env.insert("PROTON_USE_WINED3D", QString::number(settings->value("Shortcuts--"+hash+"/ForceWineD3D").toInt()));
@@ -495,7 +498,7 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
     if(settings->value("PrefixSettings/RuntimeUpdateOnLaunch").toBool())
         env.insert("UMU_RUNTIME_UPDATE", "1");
     if(!settings->value("PrefixSettings/DLLoverrides").toStringList().isEmpty())
-        env.insert("WINEDLLOVERRIDES", settings->value("PrefixSettings/DLLoverrides").toStringList().join(';'));
+        env.insert("WINEDLLOVERRIDES", settings->value("PrefixSettings/DLLoverrides").toStringList().join(';')+';'+env.value("WINEDLLOVERRIDES"));
     if(settings->value("PrefixSettings/ForceWineD3D").toBool())
         env.insert("PROTON_USE_WINED3D", "1");
     else if(!settings->value("PrefixSettings/NoD8VK").toBool())
