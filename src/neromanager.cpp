@@ -749,15 +749,35 @@ void NeroManagerWindow::on_oneTimeRunBtn_clicked()
             tempDir.removeRecursively();
         }
 
-        // TODO: flawed args split if the argument contains a path :/
         if(ui->oneTimeRunArgs->text().isEmpty()) {
             if(currentlyRunning.count() > 1)
                 umuController << new NeroThreadController(-1, oneTimeApp, true);
             else umuController << new NeroThreadController(-1, oneTimeApp, false);
         } else {
+            // SUPER UNGA BUNGA: manually split string into a list
+            QString buf = ui->oneTimeRunArgs->text();
+            QStringList args;
+            args.append("");
+            bool quotation = false;
+            for(const auto &chara : std::as_const(buf)) {
+                if(!quotation) {
+                    if(chara != ' ' && chara != '"') args.last().append(chara);
+                    else switch(chara.unicode()) {
+                        case '"': quotation = true;
+                        case ' ': if(!args.last().isEmpty()) args.append(""); break;
+                        default: break;
+                        }
+                } else if(chara != '"') args.last().append(chara);
+                else {
+                    quotation = false;
+                    args.append("");
+                }
+            }
+            if(args.last().isEmpty()) args.removeLast();
+
             if(currentlyRunning.count() > 1)
-                umuController << new NeroThreadController(-1, oneTimeApp, true, ui->oneTimeRunArgs->text().split(' '));
-            else umuController << new NeroThreadController(-1, oneTimeApp, false, ui->oneTimeRunArgs->text().split(' '));
+                umuController << new NeroThreadController(-1, oneTimeApp, true, args);
+            else umuController << new NeroThreadController(-1, oneTimeApp, false, args);
         }
 
         umuController.last()->setProperty("slot", threadsCount-1);

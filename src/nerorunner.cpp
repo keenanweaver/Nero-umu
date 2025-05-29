@@ -180,10 +180,33 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
         arguments.append(settings->value("Shortcuts--"+hash+"/Path").toString());
 
         // some arguments are parsed as stringlists and others as string, so check which first.
-        if(!settings->value("Shortcuts--"+hash+"/Args").toStringList().isEmpty())
+        if(settings->value("Shortcuts--"+hash+"/Args").type() == QMetaType::QStringList &&
+           !settings->value("Shortcuts--"+hash+"/Args").toStringList().isEmpty())
             arguments.append(settings->value("Shortcuts--"+hash+"/Args").toStringList());
-        else if(!settings->value("Shortcuts--"+hash+"/Args").toString().isEmpty())
-            arguments.append(settings->value("Shortcuts--"+hash+"/Args").toString());
+        else if(settings->value("Shortcuts--"+hash+"/Args").type() == QMetaType::QString &&
+                !settings->value("Shortcuts--"+hash+"/Args").toString().isEmpty()) {
+            // SUPER UNGA BUNGA: manually split string into a list
+            QString buf = settings->value("Shortcuts--"+hash+"/Args").toString();
+            QStringList args;
+            args.append("");
+            bool quotation = false;
+            for(const auto &chara : std::as_const(buf)) {
+                if(!quotation) {
+                    if(chara != ' ' && chara != '"') args.last().append(chara);
+                    else switch(chara.unicode()) {
+                        case '"': quotation = true;
+                        case ' ': if(!args.last().isEmpty()) args.append(""); break;
+                        default: break;
+                    }
+                } else if(chara != '"') args.last().append(chara);
+                else {
+                    quotation = false;
+                    args.append("");
+                }
+            }
+            if(args.last().isEmpty()) args.removeLast();
+            arguments.append(args);
+        }
 
         if(!settings->value("Shortcuts--"+hash+"/Gamemode").toString().isEmpty()) {
             if(settings->value("Shortcuts--"+hash+"/Gamemode").toBool())
