@@ -1727,22 +1727,6 @@
           <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
          <layout class="QGridLayout" name="gridLayout_11">
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="toggleWayland">
-            <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set whether or not to force the native Wayland environment &lt;span style=&quot; font-style:italic;&quot;&gt;for supported Proton versions.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Runners based on &lt;span style=&quot; font-style:italic;&quot;&gt;Proton 10&lt;/span&gt; have added experimental &lt;span style=&quot; font-weight:700;&quot;&gt;native&lt;/span&gt; Wayland support, but will still default to the X11 backend running through XWayland. While enabling this will provide a more cohesive look &amp;amp; feel and potentially provide better performance on a native Wayland desktop, do note that &lt;span style=&quot; font-weight:700;&quot;&gt;there are known issues with mouse focus and native OpenGL/Vulkan applications, &lt;/span&gt;&lt;a href=&quot;https://github.com/GloriousEggroll/proton-ge-custom/releases&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;as noted by GE.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Enabling this will have no effect on X11 desktops.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="accessibleName">
-             <string>Use Experimental Native Wayland Support</string>
-            </property>
-            <property name="text">
-             <string>Enable Native Wayland Support</string>
-            </property>
-            <property name="isFor" stdset="0">
-             <string>UseWayland</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="3">
            <spacer name="horizontalSpacer_20">
             <property name="orientation">
@@ -1785,7 +1769,23 @@
             </property>
            </spacer>
           </item>
-          <item row="1" column="1" colspan="2" alignment="Qt::AlignmentFlag::AlignHCenter">
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="toggleWayland">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set whether or not to force the native Wayland environment &lt;span style=&quot; font-style:italic;&quot;&gt;for supported Proton versions.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Runners based on &lt;span style=&quot; font-style:italic;&quot;&gt;Proton 10&lt;/span&gt; have added experimental &lt;span style=&quot; font-weight:700;&quot;&gt;native&lt;/span&gt; Wayland support, but will still default to the X11 backend running through XWayland. While enabling this will provide a more cohesive look &amp;amp; feel and potentially provide better performance on a native Wayland desktop, do note that &lt;span style=&quot; font-weight:700;&quot;&gt;there are known issues with mouse focus and native OpenGL/Vulkan applications, &lt;/span&gt;&lt;a href=&quot;https://github.com/GloriousEggroll/proton-ge-custom/releases&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;as noted by GE.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Enabling this will have no effect on X11 desktops.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Use Experimental Native Wayland Support</string>
+            </property>
+            <property name="text">
+             <string>Enable Native Wayland Support</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>UseWayland</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
            <widget class="QCheckBox" name="toggleHidraw">
             <property name="whatsThis">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This determines whether or not the runner is allowed to directly interact with connected HID devices or not.&lt;/p&gt;&lt;p&gt;Some applications need this to access things like controller firmware or to individually address some devices. However, this has the side effect of certain controllers, such as the &lt;span style=&quot; font-style:italic;&quot;&gt;Sony DualSense,&lt;/span&gt; overriding the SDL interface and will not be recognized as an Xinput-compatible device.&lt;/p&gt;&lt;p&gt;This should only be enabled for applications that &lt;span style=&quot; font-weight:700;&quot;&gt;do not&lt;/span&gt; function properly without this enabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -1798,6 +1798,22 @@
             </property>
             <property name="isFor" stdset="0">
              <string>AllowHidraw</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="toggleXalia">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set whether or not to enable Proton's &lt;a href=&quot;https://github.com/madewokherd/xalia&quot;&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline; color:#8ab4f8;&quot;&gt;Xalia&lt;/span&gt;&lt;/a&gt; integration for built-in Gamepad Navigation in normal Windows dialogs.&lt;/p&gt;&lt;p&gt;Xalia allows for selecting options in normal Windows dialog popups or launchers that otherwise doesn't have any integration with controllers. This can be a very useful accessibility feature. However, Xalia has a hard dependency on &lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;.NET 4.8&lt;/span&gt; which, by default, relies on Proton's &lt;span style=&quot; font-style:italic;&quot;&gt;Mono&lt;/span&gt; runtime; so if any dotnet Winetricks verb has been installed that is &lt;span style=&quot; font-style:italic;&quot;&gt;not &lt;/span&gt;&lt;span style=&quot; font-family:'Iosevka Extended'; font-weight:700;&quot;&gt;dotnet48&lt;/span&gt;, Proton will spawn error popups any time it's started. The only workaround is to either install &lt;span style=&quot; font-family:'Iosevka Extended'; font-weight:700;&quot;&gt;dotnet48&lt;/span&gt;, or disable Xalia.&lt;/p&gt;&lt;p&gt;If unsure, &lt;span style=&quot; font-weight:700;&quot;&gt;keep disabled&lt;/span&gt; if any &lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;.NET&lt;/span&gt; Winetricks verb other than &lt;span style=&quot; font-family:'Iosevka Extended'; font-weight:700;&quot;&gt;dotnet48&lt;/span&gt; has been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="accessibleName">
+             <string>Enable Xalia Gamepad Navigation Plugin</string>
+            </property>
+            <property name="text">
+             <string>Enable Xalia</string>
+            </property>
+            <property name="isFor" stdset="0">
+             <string>UseXalia</string>
             </property>
            </widget>
           </item>

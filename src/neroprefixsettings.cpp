@@ -237,6 +237,7 @@ void NeroPrefixSettingsWindow::LoadSettings()
     SetCheckboxState("UseWayland",         ui->toggleWayland);
     SetCheckboxState("UseHDR",             ui->toggleWaylandHDR);
     SetCheckboxState("AllowHidraw",        ui->toggleHidraw);
+    SetCheckboxState("UseXalia",           ui->toggleXalia);
 
     if(currentShortcutHash.isEmpty()) {
         // for prefix general settings, checkboxes are normal two-state

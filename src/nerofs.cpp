@@ -314,6 +314,7 @@ void NeroFS::AddNewPrefix(const QString &newPrefix, const QString &runner)
     prefixCfg->setValue("UseWayland", false);
     prefixCfg->setValue("UseHDR", false);
     prefixCfg->setValue("AllowHidraw", false);
+    prefixCfg->setValue("UseXalia", false);
     prefixCfg->setValue("CustomEnvVars", {""});
     prefixCfg->setValue("RuntimeUpdateOnLaunch", true);
     prefixCfg->setValue("DiscordRPCinstalled", false);

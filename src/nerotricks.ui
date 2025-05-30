@@ -16,6 +16,9 @@
   <property name="windowTitle">
    <string>Winetricks Verb Selector</string>
   </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="header">

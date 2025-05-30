@@ -54,14 +54,14 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
         env.insert("PROTONPATH", NeroFS::GetProtonsPath().path()+'/'+settings->value("PrefixSettings/CurrentRunner").toString());
 
         if(settings->value("PrefixSettings/RuntimeUpdateOnLaunch").toBool())
-            env.insert("UMU_RUNTIME_UPDATE", "1");
+            if(!env.contains("UMU_RUNTIME_UPDATE")) env.insert("UMU_RUNTIME_UPDATE", "1");
 
         if(prefixAlreadyRunning)
             env.insert("PROTON_VERB", "run");
         else env.insert("PROTON_VERB", "waitforexitandrun");
 
         if(!env.contains("SDL_GAMECONTROLLER_USE_BUTTON_LABELS"))
-            env.insert("SDL_GAMECONTROLLER_USE_BUTTON_LABELS", QString::number(0));
+            env.insert("SDL_GAMECONTROLLER_USE_BUTTON_LABELS", "0");
 
         QDir cachePath(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
         if(cachePath.exists(".shaderCache")) cachePath.mkdir(".shaderCache");
@@ -157,6 +157,13 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
                 env.insert("PROTON_ENABLE_HIDRAW", "1");
         } else if(settings->value("PrefixSettings/AllowHidraw").toBool())
             env.insert("PROTON_ENABLE_HIDRAW", "1");
+
+        if(!settings->value("Shortcuts--"+hash+"/UseXalia").toString().isEmpty()) {
+            if(settings->value("Shortcuts--"+hash+"/UseXalia").toBool())
+                env.insert("PROTON_USE_XALIA", "1");
+        } else if(settings->value("PrefixSettings/UseXalia").toBool())
+            env.insert("PROTON_USE_XALIA", "1");
+        else env.insert("PROTON_USE_XALIA", "0");
 
         if(env.contains("WAYLAND_DISPLAY") && !env.value("WAYLAND_DISPLAY").isEmpty()) {
             if(!settings->value("Shortcuts--"+hash+"/UseWayland").toString().isEmpty()) {
@@ -436,12 +443,12 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
             if(settings->value("Shortcuts--"+hash+"/Mangohud").toBool()) {
                 if(arguments.contains("gamescope"))
                     arguments.insert(1, "--mangoapp");
-                else arguments.prepend("mangohud");
+                else if(!env.contains("MANGOHUD")) arguments.prepend("mangohud");
             }
         } else if(settings->value("PrefixSettings/Mangohud").toBool()) {
             if(arguments.contains("gamescope"))
                 arguments.insert(1, "--mangoapp");
-            else arguments.prepend("mangohud");
+            else if(!env.contains("MANGOHUD")) arguments.prepend("mangohud");
         }
 
         runner.setProcessEnvironment(env);
@@ -511,7 +518,7 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
     else env.insert("PROTON_VERB", "waitforexitandrun");
 
     if(!env.contains("SDL_GAMECONTROLLER_USE_BUTTON_LABELS"))
-        env.insert("SDL_GAMECONTROLLER_USE_BUTTON_LABELS", QString::number(0));
+        env.insert("SDL_GAMECONTROLLER_USE_BUTTON_LABELS", "0");
 
     QDir cachePath(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
     if(cachePath.exists(".shaderCache")) cachePath.mkdir(".shaderCache");
@@ -552,6 +559,13 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
         env.insert("WINEDEBUG", "+loaddll");
         break;
     }
+
+    if(settings->value("PrefixSettings/AllowHidraw").toBool())
+        if(!env.contains("PROTON_ENABLE_HIDRAW")) env.insert("PROTON_ENABLE_HIDRAW", "1");
+
+    if(settings->value("PrefixSettings/UseXalia").toBool()) {
+        if(!env.contains("PROTON_USE_XALIA")) env.insert("PROTON_USE_XALIA", "1");
+    } else if(!env.contains("PROTON_USE_XALIA")) env.insert("PROTON_USE_XALIA", "0");
 
     if(env.contains("WAYLAND_DISPLAY") && !env.value("WAYLAND_DISPLAY").isEmpty()) {
         if(settings->value("PrefixSettings/UseWayland").toBool()) {
@@ -692,7 +706,7 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
     if(settings->value("PrefixSettings/Mangohud").toBool()) {
         if(arguments.contains("gamescope"))
             arguments.insert(1, "--mangoapp");
-        else arguments.prepend("mangohud");
+        else if(!env.contains("MANGOHUD")) arguments.prepend("mangohud");
     }
 
     runner.setProcessEnvironment(env);
