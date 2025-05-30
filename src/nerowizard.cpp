@@ -19,14 +19,11 @@
 
 #include "nerowizard.h"
 #include "ui_nerowizard.h"
-#include "nerotricks.h"
 #include "nerofs.h"
 
 #include <QMessageBox>
 #include <QPushButton>
 #include <QAction>
-
-NeroTricksWindow *tricks;
 
 NeroPrefixWizard::NeroPrefixWizard(QWidget *parent)
     : QDialog(parent)
@@ -62,6 +59,7 @@ NeroPrefixWizard::NeroPrefixWizard(QWidget *parent)
 
 NeroPrefixWizard::~NeroPrefixWizard()
 {
+    if(tricks != nullptr) delete tricks;
     delete ui;
 }
 
@@ -72,7 +70,7 @@ void NeroPrefixWizard::UpdateTricksButtonText()
         ui->winetricksBox->setText("Select Winetricks to Preinstall...");
     } else {
         ui->winetricksBox->setFont(boldFont);
-        ui->winetricksBox->setText(QString("Winetricks (%1 Selected to Preinstall)").arg(verbsToInstall.count()));
+        ui->winetricksBox->setText("Winetricks (" + QString::number(verbsToInstall.count()) + " Selected to Preinstall)");
     }
 }
 
@@ -99,35 +97,38 @@ void NeroPrefixWizard::on_prefixNameInput_textChanged(const QString &arg1)
 
 void NeroPrefixWizard::on_winetricksBox_clicked()
 {
-    if(tricks == nullptr) { tricks = new NeroTricksWindow(this, ui->protonRunnerBox->currentText()); }
-    bool confirmed = false;
-    QStringList prevVerbs = verbsToInstall;
-
-    while(!confirmed) {
-        tricks->exec();
-        if(tricks->result() == QDialog::Accepted) {
-            verbsToInstall.append(tricks->verbIsSelected.keys(true));
-            verbsToInstall.removeDuplicates();
-            if(QMessageBox::question(this,
-                                     "Verbs Confirmation",
-                                     QString("Are you sure you wish to install these verbs?\n\n%1").arg(verbsToInstall.join('\n')))
-                == QMessageBox::Yes) {
-
-                confirmed = true;
-            }
-        } else {
-            // user doesn't want to do verbs installation after all, so stop asking and revert to prev state.
-            verbsToInstall = prevVerbs;
-            confirmed = true;
-        }
+    if(tricks == nullptr) {
+        tricks = new NeroTricksWindow(this, ui->protonRunnerBox->currentText());
+        connect(tricks, &NeroTricksWindow::finished, this, &NeroPrefixWizard::tricksWindow_result);
     }
 
-    UpdateTricksButtonText();
+    prevVerbs = verbsToInstall;
+
+    tricks->show();
+}
+
+void NeroPrefixWizard::tricksWindow_result()
+{
+    if(tricks->result() == QDialog::Accepted) {
+        verbsToInstall = tricks->verbIsSelected.keys(true);
+        verbsToInstall.removeDuplicates();
+        if(QMessageBox::question(this,
+                                  "Verbs Confirmation",
+                                  "Are you sure you wish to install these verbs?\n\n"
+                                      + verbsToInstall.join('\n'))
+            == QMessageBox::Yes) {
+
+            UpdateTricksButtonText();
+        } else tricks->show();
+    } else verbsToInstall = prevVerbs;
 }
 
 void NeroPrefixWizard::SetFontTricks()
 {
-    if(tricks == nullptr) { tricks = new NeroTricksWindow(this); }
+    if(tricks == nullptr) {
+        tricks = new NeroTricksWindow(this);
+        connect(tricks, &NeroTricksWindow::finished, this, &NeroPrefixWizard::tricksWindow_result);
+    }
 
     QStringList prevVerbs = verbsToInstall;
 
@@ -144,16 +145,16 @@ void NeroPrefixWizard::SetFontTricks()
         == QMessageBox::Yes) {
 
         tricks->AddTricks(verbsToInstall);
-
         UpdateTricksButtonText();
-    } else {
-        verbsToInstall = prevVerbs;
-    }
+    } else verbsToInstall = prevVerbs;
 }
 
 void NeroPrefixWizard::SetDXtricks()
 {
-    if(tricks == nullptr) { tricks = new NeroTricksWindow(this); }
+    if(tricks == nullptr) {
+        tricks = new NeroTricksWindow(this);
+        connect(tricks, &NeroTricksWindow::finished, this, &NeroPrefixWizard::tricksWindow_result);
+    }
 
     QStringList prevVerbs = verbsToInstall;
 
@@ -180,16 +181,16 @@ void NeroPrefixWizard::SetDXtricks()
         == QMessageBox::Yes) {
 
         tricks->AddTricks(verbsToInstall);
-
         UpdateTricksButtonText();
-    } else {
-        verbsToInstall = prevVerbs;
-    }
+    } else verbsToInstall = prevVerbs;
 }
 
 void NeroPrefixWizard::SetVCRunTricks()
 {
-    if(tricks == nullptr) { tricks = new NeroTricksWindow(this); }
+    if(tricks == nullptr) {
+        tricks = new NeroTricksWindow(this);
+        connect(tricks, &NeroTricksWindow::finished, this, &NeroPrefixWizard::tricksWindow_result);
+    }
 
     QStringList prevVerbs = verbsToInstall;
 
@@ -216,16 +217,16 @@ void NeroPrefixWizard::SetVCRunTricks()
         == QMessageBox::Yes) {
 
         tricks->AddTricks(verbsToInstall);
-
         UpdateTricksButtonText();
-    } else {
-        verbsToInstall = prevVerbs;
-    }
+    } else verbsToInstall = prevVerbs;
 }
 
 void NeroPrefixWizard::SetXactTricks()
 {
-    if(tricks == nullptr) { tricks = new NeroTricksWindow(this); }
+    if(tricks == nullptr) {
+        tricks = new NeroTricksWindow(this);
+        connect(tricks, &NeroTricksWindow::finished, this, &NeroPrefixWizard::tricksWindow_result);
+    }
 
     QStringList prevVerbs = verbsToInstall;
 
@@ -244,11 +245,8 @@ void NeroPrefixWizard::SetXactTricks()
         == QMessageBox::Yes) {
 
         tricks->AddTricks(verbsToInstall);
-
         UpdateTricksButtonText();
-    } else {
-        verbsToInstall = prevVerbs;
-    }
+    } else verbsToInstall = prevVerbs;
 }
 
 void NeroPrefixWizard::on_symlinksCheckbox_stateChanged(int arg1)

@@ -24,6 +24,8 @@
 #include "neroprefixsettings.h"
 #include "nerorunner.h"
 #include "nerorunnerdialog.h"
+#include "nerotricks.h"
+#include "nerowizard.h"
 
 #include <QMainWindow>
 #include <QDir>
@@ -112,6 +114,8 @@ private slots:
     void prefixShortcutPlayButtons_clicked();
     void prefixShortcutEditButtons_clicked();
     void blinkTimer_timeout();
+    void tricksWindow_result();
+    void prefixWizard_result();
     void prefixSettings_result();
     void actionExit_activated();
 
@@ -138,6 +142,8 @@ private:
     NeroManagerPreferences *prefs = nullptr;
     NeroPrefixSettingsWindow *prefixSettings = nullptr;
     NeroRunnerDialog *runnerWindow = nullptr;
+    NeroPrefixWizard *wizard = nullptr;
+    NeroTricksWindow *tricks = nullptr;
 
     // METHODS
     void SetHeader(const QString prefix = "", const unsigned int shortcutsCount = 0);
@@ -145,7 +151,6 @@ private:
     void RenderPrefixes();
     void RenderPrefixList();
     void CreatePrefix(const QString &, const QString &, QStringList tricksToInstall = {});
-    void AddTricks(QStringList, const QString &);
     void RenderShortcuts();
     void CleanupShortcuts();
     void StartBlinkTimer();

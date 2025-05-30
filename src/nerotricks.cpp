@@ -34,10 +34,7 @@
 #include <QProcess>
 #include <QMessageBox>
 #include <QPushButton>
-//#include <QDebug>
-
-QStringList NeroTricksWindow::winetricksAvailVerbs;
-QStringList NeroTricksWindow::winetricksDescriptions;
+#include <QThread>
 
 NeroTricksWindow::NeroTricksWindow(QWidget *parent, const QString &runner)
     : QDialog(parent)
@@ -45,17 +42,19 @@ NeroTricksWindow::NeroTricksWindow(QWidget *parent, const QString &runner)
 {
     ui->setupUi(this);
 
-    if(winetricksAvailVerbs.isEmpty()) { InitVerbs(runner); }
+    if(winetricksAvailVerbs.isEmpty())
+        InitVerbs(runner);
 
-    for(int i = 0; i < winetricksAvailVerbs.count(); i++) {
+    for(int i = 0; i < winetricksAvailVerbs.count(); ++i) {
         verbSelector << new QCheckBox(winetricksAvailVerbs.at(i), this);
+        verbSelector.at(i)->setProperty("slot", i);
         verbDesc << new QLabel(winetricksDescriptions.at(i), this);
         verbDesc.at(i)->setAlignment(Qt::AlignRight);
         verbDesc.at(i)->setWordWrap(true);
         ui->verbsList->addWidget(verbSelector.at(i), i, 0);
         ui->verbsList->addWidget(verbDesc.at(i), i, 1);
         verbIsSelected.insert(winetricksAvailVerbs.at(i), false);
-        connect(verbSelector.at(i), SIGNAL(stateChanged(int)), this, SLOT(verbSelectors_stateChanged(int)));
+        connect(verbSelector.at(i), &QCheckBox::stateChanged, this, &NeroTricksWindow::verbSelectors_stateChanged);
     }
 
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
@@ -87,7 +86,10 @@ void NeroTricksWindow::InitVerbs(const QString &runner)
             QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
             // don't use blocking function so that the dialog shows and the UI doesn't freeze.
-            while(winetricksList.state() != QProcess::NotRunning) { QApplication::processEvents(); }
+            while(winetricksList.state() != QProcess::NotRunning) {
+                QApplication::processEvents();
+                QThread::msleep(1);
+            }
 
             if(winetricksList.exitCode() == 0) {
                 waitBox.setText("Organizing verbs...");
@@ -105,7 +107,7 @@ void NeroTricksWindow::InitVerbs(const QString &runner)
                 QString winetricksOutput = winetricksList.readAllStandardOutput();
                 winetricksAvailVerbs << winetricksOutput.split("\n", Qt::SkipEmptyParts);
 
-                for(int i = 0; i < winetricksAvailVerbs.count(); i++) {
+                for(int i = 0; i < winetricksAvailVerbs.count(); ++i) {
                     // The winetricks listing uses a several-spaces-long padding to separate name from description,
                     // so use that as the split point to clean up both lists.
                     winetricksDescriptions.append(winetricksAvailVerbs[i].mid(winetricksAvailVerbs[i].indexOf("       ")).trimmed());
@@ -140,10 +142,10 @@ void NeroTricksWindow::InitVerbs(const QString &runner)
 
 void NeroTricksWindow::FilterTricks(const QStringList filters)
 {
-    for(int i = 0; i < filters.length(); i++) {
+    for(int i = 0; i < filters.length(); ++i) {
         QStringList filterEntries = winetricksAvailVerbs.filter(filters.at(i));
         int slot;
-        for(int e = 0; e < filterEntries.length(); e++) {
+        for(int e = 0; e < filterEntries.length(); ++e) {
             slot = winetricksAvailVerbs.indexOf(filterEntries.at(e));
             winetricksAvailVerbs.removeAt(slot);
             winetricksDescriptions.removeAt(slot);
@@ -153,67 +155,67 @@ void NeroTricksWindow::FilterTricks(const QStringList filters)
 
 void NeroTricksWindow::AddTricks(const QStringList newTricks)
 {
-    int slot;
-    for(int i = 0; i < newTricks.length(); i++) {
+    for(int i = 0; i < newTricks.length(); ++i)
         verbSelector.at(winetricksAvailVerbs.indexOf(newTricks.at(i)))->setCheckState(Qt::Checked);
-    }
 }
 
-void NeroTricksWindow::SetPreinstalledVerbs(const QStringList installed)
+void NeroTricksWindow::SetPreinstalledVerbs(const QStringList &installed)
 {
     int slot;
     for(const auto &verb : installed) {
         // in case verb isn't in the list
         slot = winetricksAvailVerbs.indexOf(verb);
         if(slot >= 0) {
+            const QSignalBlocker blocker(verbSelector.at(slot));
             verbSelector.at(slot)->setCheckState(Qt::Checked);
-            verbIsSelected[verb] = false;
             verbSelector.at(slot)->setEnabled(false);
             verbDesc.at(slot)->setEnabled(false);
         }
     }
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+
+    installedVerbs = installed;
+}
+
+void NeroTricksWindow::SetCheckedVerbs(const QStringList &checked)
+{
+    int slot;
+    for(const auto &verb : checked) {
+        // in case verb isn't in the list
+        slot = winetricksAvailVerbs.indexOf(verb);
+        if(slot >= 0) verbSelector.at(slot)->setCheckState(Qt::Checked);
+    }
 }
 
 // Apparently "stateChanged" is being deprecated? wtf
 // VERY DISTANT TODO: migrate to checkStateChanged(???)
 void NeroTricksWindow::verbSelectors_stateChanged(int arg1)
 {
-    int slot;
-    QObject* obj = sender();
-    for(int i = 0;;i++) {
-        if(obj == verbSelector.at(i)) {
-            slot = i;
-            break;
-        }
-    }
+    int slot = sender()->property("slot").toInt();
 
     verbIsSelected[winetricksAvailVerbs.at(slot)] = arg1;
 
-    if(!verbIsSelected.key(true, "").isEmpty()) {
-        ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
-    } else {
-        ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-    }
+    if(!verbIsSelected.key(true, "").isEmpty())
+         ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+    else ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 }
 
 void NeroTricksWindow::on_searchBox_textEdited(const QString &arg1)
 {
     if(arg1.isEmpty()) {
         winetricksFilter.empty();
-        for(int i = 0; i < winetricksAvailVerbs.length(); i++) {
+        for(int i = 0; i < winetricksAvailVerbs.length(); ++i) {
             verbSelector.at(i)->setVisible(true), verbDesc.at(i)->setVisible(true);
         }
     } else {
         winetricksFilter = winetricksAvailVerbs.filter(arg1, Qt::CaseInsensitive);
 
         // is there a better way than hiding all elements and then unhiding what matches the filter?
-        for(int i = 0; i < winetricksAvailVerbs.count(); i++) {
+        for(int i = 0; i < winetricksAvailVerbs.count(); ++i) {
             verbSelector.at(i)->setVisible(false), verbDesc.at(i)->setVisible(false);
         }
 
         int slot;
-        for(int i = 0; i < winetricksFilter.count(); i++) {
+        for(int i = 0; i < winetricksFilter.count(); ++i) {
             slot = winetricksAvailVerbs.indexOf(winetricksFilter.at(i));
             verbSelector.at(slot)->setVisible(true), verbDesc.at(slot)->setVisible(true);
         }
@@ -224,9 +226,8 @@ void NeroTricksWindow::on_buttonBox_rejected()
 {
     QStringList verbsToClean = verbIsSelected.keys(true);
     if(!verbsToClean.isEmpty()) {
-        for(int i = 0; i < verbsToClean.length(); i++) {
+        for(int i = 0; i < verbsToClean.length(); ++i)
             verbSelector[winetricksAvailVerbs.indexOf(verbsToClean.at(i))]->setCheckState(Qt::Unchecked);
-        }
     }
 }
 

@@ -20,6 +20,8 @@
 #ifndef NEROWIZARD_H
 #define NEROWIZARD_H
 
+#include "nerotricks.h"
+
 #include <QDialog>
 
 namespace Ui {
@@ -38,6 +40,7 @@ public:
     int protonRunner;
     QString prefixName;
     QStringList verbsToInstall;
+    QStringList prevVerbs;
     QStringList currentPrefixes;
 
 private slots:
@@ -49,6 +52,8 @@ private slots:
 
     void on_winetricksBox_clicked();
 
+    void tricksWindow_result();
+
     void SetFontTricks();
     void SetDXtricks();
     void SetVCRunTricks();
@@ -58,6 +63,7 @@ private slots:
 
 private:
     Ui::NeroPrefixWizard *ui;
+    NeroTricksWindow *tricks = nullptr;
 
     QList<QAction*> winetricksPresets;
 

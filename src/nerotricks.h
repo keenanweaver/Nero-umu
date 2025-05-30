@@ -41,12 +41,15 @@ public:
     void InitVerbs(const QString & = "");
 
     void AddTricks(const QStringList newTricks);
-    void SetPreinstalledVerbs(const QStringList installed);
+    void SetPreinstalledVerbs(const QStringList &);
+    void SetCheckedVerbs(const QStringList &);
 
     QStringList GetAvailableVerbs() { return winetricksAvailVerbs; }
     QStringList GetAvailableDescs() { return winetricksDescriptions; }
 
     QHash<QString, bool> verbIsSelected;
+
+    QStringList installedVerbs;
 
 private slots:
     void on_searchBox_textEdited(const QString &arg1);
@@ -60,8 +63,8 @@ private:
 
     void FilterTricks(const QStringList filters);
 
-    static QStringList winetricksAvailVerbs;
-    static QStringList winetricksDescriptions;
+    static inline QStringList winetricksAvailVerbs;
+    static inline QStringList winetricksDescriptions;
 
     QStringList winetricksFilter;
 

@@ -27,7 +27,6 @@
 #include "nerorunnerdialog.h"
 #include "neroshortcut.h"
 #include "nerotricks.h"
-#include "nerowizard.h"
 
 #include <QCryptographicHash>
 #include <QFileDialog>
@@ -287,16 +286,32 @@ void NeroManagerWindow::CreatePrefix(const QString &newPrefix, const QString &ru
     env.insert("WINEPREFIX", NeroFS::GetPrefixesPath().path() + '/' + newPrefix);
     env.insert("GAMEID", "0");
     env.insert("PROTONPATH", NeroFS::GetProtonsPath().path() + '/' + runner);
+    // for Proton 10+. this shit gets real annoying
+    env.insert("PROTON_USE_XALIA", "0");
     //env.insert("UMU_RUNTIME_UPDATE", "0");
     umu.setProcessEnvironment(env);
     umu.setProcessChannelMode(QProcess::MergedChannels);
 
     if(tricksToInstall.isEmpty()) {
-        umu.start(NeroFS::GetUmU(), {"createprefix"});
+        // UMU is supposed to have "createprefix" action, but it doesn't actually do anything
+        // tbf, neither does CMD on its own as it exits early when run through UMU,
+        // but it gives us a zero exit code so fuck it I guess?
+        umu.start(NeroFS::GetUmU(), {"cmd"});
     } else {
         tricksToInstall.prepend("winetricks");
-        umu.start(NeroFS::GetUmU(), tricksToInstall);
-        tricksToInstall.removeFirst();
+        QStringList argsList;
+
+        // NOTE: until https://github.com/Winetricks/winetricks/issues/2367 is resolved,
+        // delete two offending reg entries so that dotnet verbs don't erroneously exit.
+        if(!tricksToInstall.filter("dotnet").isEmpty())
+            argsList = {NeroFS::GetUmU() + " reg delete \"HKLM\\Software\\Wow6432Node\\Microsoft\\.NETFramework\" /f && " +
+                        NeroFS::GetUmU() + " reg delete \"HKLM\\Software\\Wow6432Node\\Microsoft\\NET Framework Setup\" /f && " +
+                        NeroFS::GetUmU() + ' ' + tricksToInstall.join(' ') };
+        else argsList = {NeroFS::GetUmU() + ' ' + tricksToInstall.join(' ')};
+
+        argsList.prepend("-c");
+        umu.start("/bin/sh", argsList);
+        tricksToInstall.remove(tricksToInstall.indexOf("winetricks"));
     }
 
     waitBox.open();
@@ -324,40 +339,48 @@ void NeroManagerWindow::CreatePrefix(const QString &newPrefix, const QString &ru
         }
     }
 
-    if(umu.exitCode() >= 0) {
-        NeroFS::AddNewPrefix(newPrefix, runner);
+    if(umu.exitCode() == 0) {
+        if(sysTray->supportsMessages())
+            sysTray->showMessage("Finished Making Prefix \"" + newPrefix + "\"",
+                                 "New Proton prefix \"" + newPrefix + "\" has been created successfully.");
+    } else {
+        if(sysTray->supportsMessages())
+            sysTray->showMessage("Error Making Prefix \"" + newPrefix + "\"",
+                                 "Prefix creation process for \"" + newPrefix + "\" has exited with error code " + QString::number(umu.exitCode()) +
+                                 ". This usually means that a winetricks verb has failed installation. "
+                                 "Confirm that the desired verbs have installed in the prefix's \"Install Winetricks Components\" window.");
+    }
 
-        if(!NeroFS::GetPrefixes().isEmpty())
-            StopBlinkTimer();
-
+    QDir prefixPath(NeroFS::GetPrefixesPath().path() + '/' + newPrefix);
+    if(prefixPath.exists("system.reg")) {
         // Add fixes to system.reg
-        QDir prefixPath(NeroFS::GetPrefixesPath().path() + '/' + newPrefix);
-        if(prefixPath.exists("system.reg")) {
-            QFile regFile(prefixPath.path() + "/system.reg");
-            if(regFile.open(QFile::ReadWrite)) {
-                QString newReg;
-                QString line;
+        QFile regFile(prefixPath.path() + "/system.reg");
+        if(regFile.open(QFile::ReadWrite)) {
+            QString newReg;
+            QString line;
 
-                while(!regFile.atEnd()) {
-                    line = regFile.readLine();
-                    newReg.append(line);
-                    // DualSense fix
-                    if(line.startsWith("[System\\\\CurrentControlSet\\\\Services\\\\winebus]"))
-                        newReg.append("\"DisableHidraw\"=dword:00000001\n");
-                    // connect COM ports for lightguns (in case someone still wants to use MAMEHOOKER) ;)
-                    else if(line.startsWith("[Software\\\\Wine\\\\Ports]"))
-                        newReg.append(  "\"COM1\"=\"/dev/ttyACM0\"\n"
-                                        "\"COM2\"=\"/dev/ttyACM1\"\n"
-                                        "\"COM3\"=\"/dev/ttyACM2\"\n"
-                                        "\"COM4\"=\"/dev/ttyACM3\"\n"
-                                        "\"COM5\"=\"/dev/ttyS0\"\n");
-                }
-
-                regFile.resize(0);
-                regFile.write(newReg.toUtf8());
-                regFile.close();
+            while(!regFile.atEnd()) {
+                line = regFile.readLine();
+                newReg.append(line);
+                // DualSense fix
+                //if(line.startsWith("[System\\\\CurrentControlSet\\\\Services\\\\winebus]"))
+                //    newReg.append("\"DisableHidraw\"=dword:00000001\n");
+                // connect COM ports for lightguns (in case someone still wants to use MAMEHOOKER) ;)
+                if(line.startsWith("[Software\\\\Wine\\\\Ports]"))
+                    newReg.append(  "\"COM1\"=\"/dev/ttyACM0\"\n"
+                                  "\"COM2\"=\"/dev/ttyACM1\"\n"
+                                  "\"COM3\"=\"/dev/ttyACM2\"\n"
+                                  "\"COM4\"=\"/dev/ttyACM3\"\n"
+                                  "\"COM5\"=\"/dev/ttyS0\"\n");
             }
+
+            regFile.resize(0);
+            regFile.write(newReg.toUtf8());
+            regFile.close();
         }
+
+        // add prefix btn to list
+        NeroFS::AddNewPrefix(newPrefix, runner);
 
         unsigned int pos = prefixMainButton.count();
 
@@ -378,9 +401,15 @@ void NeroManagerWindow::CreatePrefix(const QString &newPrefix, const QString &ru
 
         connect(prefixMainButton.at(pos),   &QPushButton::clicked, this, &NeroManagerWindow::prefixMainButtons_clicked);
         connect(prefixDeleteButton.at(pos), &QPushButton::clicked, this, &NeroManagerWindow::prefixDeleteButtons_clicked);
-
-        QApplication::alert(this);
     }
+
+    QApplication::alert(this);
+
+    if(!NeroFS::GetPrefixes().isEmpty())
+        StopBlinkTimer();
+
+    sysTray->setIcon(QIcon(":/ico/systrayPhi"));
+
     QGuiApplication::restoreOverrideCursor();
 }
 
@@ -395,70 +424,6 @@ void NeroManagerWindow::CheckWinetricks()
         ui->prefixTricksBtn->setText("Install Winetricks Components");
         ui->prefixTricksBtn->setStyleSheet("");
     }
-}
-
-void NeroManagerWindow::AddTricks(QStringList verbs, const QString &prefix)
-{
-    QProcess umu;
-    QMessageBox waitBox(QMessageBox::NoIcon,
-                        "Generating Prefix",
-                        "Please wait...",
-                        QMessageBox::NoButton,
-                        this,
-                        Qt::Dialog | Qt::FramelessWindowHint | Qt::MSWindowsFixedSizeDialogHint);
-    waitBox.setStandardButtons(QMessageBox::NoButton);
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-
-    QMap<QString, QVariant> settingsMap = NeroFS::GetCurrentPrefixSettings();
-
-    env.insert("WINEPREFIX", NeroFS::GetPrefixesPath().path() + '/' + prefix);
-    env.insert("GAMEID", "0");
-    env.insert("PROTONPATH", NeroFS::GetProtonsPath().path() + '/' + settingsMap["CurrentRunner"].toString());
-    //env.insert("UMU_RUNTIME_UPDATE", "0");
-    umu.setProcessEnvironment(env);
-    umu.setProcessChannelMode(QProcess::MergedChannels);
-
-    verbs.prepend("winetricks");
-    umu.start(NeroFS::GetUmU(), verbs);
-    verbs.removeFirst();
-
-    waitBox.open();
-    waitBox.raise();
-    QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
-    // don't use blocking function so that the dialog shows and the UI doesn't freeze.
-    while(umu.state() != QProcess::NotRunning) {
-        QApplication::processEvents();
-        QByteArray stdout;
-        // TODO: use QTextStream instead of printing line-by-line?
-        umu.waitForReadyRead(100);
-        if(umu.canReadLine()) {
-            stdout = umu.readLine();
-            printf("%s", stdout.constData());
-            if(stdout.contains("Proton: Upgrading")) {
-                waitBox.setText(QString("Updating %1 with new Proton %2...").arg(prefix, settingsMap["CurrentRunner"].toString()));
-            } else if(stdout.contains("Downloading latest steamrt sniper")) {
-                waitBox.setText("umu: Updating runtime to latest version...");
-            } else if(stdout.contains("Proton: Running winetricks verbs in prefix:")) {
-                waitBox.setText(QString("Running installations for Winetricks verbs:\n\n%1\n\nThis stage may take a while...").arg(verbs.join('\n')));
-            }
-        }
-    }
-
-    QApplication::alert(this);
-    if(umu.exitCode() != 0) {
-        if(sysTray->supportsMessages())
-            sysTray->showMessage("Winetricks Installation Returned An Error",
-                                 "Winetricks process in prefix \"" + NeroFS::GetCurrentPrefix() + "\" has exited with error code " + QString::number(umu.exitCode()) + ". "
-                                 "Not all queued verbs may have finished installing. "
-                                 "Confirm which verbs have been successfully installed by checking for grayed-out entries in the \"Install Winetricks Components\" window for this prefix.",
-                                 QSystemTrayIcon::Warning);
-    } else {
-        if(sysTray->supportsMessages())
-            sysTray->showMessage("Finished Installing Winetricks",
-                                 "Queued Winetricks verbs has finished installing to prefix \"" + NeroFS::GetCurrentPrefix() + "\".");
-    }
-    QGuiApplication::restoreOverrideCursor();
 }
 
 void NeroManagerWindow::on_addButton_clicked()
@@ -549,22 +514,10 @@ void NeroManagerWindow::on_addButton_clicked()
         }
 
     } else {
-        NeroPrefixWizard wizard(this);
-        wizard.setFixedSize(wizard.size());
-        wizard.exec();
-
-        if(wizard.result() == QDialog::Accepted) {
-            sysTray->setIcon(QIcon(":/ico/systrayPhiBusy"));
-            CreatePrefix(wizard.prefixName, NeroFS::GetAvailableProtons().at(wizard.protonRunner), wizard.verbsToInstall);
-
-            if(wizard.userSymlinks) NeroFS::CreateUserLinks(wizard.prefixName);
-            sysTray->setIcon(QIcon(":/ico/systrayPhi"));
-            if(sysTray->supportsMessages())
-                sysTray->showMessage("Finished Making Prefix \"" + wizard.prefixName + "\"",
-                                     "New Proton prefix \"" + wizard.prefixName + "\" has been created successfully.");
-        } else {
-            if(NeroFS::GetPrefixes().isEmpty()) { StartBlinkTimer(); }
-        }
+        wizard = new NeroPrefixWizard(this);
+        connect(wizard, &NeroPrefixWizard::finished, this, &NeroManagerWindow::prefixWizard_result);
+        wizard->setFixedSize(wizard->size());
+        wizard->show();
     }
 }
 
@@ -823,39 +776,129 @@ void NeroManagerWindow::on_prefixTricksBtn_clicked()
 
     if(winetricksLog.exists()) {
         if(winetricksLog.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            while(!winetricksLog.atEnd()) { verbsInstalled.append(winetricksLog.readLine().trimmed()); }
+            while(!winetricksLog.atEnd()) verbsInstalled.append(winetricksLog.readLine().trimmed());
             verbsInstalled.removeDuplicates();
         }
     } else printf("Prefix has no winetricks file, skipping...\n");
 
-    NeroTricksWindow tricks(this);
+    tricks = new NeroTricksWindow(this);
+    connect(tricks, &NeroTricksWindow::finished, this, &NeroManagerWindow::tricksWindow_result);
 
-    if(!verbsInstalled.isEmpty()) tricks.SetPreinstalledVerbs(verbsInstalled);
+    if(!verbsInstalled.isEmpty()) tricks->SetPreinstalledVerbs(verbsInstalled);
 
-    bool confirmed = false;
-    QStringList verbsToInstall;
+    tricks->show();
+}
 
-    while(!confirmed) {
-        tricks.exec();
-        if(tricks.result() == QDialog::Accepted) {
-            verbsToInstall.append(tricks.verbIsSelected.keys(true));
-            verbsToInstall.removeDuplicates();
-            if(QMessageBox::question(this,
-                                      "Verbs Confirmation",
-                                      "Are you sure you wish to install these verbs?\n\n" + verbsToInstall.join('\n'))
-                == QMessageBox::Yes) {
+void NeroManagerWindow::tricksWindow_result()
+{
+    QStringList verbsToInstall = tricks->verbIsSelected.keys(true);
+    verbsToInstall.removeDuplicates();
+    if(tricks->result() == QDialog::Accepted) {
+        if(QMessageBox::question(this,
+                                  "Verbs Confirmation",
+                                  "Are you sure you wish to install these verbs?\n\n" + verbsToInstall.join('\n'))
+            == QMessageBox::Yes) {
 
-                confirmed = true;
+            // Start tricks installation
+            sysTray->setIcon(QIcon(":/ico/systrayPhiBusy"));
 
-                sysTray->setIcon(QIcon(":/ico/systrayPhiBusy"));
-                AddTricks(verbsToInstall, NeroFS::GetCurrentPrefix());
-                sysTray->setIcon(QIcon(":/ico/systrayPhi"));
+            QProcess umu;
+            QMessageBox waitBox(QMessageBox::NoIcon,
+                                "Generating Prefix",
+                                "Please wait...",
+                                QMessageBox::NoButton,
+                                this,
+                                Qt::Dialog | Qt::FramelessWindowHint | Qt::MSWindowsFixedSizeDialogHint);
+            waitBox.setStandardButtons(QMessageBox::NoButton);
+            QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+
+            QMap<QString, QVariant> settingsMap = NeroFS::GetCurrentPrefixSettings();
+            QString prefix = NeroFS::GetCurrentPrefix();
+
+            env.insert("WINEPREFIX", NeroFS::GetPrefixesPath().path() + '/' + prefix);
+            env.insert("GAMEID", "0");
+            env.insert("PROTONPATH", NeroFS::GetProtonsPath().path() + '/' + settingsMap["CurrentRunner"].toString());
+            // for Proton 10+. this shit gets real annoying
+            env.insert("PROTON_USE_XALIA", "0");
+            //env.insert("UMU_RUNTIME_UPDATE", "0");
+            umu.setProcessEnvironment(env);
+            umu.setProcessChannelMode(QProcess::MergedChannels);
+
+            verbsToInstall.prepend("winetricks");
+
+            QStringList argsList;
+
+            // NOTE: until https://github.com/Winetricks/winetricks/issues/2367 is resolved, delete two offending reg entries
+            if(tricks->installedVerbs.filter("dotnet").isEmpty() && !verbsToInstall.filter("dotnet").isEmpty())
+                argsList = {NeroFS::GetUmU() + " reg delete \"HKLM\\Software\\Wow6432Node\\Microsoft\\.NETFramework\" /f && " +
+                            NeroFS::GetUmU() + " reg delete \"HKLM\\Software\\Wow6432Node\\Microsoft\\NET Framework Setup\" /f && " +
+                            NeroFS::GetUmU() + ' ' + verbsToInstall.join(' ') };
+            else argsList = {NeroFS::GetUmU() + ' ' + verbsToInstall.join(' ')};
+
+            argsList.prepend("-c");
+            umu.start("/bin/sh", argsList);
+            verbsToInstall.removeFirst();
+
+            waitBox.open();
+            waitBox.raise();
+            QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
+            // don't use blocking function so that the dialog shows and the UI doesn't freeze.
+            while(umu.state() != QProcess::NotRunning) {
+                QApplication::processEvents();
+                QByteArray stdout;
+                // TODO: use QTextStream instead of printing line-by-line?
+                umu.waitForReadyRead(100);
+                if(umu.canReadLine()) {
+                    stdout = umu.readLine();
+                    printf("%s", stdout.constData());
+                    if(stdout.contains("Proton: Upgrading")) {
+                        waitBox.setText(QString("Updating %1 with new Proton %2...").arg(prefix, settingsMap["CurrentRunner"].toString()));
+                    } else if(stdout.contains("Downloading latest steamrt sniper")) {
+                        waitBox.setText("umu: Updating runtime to latest version...");
+                    } else if(stdout.contains("Proton: Running winetricks verbs in prefix:")) {
+                        waitBox.setText(QString("Running installations for Winetricks verbs:\n\n%1\n\nThis stage may take a while...").arg(verbsToInstall.join('\n')));
+                    }
+                }
             }
-        } else {
-            // user doesn't want to do verbs installation after all, so stop asking and revert to prev state.
-            confirmed = true;
-        }
+
+            QApplication::alert(this);
+            if(umu.exitCode() != 0) {
+                if(sysTray->supportsMessages())
+                    sysTray->showMessage("Winetricks Installation Returned An Error",
+                                         "Winetricks process in prefix \"" + prefix + "\" has exited with error code " + QString::number(umu.exitCode()) + ". "
+                                                                                                                                                           "Not all queued verbs may have finished installing. "
+                                                                                                                                                           "Confirm which verbs have been successfully installed by checking for grayed-out entries in the \"Install Winetricks Components\" window for this prefix.",
+                                         QSystemTrayIcon::Warning);
+            } else if(sysTray->supportsMessages())
+                sysTray->showMessage("Finished Installing Winetricks",
+                                     "Queued Winetricks verbs has finished installing to prefix \"" + NeroFS::GetCurrentPrefix() + "\".");
+
+            QGuiApplication::restoreOverrideCursor();
+
+            sysTray->setIcon(QIcon(":/ico/systrayPhi"));
+
+            delete tricks;
+            tricks = nullptr;
+
+        } else tricks->show();
+    } else {
+        delete tricks;
+        tricks = nullptr;
     }
+}
+
+void NeroManagerWindow::prefixWizard_result()
+{
+    if(wizard->result() == QDialog::Accepted) {
+        sysTray->setIcon(QIcon(":/ico/systrayPhiBusy"));
+        CreatePrefix(wizard->prefixName, NeroFS::GetAvailableProtons().at(wizard->protonRunner), wizard->verbsToInstall);
+
+        if(wizard->userSymlinks) NeroFS::CreateUserLinks(wizard->prefixName);
+    } else if(NeroFS::GetPrefixes().isEmpty()) StartBlinkTimer();
+
+    delete wizard;
+    wizard = nullptr;
 }
 
 void NeroManagerWindow::prefixSettings_result()
