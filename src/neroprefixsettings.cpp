@@ -697,6 +697,7 @@ void NeroPrefixSettingsWindow::StartUmu(const QString command, QStringList args)
         env.insert("WINEPREFIX", QString("%1/%2").arg(NeroFS::GetPrefixesPath().path(), NeroFS::GetCurrentPrefix()));
         env.insert("GAMEID", "0");
         env.insert("PROTONPATH", QString("%1/%2").arg(NeroFS::GetProtonsPath().path(), NeroFS::GetCurrentRunner()));
+        env.insert("PROTON_USE_XALIA", "0");
         env.insert("UMU_RUNTIME_UPDATE", "0");
         umu.setProcessEnvironment(env);
         umu.setProcessChannelMode(QProcess::MergedChannels);
