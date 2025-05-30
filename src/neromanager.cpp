@@ -303,11 +303,12 @@ void NeroManagerWindow::CreatePrefix(const QString &newPrefix, const QString &ru
 
         // NOTE: until https://github.com/Winetricks/winetricks/issues/2367 is resolved,
         // delete two offending reg entries so that dotnet verbs don't erroneously exit.
-        if(!tricksToInstall.filter("dotnet").isEmpty())
+        if(!tricksToInstall.filter("dotnet").isEmpty()) {
             argsList = {NeroFS::GetUmU() + " reg delete \"HKLM\\Software\\Wow6432Node\\Microsoft\\.NETFramework\" /f && " +
                         NeroFS::GetUmU() + " reg delete \"HKLM\\Software\\Wow6432Node\\Microsoft\\NET Framework Setup\" /f && " +
                         NeroFS::GetUmU() + ' ' + tricksToInstall.join(' ') };
-        else argsList = {NeroFS::GetUmU() + ' ' + tricksToInstall.join(' ')};
+            printf(".NET verb detected, cleaning up registry keys before winetricks install...\n");
+        } else argsList = {NeroFS::GetUmU() + ' ' + tricksToInstall.join(' ')};
 
         argsList.prepend("-c");
         umu.start("/bin/sh", argsList);
@@ -829,11 +830,12 @@ void NeroManagerWindow::tricksWindow_result()
             QStringList argsList;
 
             // NOTE: until https://github.com/Winetricks/winetricks/issues/2367 is resolved, delete two offending reg entries
-            if(tricks->installedVerbs.filter("dotnet").isEmpty() && !verbsToInstall.filter("dotnet").isEmpty())
+            if(tricks->installedVerbs.filter("dotnet").isEmpty() && !verbsToInstall.filter("dotnet").isEmpty()) {
                 argsList = {NeroFS::GetUmU() + " reg delete \"HKLM\\Software\\Wow6432Node\\Microsoft\\.NETFramework\" /f && " +
                             NeroFS::GetUmU() + " reg delete \"HKLM\\Software\\Wow6432Node\\Microsoft\\NET Framework Setup\" /f && " +
                             NeroFS::GetUmU() + ' ' + verbsToInstall.join(' ') };
-            else argsList = {NeroFS::GetUmU() + ' ' + verbsToInstall.join(' ')};
+                printf("First time .NET verb has been requested, cleaning up registry keys before winetricks install...\n");
+            } else argsList = {NeroFS::GetUmU() + ' ' + verbsToInstall.join(' ')};
 
             argsList.prepend("-c");
             umu.start("/bin/sh", argsList);
