@@ -104,11 +104,6 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
         } else if(settings->value("PrefixSettings/LimitGLextensions").toBool())
             env.insert("PROTON_OLD_GL_STRING", "1");
 
-        if(!settings->value("Shortcuts--"+hash+"/VKcapture").toString().isEmpty()) {
-            if(settings->value("Shortcuts--"+hash+"VKcapture").toBool()) env.insert("OBS_VKCAPTURE", "1");
-        } else if(settings->value("PrefixSettings/VKcapture").toBool())
-            env.insert("OBS_VKCAPTURE", "1");
-
         if(settings->value("Shortcuts--"+hash+"/LimitFPS").toInt())
             env.insert("DXVK_FRAME_RATE", QString::number(settings->value("Shortcuts--"+hash+"/LimitFPS").toInt()));
 
@@ -214,6 +209,12 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
             if(args.last().isEmpty()) args.removeLast();
             arguments.append(args);
         }
+
+        if(!settings->value("Shortcuts--"+hash+"/VKcapture").toString().isEmpty()) {
+            if(settings->value("Shortcuts--"+hash+"/VKcapture").toBool())
+                arguments.prepend("obs-gamecapture");
+        } else if(settings->value("PrefixSettings/VKcapture").toBool())
+            arguments.prepend("obs-gamecapture");
 
         if(!settings->value("Shortcuts--"+hash+"/Gamemode").toString().isEmpty()) {
             if(settings->value("Shortcuts--"+hash+"/Gamemode").toBool())
@@ -537,8 +538,6 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
         env.insert("PROTON_ENABLE_NVAPI", "1");
     if(settings->value("PrefixSettings/LimitGLextensions").toBool())
         env.insert("PROTON_OLD_GL_STRING", "1");
-    if(settings->value("PrefixSettings/VKcapture").toBool())
-        env.insert("OBS_VKCAPTURE", "1");
 
     switch(settings->value("PrefixSettings/FileSyncMode").toInt()) {
     case NeroConstant::NoSync:
@@ -595,6 +594,9 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
 
     if(!args.isEmpty())
         arguments.append(args);
+
+    if(settings->value("PrefixSettings/VKcapture").toBool())
+        arguments.prepend("obs-gamecapture");
 
     if(settings->value("PrefixSettings/Gamemode").toBool())
         arguments.prepend("gamemoderun");

@@ -74,7 +74,7 @@
           <item>
            <widget class="QCheckBox" name="toggleVKcap">
             <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, this will allow any apps using Vulkan (including DX8-11 titles w/ DXVK, or DX12 titles w/ VKD3D) to be captured in OBS Studio using the &lt;a href=&quot;https://github.com/nowrep/obs-vkcapture&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;Game Capture source.&lt;/span&gt;&lt;/a&gt; This is usually provided in a user package such as &lt;span style=&quot; font-style:italic;&quot;&gt;obs-vkcapture-git&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;lib32-obs-vkcapture-git.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, this will allow any apps using Vulkan (including DX8-11 titles w/ DXVK, or DX12 titles w/ VKD3D) or OpenGL to be captured in OBS Studio using the &lt;a href=&quot;https://github.com/nowrep/obs-vkcapture&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;Game Capture source.&lt;/span&gt;&lt;/a&gt; This is usually provided in a user package such as &lt;span style=&quot; font-style:italic;&quot;&gt;obs-vkcapture-git&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;lib32-obs-vkcapture-git.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="accessibleName">
              <string>Enable OBS Studio Vulkan Capture</string>
