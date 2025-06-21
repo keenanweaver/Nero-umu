@@ -71,9 +71,9 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
         // unfortunately, env insert does NOT allow settings bools properly as-is,
         // so all booleans have to be converted to an int string.
 
-        //if(!settings->value("Shortcuts--"+hash+"/CustomEnvVars").toString().isEmpty()) {
-        //   qDebug() << settings->value("Shortcuts--"+hash+"/CustomEnvVars").toStringList();
-        //}
+        if(!settings->value("Shortcuts--"+hash+"/CustomEnvVars").toString().isEmpty()) {
+           qDebug() << settings->value("Shortcuts--"+hash+"/CustomEnvVars").toStringList();
+        }
         if(!settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().isEmpty()) {
             if(settings->value("Shortcuts--"+hash+"/IgnoreGlobalDLLs").toBool() || settings->value("PrefixSettings/DLLoverrides").toStringList().isEmpty())
                 env.insert("WINEDLLOVERRIDES", settings->value("Shortcuts--"+hash+"/DLLoverrides").toStringList().join(';')+';'
@@ -214,7 +214,7 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
             if(args.last().isEmpty()) args.removeLast();
             arguments.append(args);
         }
-
+        
         if(!settings->value("Shortcuts--"+hash+"/Gamemode").toString().isEmpty()) {
             if(settings->value("Shortcuts--"+hash+"/Gamemode").toBool())
                 arguments.prepend("gamemoderun");

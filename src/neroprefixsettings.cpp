@@ -41,7 +41,7 @@ NeroPrefixSettingsWindow::NeroPrefixSettingsWindow(QWidget *parent, const QStrin
     boldFont.setBold(true);
 
     // env vars shouldn't be needed (and parsing it is a pita), so hide it for now
-    ui->envBox->setVisible(false);
+    ui->envBox->setVisible(true);
 
     // prefix runner box is used to govern availability of scaling options in both prefix and shortcut settings
     ui->prefixRunner->addItems(NeroFS::GetAvailableProtons());
@@ -251,7 +251,7 @@ void NeroPrefixSettingsWindow::LoadSettings()
         ui->togglePrefixRuntimeUpdates->setChecked(settings.value("RuntimeUpdateOnLaunch").toBool());
 
         // advanced tab
-        //ui->prefixEnvVars->setText(settings.value("CustomEnvVars").toString());
+        ui->prefixEnvVars->setText(settings.value("CustomEnvVars").toString());
     } else {
         // for shortcut settings, any defined settings set the button to either 0 (Unchecked) or 2 (Checked)
         // else, undefined settings remain at 1 (Partially Checked)
