@@ -365,6 +365,7 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
                                                               settings->value("PrefixSettings/FSRcustomResH").toString());
                 break;
             case NeroConstant::ScalingGamescopeFullscreen:
+                arguments.prepend("--");
                 arguments.prepend("-f");
                 if(settings->value("PrefixSettings/GamescopeOutResH").toInt()) {
                     arguments.prepend(settings->value("PrefixSettings/GamescopeOutResH").toString());
@@ -388,17 +389,25 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
                     arguments.prepend("-F");
                 }
                 if(settings->value("PrefixSettings/LimitFPS").toInt()) {
+                    // gamescope seems to have two different types of settings for enforcing a frame limiter?
+                    // also for some reason, neither implems really work reliably in Wayland :shrug:
                     arguments.prepend(QByteArray::number(settings->value("PrefixSettings/LimitFPS").toInt()));
+                    arguments.prepend("--framerate-limit");
+                    /*
                     arguments.prepend("-r");
                     arguments.prepend(QByteArray::number(settings->value("PrefixSettings/LimitFPS").toInt()));
                     arguments.prepend("-o");
+                    */
                 }
-                //arguments.prepend("--adaptive-sync");
+                // don't think it hurts to enable adaptive sync support by default?
+                arguments.prepend("--adaptive-sync");
                 arguments.prepend("gamescope");
                 break;
             case NeroConstant::ScalingGamescopeBorderless:
+                arguments.prepend("--");
                 arguments.prepend("-b");
             case NeroConstant::ScalingGamescopeWindowed:
+                if(!arguments.contains("--")) arguments.prepend("--");
                 if(settings->value("PrefixSettings/GamescopeWinResH").toInt()) {
                     arguments.prepend(settings->value("PrefixSettings/GamescopeWinResH").toString());
                     arguments.prepend("-H");
@@ -430,11 +439,14 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
                 }
                 if(settings->value("PrefixSettings/LimitFPS").toInt()) {
                     arguments.prepend(QByteArray::number(settings->value("PrefixSettings/LimitFPS").toInt()));
+                    arguments.prepend("--framerate-limit");
+                    /*
                     arguments.prepend("-r");
                     arguments.prepend(QByteArray::number(settings->value("PrefixSettings/LimitFPS").toInt()));
                     arguments.prepend("-o");
+                    */
                 }
-                //arguments.prepend("--adaptive-sync");
+                arguments.prepend("--adaptive-sync");
                 arguments.prepend("gamescope");
                 break;
         }
@@ -470,6 +482,7 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
             log.resize(0);
             log.write("Current running environment:\n");
             log.write(runner.environment().join('\n').toLocal8Bit());
+            log.write("\n\nRunning command:\n" + command.toLocal8Bit() + arguments.join(' ').toLocal8Bit() + '\n');
             log.write("==============================================\n");
         }
 
@@ -633,6 +646,7 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
                                                                            settings->value("PrefixSettings/FSRcustomResH").toString()));
         break;
     case NeroConstant::ScalingGamescopeFullscreen:
+        arguments.prepend("--");
         arguments.prepend("-f");
         if(settings->value("PrefixSettings/GamescopeOutResH").toInt()) {
             arguments.prepend(settings->value("PrefixSettings/GamescopeOutResH").toString());
@@ -663,8 +677,10 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
         arguments.prepend("gamescope");
         break;
     case NeroConstant::ScalingGamescopeBorderless:
+        arguments.prepend("--");
         arguments.prepend("-b");
     case NeroConstant::ScalingGamescopeWindowed:
+        if(!arguments.contains("--")) arguments.prepend("--");
         if(settings->value("PrefixSettings/GamescopeWinResH").toInt()) {
             arguments.prepend(settings->value("PrefixSettings/GamescopeWinResH").toString());
             arguments.prepend("-H");
