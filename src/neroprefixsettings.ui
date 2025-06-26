@@ -953,7 +953,7 @@
                <x>0</x>
                <y>0</y>
                <width>600</width>
-               <height>436</height>
+               <height>435</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1057,7 +1057,7 @@
           <item>
            <widget class="QComboBox" name="winVerBox">
             <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set the Windows version to report to this application.&lt;/p&gt;&lt;p&gt;If this setting is changed from the shortcut's current value&lt;span style=&quot; font-style:italic;&quot;&gt;,&lt;/span&gt; Nero will add the compatibility flag into the registry file &lt;span style=&quot; font-style:italic;&quot;&gt;user.reg,&lt;/span&gt; which can sometimes fix compatibility issues - for example, &lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Phantasy Star Online: Blue Burst&lt;/span&gt;&lt;span style=&quot; font-weight:700; text-decoration: underline;&quot;&gt;requires&lt;/span&gt; a Windows version less than &lt;span style=&quot; font-style:italic;&quot;&gt;Windows 7&lt;/span&gt; to load without crashing.&lt;/p&gt;&lt;p&gt;If unsure, either keep it at &lt;span style=&quot; font-style:italic;&quot;&gt;[Use Default Setting]&lt;/span&gt; (defaults to &lt;span style=&quot; font-style:italic;&quot;&gt;Windows 10&lt;/span&gt;) unless an app needs a specific Windows version to work.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set the Windows version to report to this application.&lt;/p&gt;&lt;p&gt;If this setting is changed from the shortcut's current value&lt;span style=&quot; font-style:italic;&quot;&gt;,&lt;/span&gt; Nero will add the compatibility flag into the registry file &lt;span style=&quot; font-style:italic;&quot;&gt;user.reg,&lt;/span&gt; which can sometimes fix compatibility issues - for example, &lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Phantasy Star Online: Blue Burst &lt;/span&gt;&lt;span style=&quot; font-weight:700; text-decoration: underline;&quot;&gt;requires&lt;/span&gt; a Windows version less than &lt;span style=&quot; font-style:italic;&quot;&gt;Windows 7&lt;/span&gt; to load without crashing.&lt;/p&gt;&lt;p&gt;If unsure, either keep it at &lt;span style=&quot; font-style:italic;&quot;&gt;[Use Default Setting]&lt;/span&gt; (defaults to &lt;span style=&quot; font-style:italic;&quot;&gt;Windows 10&lt;/span&gt;) unless an app needs a specific Windows version to work.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="accessibleName">
              <string>Windows Version Override</string>
@@ -1861,7 +1861,7 @@
            <x>0</x>
            <y>0</y>
            <width>624</width>
-           <height>101</height>
+           <height>102</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
