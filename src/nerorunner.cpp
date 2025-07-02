@@ -167,6 +167,7 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
         if(!settings->value("Shortcuts--"+hash+"/UseXalia").toString().isEmpty()) {
             if(settings->value("Shortcuts--"+hash+"/UseXalia").toBool())
                 env.insert("PROTON_USE_XALIA", "1");
+            else env.insert("PROTON_USE_XALIA", "0");
         } else if(settings->value("PrefixSettings/UseXalia").toBool())
             env.insert("PROTON_USE_XALIA", "1");
         else env.insert("PROTON_USE_XALIA", "0");
