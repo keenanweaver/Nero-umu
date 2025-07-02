@@ -34,6 +34,7 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
     if(settings->value("Shortcuts--"+hash+"/Path").toString().startsWith("C:/") || fileToRun.exists()) {
         QProcess runner;
 
+        // TODO: this is ass for prerun scripts that should be running persistently.
         if(!settings->value("Shortcuts--"+hash+"/PreRunScript").toString().isEmpty()) {
             runner.start(settings->value("Shortcuts--"+hash+"/PreRunScript").toString(), (QStringList){});
 
@@ -152,11 +153,16 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
                 break;
         }
 
+        // TODO: ideally, we should set this as a colon-separated list of whitelisted "0xVID/0xPID" pairs
+        //       but I guess this'll do for now.
         if(!settings->value("Shortcuts--"+hash+"/AllowHidraw").toString().isEmpty()) {
             if(settings->value("Shortcuts--"+hash+"/AllowHidraw").toBool())
                 env.insert("PROTON_ENABLE_HIDRAW", "1");
+            else env.insert("PROTON_PREFER_SDL", "1");
         } else if(settings->value("PrefixSettings/AllowHidraw").toBool())
             env.insert("PROTON_ENABLE_HIDRAW", "1");
+        // Forces controllers (that otherwise get preferred by hidraw by default) to go through SDL backend instead
+        else env.insert("PROTON_PREFER_SDL", "1");
 
         if(!settings->value("Shortcuts--"+hash+"/UseXalia").toString().isEmpty()) {
             if(settings->value("Shortcuts--"+hash+"/UseXalia").toBool())
@@ -573,8 +579,10 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
         break;
     }
 
-    if(settings->value("PrefixSettings/AllowHidraw").toBool())
+    if(settings->value("PrefixSettings/AllowHidraw").toBool()) {
         if(!env.contains("PROTON_ENABLE_HIDRAW")) env.insert("PROTON_ENABLE_HIDRAW", "1");
+    // Forces controllers (that otherwise get preferred by hidraw by default) to go through SDL backend instead
+    } else env.insert("PROTON_PREFER_SDL", "1");
 
     if(settings->value("PrefixSettings/UseXalia").toBool()) {
         if(!env.contains("PROTON_USE_XALIA")) env.insert("PROTON_USE_XALIA", "1");
