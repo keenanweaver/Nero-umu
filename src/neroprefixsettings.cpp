@@ -878,6 +878,7 @@ void NeroPrefixSettingsWindow::on_buttonBox_clicked(QAbstractButton *button)
                     else NeroFS::SetCurrentPrefixCfg("Shortcuts--"+currentShortcutHash, child->property("isFor").toString(), child->currentIndex()-1);
                 }
 
+            // windows version overrides are currently a one-way op (e.g. can't be unset from the UI)
             if(ui->winVerBox->font() == boldFont) {
                 int winVerSelected = winVersionListBackwards.indexOf(ui->winVerBox->itemText(ui->winVerBox->currentIndex()));
                 NeroFS::SetCurrentPrefixCfg("Shortcuts--"+currentShortcutHash, "WindowsVersion", winVerSelected);
@@ -889,14 +890,21 @@ void NeroPrefixSettingsWindow::on_buttonBox_clicked(QAbstractButton *button)
                         QString newReg;
                         QString line;
                         const QString exe = settings.value("Path").toString().mid(settings.value("Path").toString().lastIndexOf('/')+1);
-                        const QString compareString = QString("[Software\\\\Wine\\\\AppDefaults\\\\%1]\n").arg(exe);
+                        const QString compareString = QString("[Software\\\\Wine\\\\AppDefaults\\\\%1]").arg(exe);
                         bool exists = false;
 
                         while(!regFile.atEnd()) {
                             line = regFile.readLine();
                             newReg.append(line);
-                            if(line == compareString)
-                                regFile.readLine(), newReg.append(QString("\"Version\"=\"%1\"\n").arg(winVersionVerb.at(winVerSelected))), exists = true;
+
+                            // winreg adds timestamp info, so just check the beginning of this line.
+                            if(line.startsWith(compareString)) {
+                                // in case this is a reg entry that's been absorbed into WinReg format (which adds timestamps)
+                                line = regFile.readLine();
+                                if(line.startsWith("#time=")) newReg.append(line), regFile.readLine();
+                                newReg.append(QString("\"Version\"=\"%1\"\n").arg(winVersionVerb.at(winVerSelected)));
+                                exists = true;
+                            }
                         }
 
                         if(!exists)
