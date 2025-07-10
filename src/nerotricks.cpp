@@ -215,9 +215,10 @@ void NeroTricksWindow::on_searchBox_textEdited(const QString &arg1)
         }
 
         int slot;
-        for(int i = 0; i < winetricksFilter.count(); ++i) {
-            slot = winetricksAvailVerbs.indexOf(winetricksFilter.at(i));
-            verbSelector.at(slot)->setVisible(true), verbDesc.at(slot)->setVisible(true);
+        for(const auto &filter : std::as_const(winetricksFilter)) {
+            slot = winetricksAvailVerbs.indexOf(filter);
+            if(slot > -1)
+                verbSelector.at(slot)->setVisible(true), verbDesc.at(slot)->setVisible(true);
         }
     }
 }
