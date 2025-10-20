@@ -198,12 +198,13 @@ void NeroManagerWindow::RenderPrefixes()
         }
 
         for(int i = 0; i < NeroFS::GetPrefixes().count(); i++) {
-            prefixMainButton << new QPushButton(NeroFS::GetPrefixes().at(i));
+            prefixMainButton << new QPushButton(QString(NeroFS::GetPrefixes().at(i)).replace("&", "&&"));
             prefixDeleteButton << new QPushButton(QIcon::fromTheme("edit-delete"), "");
-
+            
             prefixMainButton.at(i)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
             prefixMainButton.at(i)->setFont(listFont);
             prefixMainButton.at(i)->setProperty("slot", i);
+            prefixMainButton.at(i)->setProperty("prefixName", NeroFS::GetPrefixes().at(i)); // Store original name
 
             prefixDeleteButton.at(i)->setFlat(true);
             prefixDeleteButton.at(i)->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -394,12 +395,13 @@ void NeroManagerWindow::CreatePrefix(const QString &newPrefix, const QString &ru
 
         unsigned int pos = prefixMainButton.count();
 
-        prefixMainButton << new QPushButton(newPrefix);
+        prefixMainButton << new QPushButton(QString(newPrefix).replace("&", "&&"));
         prefixDeleteButton << new QPushButton(QIcon::fromTheme("edit-delete"), "");
 
         prefixMainButton.at(pos)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         prefixMainButton.at(pos)->setFont(listFont);
         prefixMainButton.at(pos)->setProperty("slot", pos);
+        prefixMainButton.at(pos)->setProperty("prefixName", newPrefix); // Store original name
 
         prefixDeleteButton.at(pos)->setFlat(true);
         prefixDeleteButton.at(pos)->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -558,7 +560,7 @@ void NeroManagerWindow::prefixMainButtons_clicked()
 {
     auto *obj = qobject_cast<QPushButton*>(sender());
 
-    if(NeroFS::GetCurrentPrefix() != obj->text()) {
+    if(NeroFS::GetCurrentPrefix() != obj->property("prefixName").toString()) {
         if(prefixShortcutLabel.count())
             CleanupShortcuts();
 
